@@ -33,3 +33,13 @@ work/pipeline1/test*.png
 work/pipeline1/ab*.txt
 work/pipeline1/ab.log
 work/pipeline1/browser_list_result.txt
+
+# Course pipeline: source code only; credentials, media, caches and archives stay local.
+.serena/
+.codebase-memory/
+work/pipeline2/runs/
+output/
+.env
+.env.*
+!.env.example
+*.partial.*
