@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三类视频形态 · 分管线设计方案</title>
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --ink:#1a2233; --ink2:#4a5568; --ink3:#8a94a6;
+  --blue:#2563eb; --blue-bg:#eaf1fe; --violet:#7c3aed; --violet-bg:#f1ebfd;
+  --teal:#0d9488; --teal-bg:#e6f6f4; --orange:#ea580c; --orange-bg:#fdf0e6;
+  --rose:#e11d48; --rose-bg:#fdeaef; --green:#16a34a; --green-bg:#e9f7ee;
+  --amber:#b45309; --amber-bg:#fdf5e2; --slate:#475569; --slate-bg:#eef1f6;
+  --border:#e4e8f0; --code-bg:#0f172a; --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15.5px}
+.page{max-width:1060px;margin:0 auto;padding:0 24px 80px}
+.hero{background:linear-gradient(135deg,#0f766e 0%,#2563eb 50%,#7c3aed 100%);color:#fff;border-radius:0 0 26px 26px;padding:52px 40px 44px;margin-bottom:36px}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:3px 14px;border-radius:99px;font-size:13px;margin-bottom:14px;letter-spacing:1px}
+.hero h1{font-size:30px;font-weight:800;line-height:1.35;margin-bottom:10px}
+.hero p{opacity:.92;font-size:15px;max-width:840px}
+.hero .meta{margin-top:18px;font-size:13px;opacity:.85;display:flex;gap:22px;flex-wrap:wrap}
+h2{font-size:23px;font-weight:800;margin:52px 0 8px;display:flex;align-items:center;gap:10px}
+h2 .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;color:#fff;font-size:16px;flex-shrink:0}
+h3{font-size:17px;font-weight:700;margin:26px 0 8px}
+p{margin:8px 0;color:var(--ink2)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 26px;margin:14px 0;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+.card.accent-teal{border-top:3px solid var(--teal)}
+.card.accent-violet{border-top:3px solid var(--violet)}
+.card.accent-orange{border-top:3px solid var(--orange)}
+.card.accent-blue{border-top:3px solid var(--blue)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;margin:2px 3px 2px 0}
+.pill.blue{background:var(--blue-bg);color:var(--blue)} .pill.violet{background:var(--violet-bg);color:var(--violet)}
+.pill.teal{background:var(--teal-bg);color:var(--teal)} .pill.orange{background:var(--orange-bg);color:var(--orange)}
+.pill.rose{background:var(--rose-bg);color:var(--rose)} .pill.green{background:var(--green-bg);color:var(--green)}
+.pill.amber{background:var(--amber-bg);color:var(--amber)} .pill.slate{background:var(--slate-bg);color:var(--slate)}
+code.inline{background:var(--slate-bg);color:#0f172a;border-radius:5px;padding:1px 7px;font-family:Consolas,monospace;font-size:13px}
+pre{background:var(--code-bg);color:#dbe4f3;border-radius:12px;padding:18px 20px;overflow-x:auto;font-family:Consolas,monospace;font-size:13px;line-height:1.65;margin:12px 0}
+pre .c{color:#64748b}pre .k{color:#7dd3fc}pre .s{color:#fca5a5}pre .hl{background:rgba(56,189,248,.14);display:inline-block;width:100%;border-radius:4px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+th{background:#1e293b;color:#f1f5f9;text-align:left;padding:10px 12px;font-weight:600;white-space:nowrap}
+td{padding:9px 12px;border-top:1px solid var(--border);vertical-align:top;color:var(--ink2)}
+td b{color:var(--ink)}
+.tcenter{text-align:center}
+.note{border-left:4px solid var(--amber);background:var(--amber-bg);border-radius:0 10px 10px 0;padding:12px 18px;margin:14px 0;font-size:14px;color:#7c4a0e}
+.note.blue{border-color:var(--blue);background:var(--blue-bg);color:#1e40af}
+.note.green{border-color:var(--green);background:var(--green-bg);color:#166534}
+.note.rose{border-color:var(--rose);background:var(--rose-bg);color:#9f1239}
+.finding{display:flex;gap:12px;margin:10px 0;align-items:flex-start}
+.finding .dot{width:26px;height:26px;border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;margin-top:2px}
+.pipeline{display:flex;flex-wrap:wrap;gap:0;margin:18px 0;align-items:stretch}
+.pstep{flex:1;min-width:128px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin:0 12px 12px 0}
+.pstep .ic{font-size:21px}
+.pstep .pt{font-weight:700;font-size:13.5px;margin:5px 0 3px}
+.pstep .pd{font-size:12px;color:var(--ink3);line-height:1.5}
+.pstep.c-blue{border-top:3px solid var(--blue)}.pstep.c-teal{border-top:3px solid var(--teal)}
+.pstep.c-violet{border-top:3px solid var(--violet)}.pstep.c-orange{border-top:3px solid var(--orange)}
+.pstep.c-rose{border-top:3px solid var(--rose)}.pstep.c-green{border-top:3px solid var(--green)}
+.lv{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;border-radius:8px;color:#fff;font-weight:800;font-size:13px;margin-right:8px}
+.foot{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-size:12.5px;color:var(--ink3)}
+.repo-chip{font-family:Consolas,monospace;font-size:12px;background:var(--slate-bg);padding:2px 9px;border-radius:6px;color:var(--slate)}
+.toc{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 6px}
+.toc a{display:inline-block;background:var(--surface);border:1px solid var(--border);color:var(--ink2);text-decoration:none;border-radius:10px;padding:7px 15px;font-size:13px;font-weight:600}
+.toc a:hover{border-color:var(--blue);color:var(--blue)}
+.typehead{border-radius:12px;padding:10px 16px;color:#fff;font-weight:800;font-size:15px;display:inline-block;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">DESIGN PROPOSAL · 分管线设计</div>
+  <h1>三类视频形态，三条分管线<br><span style="font-size:19px;font-weight:600;opacity:.9">口播观点 / 课程讲义 / 实操复刻 —— 共用感知底座的内容形态分层设计</span></h1>
+  <p>基于源码级调研结论，把"视频观看 agent"按内容形态拆成三条管线：信息所在的模态不同，处理路径、难点和输出物完全不同。本方案给出每条管线的设计、现有轮子与可行性评级。</p>
+  <div class="meta"><span>📅 2026-09-17</span><span>📌 承接《源码级技术调研报告》</span><span>🎯 目标：让三类视频各自有一条能落地的完整链路</span></div>
+</div>
+
+<div class="page">
+
+<div class="toc">
+  <a href="#s1">① 三类形态的本质差异</a>
+  <a href="#s2">② 总架构：共用底座 + 三个分叉</a>
+  <a href="#s3">③ 管线一：口播/观点类</a>
+  <a href="#s4">④ 管线二：课程 → LaTeX 讲义</a>
+  <a href="#s5">⑤ 管线三：实操教程 → 复刻+实验报告</a>
+  <a href="#s6">⑥ 可行性评级与路线图</a>
+</div>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1"><span class="num" style="background:var(--blue)">1</span>三类形态的本质差异</h2>
+<p class="lead">分型的依据不是视频题材，而是<b>"信息到底装在哪个模态里、输出物长什么样、怎么验收"</b>。这决定了三条管线的每一段都不同。</p>
+
+<table>
+<tr><th></th><th>🎙️ 类型一 · 口播/观点</th><th>📐 类型二 · 课程/讲座</th><th>🛠️ 类型三 · 实操教程</th></tr>
+<tr><td><b>典型内容</b></td><td>播客、政治/时事观点、小说推荐</td><td>数学讲座、系统课程</td><td>PS/绘画教程、AI提示词实验、剪辑、游戏技术美术、计算机开发</td></tr>
+<tr><td><b>信息载体</b></td><td><b>几乎全在音频</b>（画面常是装饰性 B-roll）</td><td><b>音频讲解 + 板书/PPT 画面</b>（公式、推导、图表在画面上）</td><td><b>操作序列</b>（屏幕动作、参数设置、工具切换，口头只讲一半）</td></tr>
+<tr><td><b>画面重要性</b></td><td>低，字幕直取即可覆盖 95%</td><td>高——<b>丢掉画面=丢掉公式和图表</b></td><td>极高——<b>丢掉画面=丢掉操作本身</b></td></tr>
+<tr><td><b>输出物</b></td><td>观点梳理文/推文、论点结构、金句、时间轴索引</td><td><b>LaTeX 讲义</b>（定义-定理-推导-例题），像好学生的完整笔记</td><td><b>操作步骤讲义 + 实验报告 + 复刻产物</b>（可运行的项目/图/工程文件）</td></tr>
+<tr><td><b>验收标准</b></td><td>覆盖率高、立场还原准</td><td>公式可编译、推导可复算、与视频可互查</td><td><b>产物能跑/能开/能看</b>，步骤能跟着做通</td></tr>
+<tr><td><b>核心难点</b></td><td>长音频的写作质量（已基本解决）</td><td>公式 OCR + 板书帧去重 + 讲义结构化</td><td><b>步骤提取 + agent 真实执行 + 产物验证</b></td></tr>
+<tr><td><b>难度</b></td><td><span class="pill green">★☆☆ 现有轮子够用</span></td><td><span class="pill amber">★★☆ 轮子成熟但需拼装</span></td><td><span class="pill rose">★★★ 前沿，需分级降级策略</span></td></tr>
+</table>
+
+<div class="note blue"><b>为什么必须分型：</b>对类型一跑多模态抽帧是浪费钱（画面没信息）；对类型二只靠字幕会丢掉全部公式（字幕读不出数学）；对类型三只做"笔记"没意义——你要的是<b>复刻产物</b>。一套管线包打天下的方案，在这三类上必然两类是残废。</div>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2"><span class="num" style="background:var(--violet)">2</span>总架构：共用感知底座 + 三个分叉</h2>
+
+<div class="card accent-violet">
+  <div class="pipeline">
+    <div class="pstep c-blue"><div class="ic">📥</div><div class="pt">共用：获取层</div><div class="pd">yt-dlp 字幕直取（SESSDATA）+ BBDown 视频；多P选集</div></div>
+    <div class="pstep c-teal"><div class="ic">🎙️</div><div class="pt">共用：语音层</div><div class="pd">字幕优先 → 静音点切chunk → faster-whisper 兜底</div></div>
+    <div class="pstep c-violet"><div class="ic">🖼️</div><div class="pt">共用：画面层</div><div class="pd">场景感知抽帧 + actual_t 对齐 + 补帧闭环</div></div>
+    <div class="pstep c-orange" style="border-left:3px dashed var(--orange)"><div class="ic">🔀</div><div class="pt">分流：内容分型器</div><div class="pd">首轮粗看（元数据+抽样帧+转写开头）→ 判定类型 → 路由</div></div>
+  </div>
+  <div class="grid3">
+    <div class="pstep c-green"><div class="ic">📝</div><div class="pt">① 口播分线</div><div class="pd">纯文本管线：转写 → 观点结构化 → 写作模型成文（不抽帧或极少抽帧）</div></div>
+    <div class="pstep c-rose"><div class="ic">∑</div><div class="pt">② 课程分线</div><div class="pd">板书帧检测去重 → 公式OCR(Pix2Text) → LaTeX 讲义 map-reduce</div></div>
+    <div class="pstep c-orange"><div class="ic">🛠️</div><div class="pt">③ 实操分线</div><div class="pd">屏幕OCR+帧差 → 操作序列JSON → agent按环境分级执行 → 实验报告+产物验证</div></div>
+  </div>
+  <p style="font-size:13.5px"><b>分型器设计</b>：成本低——只看三样东西：①元数据/标题/UP主分类；②转写前 500 字的语言特征（"今天我们聊聊"vs"我们来证明"vs"打开软件"）；③均匀抽 8 帧的画面特征（人像 vs 板书 vs 软件界面）。规则+小模型即可，不必上大模型。</p>
+</div>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3"><span class="num" style="background:var(--green)">3</span>管线一 · 口播/观点类：纯文本管线</h2>
+<div class="card accent-blue">
+  <div class="pipeline">
+    <div class="pstep c-blue"><div class="ic">⬇️</div><div class="pt">字幕直取</div><div class="pd">B站CC/AI字幕，跳过视频流下载（省时省钱90%）</div></div>
+    <div class="pstep c-teal"><div class="ic">🧹</div><div class="pt">文本清洗</div><div class="pd">滚动重复去重、语气词归并、说话人分离（多人播客）</div></div>
+    <div class="pstep c-violet"><div class="ic">🧩</div><div class="pt">观点结构化</div><div class="pd">map：分段提取"论点-论据-例子-立场"四元组</div></div>
+    <div class="pstep c-rose"><div class="ic">✍️</div><div class="pt">写作输出</div><div class="pd">reduce：按文体模板成文（推文/读书笔记/观点综述）</div></div>
+  </div>
+  <div class="finding"><span class="dot" style="background:var(--green)">✓</span><p><b>现状：直接可做。</b>这是上次调研里所有"纯字幕流"项目已验证的路径，80% 覆盖率规则（video-to-article-skill）+ map-reduce 分段（let-ai）搬过来即可。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--blue)">＋</span><p><b>补充设计 1 · 说话人分离</b>：多人播客需要区分"谁在说"。轮子：<code class="inline">pyannote.audio</code> 或 faster-whisper 的词级时间戳 + 简单聚类；输出转写时标注 Speaker A/B。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--blue)">＋</span><p><b>补充设计 2 · 观点类特殊处理</b>：时事观点视频的输出物要加一层<b>「立场还原」约束</b>——区分"UP主的论点"和"整理者的转述"，写作 prompt 里禁止把转述写成事实（沿用 let-ai 的证据边界规则：转写里没有的不许编）。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--blue)">＋</span><p><b>补充设计 3 · 小说推荐类</b>：输出结构应是<b>结构化书单</b>（书名/作者/推荐理由/时间戳），可以直接规则化提取，产物可入库（以后做"推荐聚合"）。</p></div>
+</div>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4"><span class="num" style="background:var(--amber)">4</span>管线二 · 课程类：视频 → LaTeX 讲义</h2>
+<div class="card accent-orange">
+  <div class="pipeline">
+    <div class="pstep c-teal"><div class="ic">🎙️</div><div class="pt">转写</div><div class="pd">同共用层；数学术语需热词表纠正（whisper 对"特征值"这类词容易错）</div></div>
+    <div class="pstep c-violet"><div class="ic">🖼️</div><div class="pt">板书帧检测</div><div class="pd">场景检测变体：画面静止久 + 文字密度高 = 讲义页；感知哈希去重</div></div>
+    <div class="pstep c-orange"><div class="ic">∑</div><div class="pt">公式 OCR</div><div class="pd">Pix2Text / LaTeX_OCR_PRO 把板书公式转 LaTeX；多模态模型兜底</div></div>
+    <div class="pstep c-rose"><div class="ic">🧩</div><div class="pt">map 分段笔记</div><div class="pd">每 10-15 分钟：「讲解转写 + 对应板书页」→ 结构化片段（定义/定理/推导/例题）</div></div>
+    <div class="pstep c-green"><div class="ic">📄</div><div class="pt">reduce 成讲义</div><div class="pd">合并 → LaTeX 模板 → 编译 PDF；公式逐条与原帧对照校验</div></div>
+  </div>
+
+  <h3>关键环节 1：板书/PPT 帧的检测与去重</h3>
+  <p>课程视频的画面 90% 时间是静止的讲义页，直接均匀抽帧会拿到几百张重复图。策略：</p>
+  <div class="finding"><span class="dot" style="background:var(--teal)">1</span><p><b>感知哈希去重</b>：对候选帧算 pHash（<code class="inline">imagehash</code> 库），汉明距离 &lt; 阈值视为同一页，只保留一张——板书页平均可以从 100 帧压到 10-20 页。watch-skill 项目（本地视频索引）已用同类"perceptual-hash dedup"方案。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--teal)">2</span><p><b>文字密度启发</b>：OCR 前用轻量检测（边缘密度/连通域数量）判断"这帧有没有板书"，人像特写直接丢弃。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--teal)">3</span><p><b>关键帧页 = 讲义资产</b>：去重后的板书页按时间戳归档，讲义里每页嵌入引用（<code class="inline">t=12:34</code> 可回看），这是"好学生笔记"和普通总结的核心差别。</p></div>
+
+  <h3>关键环节 2：公式识别的现成轮子</h3>
+  <table>
+    <tr><th>项目</th><th>Stars</th><th>能力</th><th>选型建议</th></tr>
+    <tr><td><span class="repo-chip">breezedeus/Pix2Text</span></td><td class="tcenter">3.2k</td><td>版面+表格+公式+文本一体化识别，输出 LaTeX</td><td><b>首选</b>：一个工具同时处理文字和公式，MIT 协议</td></tr>
+    <tr><td><span class="repo-chip">LinXueyuanStdio/LaTeX_OCR_PRO</span></td><td class="tcenter">1.3k</td><td>手写+印刷公式，中英文，支持符号推导（LaTeX AST）</td><td>手写板书场景备选</td></tr>
+    <tr><td><span class="repo-chip">alephpi/Texo</span></td><td class="tcenter">895</td><td>20M 参数 SOTA 公式 OCR，可在浏览器跑</td><td>本地轻量部署备选</td></tr>
+    <tr><td>Mathpix API</td><td class="tcenter">—</td><td>商用最强，公式+表格识别</td><td>精度要求高时按量付费兜底</td></tr>
+  </table>
+
+  <h3>关键环节 3：讲义的"好学生规范"与校验</h3>
+<pre><span class="c"># LaTeX 讲义的结构模板（每讲）</span>
+\section{定义}[t=05:12]        <span class="c">% 每个结构块携带视频时间戳</span>
+\section{定理与证明}[t=18:40]   <span class="c">% 推导步骤逐条可回看</span>
+\section{例题}[t=32:05]        <span class="c">% 板书原页作为 figure 嵌入</span>
+
+<span class="c"># 校验闭环（保证"可阅读"不等于"能编译就行"）</span>
+1. pdflatex 编译零 error —— 公式语法校验
+2. 逐条公式与原板书帧对照（多模态模型交叉验证）
+3. 术语一致性表：全篇符号定义唯一（讲义最容易烂在符号混乱上）</pre>
+  <div class="note"><b>参考项目：</b><span class="repo-chip">lachlanchen/Video2Book</span> 已验证"视频合集→转写→LaTeX/PDF 讲义"完整 pipeline 可行；<span class="repo-chip">byxshr/video-render-pdf-skills</span> 把同样的事做成了 skill。它们都<b>只处理音频、不处理板书画面</b>——加画面通道就是我们的差异点。</p></div>
+</div>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5"><span class="num" style="background:var(--rose)">5</span>管线三 · 实操教程：看懂 → 做出 → 写报告</h2>
+<p class="lead">这是三种里最激进的：agent 不只是"看懂"，还要<b>按教程实际操作并交付复刻作品</b>。调研发现这个方向已有先行者，但完整闭环（复刻+实验报告）仍无人做全。</p>
+
+<div class="card accent-rose">
+  <h3 style="margin-top:0">先分情况：不是所有教程都能"真复刻"</h3>
+  <table>
+    <tr><th>可执行性等级</th><th>环境</th><th>例子</th><th>复刻策略</th><th>可行性</th></tr>
+    <tr><td><span class="lv" style="background:var(--green)">A</span><b>可编程环境</b></td><td>代码/CLI/配置文件/提示词</td><td>Python/前端教程、AI 提示词实验、ffmpeg 命令、Shader</td><td><b>agent 真执行</b>：建工作区、装依赖、逐步复现、跑测试</td><td><span class="pill green">高，先做这块</span></td></tr>
+    <tr><td><span class="lv" style="background:var(--amber)">B</span><b>GUI 软件操作</b></td><td>PS/剪辑软件/Blender 等</td><td>PS 调色步骤、Pr 剪辑、游戏引擎操作</td><td><b>半复刻</b>：提取精确操作步骤手册；GUI agent 辅助执行（实验性）；或人机协作——agent 指导、人操作、agent 验证截图</td><td><span class="pill amber">中，步骤手册稳定可用</span></td></tr>
+    <tr><td><span class="lv" style="background:var(--rose)">C</span><b>手艺/创作类</b></td><td>手绘/审美驱动</td><td>绘画教程、构图讲解</td><td><b>讲义+练习</b>：完整技法拆解讲义 + 分步练习任务单；可用代码生成器辅助复现特定效果</td><td><span class="pill rose">低，产出讲义即可</span></td></tr>
+  </table>
+  <div class="note rose"><b>务实建议：</b>v1 只做 A 级环境（含游戏技术美术里的 Shader/代码部分、提示词实验、开发教程）——这是 agent 能 100% 自主完成的闭环；B 级先交付"精确操作手册"（步骤+参数+时间戳截图），GUI 复刻作为 v2 实验特性。</p></div>
+</div>
+
+<div class="card accent-orange">
+  <h3 style="margin-top:0">核心环节 1：操作序列提取（帧+屏幕OCR+转写 → 步骤 JSON）</h3>
+  <p>教程视频的口头讲解和屏幕操作各说一半，必须三路融合。参考 <span class="repo-chip">sonpiaz/watch-cli</span> 的已验证做法——它的定位就是"观看这个视频并构建其中展示的项目"：</p>
+<pre><span class="c"># watch-cli 的实际用法（agent 收到的素材包）</span>
+$ watch https://youtube.com/watch?v=TUTORIAL 16    <span class="c"># 参数=帧数</span>
+VIDEO: /tmp/dl-video/abc123.mp4
+DURATION: 1847
+FRAMES: frame_01.jpg  <span class="c"># 项目文件夹结构</span>
+FRAMES: frame_02.jpg  <span class="c"># package.json 内容</span>
+FRAMES: frame_03.jpg  <span class="c"># App.tsx 源码</span>
+FRAMES: frame_04.jpg  <span class="c"># 终端里的 npm install</span>
+TRANSCRIPT: "先创建 React 项目，然后安装依赖……"
+<span class="c"># agent 处理：看结构→建目录 / 读依赖→写 package.json / 照屏代码→实现 / 转录补口头说明</span>
+<span class="c"># 结果：与教程一致的可运行项目</span></pre>
+  <p>我们的版本在此基础上结构化升级——每一步输出为<b>可校验的操作记录</b>：</p>
+<pre>{
+  <span class="s">"step"</span>: 7,
+  <span class="s">"action"</span>: <span class="s">"run_command"</span>,          <span class="c">// install_pkg / edit_file / set_param / ui_click / draw_stroke ...</span>
+  <span class="s">"detail"</span>: <span class="s">"npm install three @types/three"</span>,
+  <span class="s">"evidence_t"</span>: <span class="s">"14:22"</span>,           <span class="c">// 步骤依据的帧/转写时间戳</span>
+  <span class="s">"expected"</span>: <span class="s">"node_modules 出现 three 包"</span>,
+  <span class="s">"verify"</span>: <span class="s">"ls node_modules/three"</span>  <span class="c">// 执行后的验证命令/检查方式</span>
+}</pre>
+  <div class="finding"><span class="dot" style="background:var(--rose)">1</span><p><b>屏幕 OCR 是 A/B 级的关键通道</b>：终端命令、代码、参数面板上的数值都在屏幕文字里，<code class="inline">PaddleOCR</code>/<code class="inline">Tesseract</code> 或直接让多模态模型读帧（效果好但贵），与转写按时间戳对齐。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--rose)">2</span><p><b>帧密度按内容自适应</b>：操作密集段（画面变化快）加密抽帧，讲解段放稀——沿用场景检测，对"屏幕录制"类视频阈值要调低（窗口切换就是关键事件）。</p></div>
+</div>
+
+<div class="card accent-violet">
+  <h3 style="margin-top:0">核心环节 2：agent 执行与实验报告</h3>
+  <div class="pipeline">
+    <div class="pstep c-teal"><div class="ic">📦</div><div class="pt">环境准备</div><div class="pd">建隔离工作区（venv/临时目录），按步骤0安装依赖</div></div>
+    <div class="pstep c-blue"><div class="ic">▶️</div><div class="pt">逐步执行</div><div class="pd">按操作序列 JSON 复现，每步跑 verify，失败→回看对应帧/转写纠错重试</div></div>
+    <div class="pstep c-orange"><div class="ic">🧪</div><div class="pt">产物验证</div><div class="pd">代码→跑测试；图像→与原视频帧对比；工程文件→能否打开</div></div>
+    <div class="pstep c-rose"><div class="ic">📋</div><div class="pt">实验报告</div><div class="pd">偏差记录、踩坑、修复过程、最终产物截图/路径</div></div>
+  </div>
+<pre><span class="c"># 实验报告模板（与讲义配套交付）</span>
+## 1. 教程信息          <span class="c"># 标题/UP主/时长/环境假设</span>
+## 2. 复现环境          <span class="c"># agent 实际用的 OS/依赖版本（与教程差异声明）</span>
+## 3. 步骤执行记录       <span class="c"># ✅32步 / ⚠️3步有偏差（列偏差与原因）/ ❌1步失败（原因分析）</span>
+## 4. 偏差与踩坑        <span class="c"># 教程没提但实际遇到的（版本差异/平台差异），这是报告的价值核心</span>
+## 5. 最终产物          <span class="c"># 复刻作品路径 + 截图 + 与原视频效果对照图</span>
+## 6. 结论与改进        <span class="c"># 教程本身的问题（跳步/过时），给 UP 主的"勘误"</span></pre>
+  <p class="lead" style="font-size:13.5px"><b>失败处理是设计核心</b>：某步 verify 失败时，agent 回到对应时间戳看帧+转写，自查是"漏了前置步骤"还是"环境差异"，重试最多 2 次——这直接复用 let-ai-read-video 的补帧闭环模式（insufficient → 定向补证据 → 重验证），只是补的从"帧"变成"执行上下文"。</p>
+</div>
+
+<div class="card accent-teal">
+  <h3 style="margin-top:0">生态现状：这个方向刚刚起步，正是切入点</h3>
+  <table>
+    <tr><th>项目</th><th>定位</th><th>与我们目标的差距</th></tr>
+    <tr><td><span class="repo-chip">sonpiaz/watch-cli</span> <span class="pill green">最对口</span></td><td>CLI 把"帧+转录"打包喂给 agent，演示了"看视频建项目"全流程</td><td>无操作序列结构化、无失败闭环、无实验报告、YouTube 为主</td></tr>
+    <tr><td><span class="repo-chip">oxbshw/watch-skill</span></td><td>本地视频索引（SQLite+向量检索）、置信度评分、低成本升级策略（密采样→放大重OCR→引用前验证）</td><td>定位是"看懂"，不做执行</td></tr>
+    <tr><td>Video-Use <span class="pill slate">23k★</span></td><td>Browser-Use 姊妹项目，帧采样+多模态问答/剪辑指令</td><td>视频理解通用库，无教程复刻概念</td></tr>
+    <tr><td>学术线：COIN / CrossTask / YouCook2</td><td>程序性视频步骤标注数据集（步骤定位/先后顺序学习）</td><td>数据集而非可用工具，但步骤建模思路可借鉴</td></tr>
+    <tr><td>GUI agent 线（OSWorld / CogAgent 等）</td><td>B 级环境的屏幕操作执行器</td><td>通用 GUI 操作，不懂"教程上下文"，成本高</td></tr>
+  </table>
+  <p class="lead" style="font-size:13.5px"><b>结论：</b>"提取操作序列 → 分级执行 → 产物验证 → 实验报告"这个完整闭环<b>没有现成项目</b>，但每个零件（watch-cli 的素材包、watch-skill 的置信度策略、GUI agent 的执行器、let-ai 的失败闭环模式）都存在。这是三条管线里差异化最大、也最值得投入的一条。</p>
+</div>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6"><span class="num" style="background:var(--green)">6</span>可行性评级与实施路线图</h2>
+
+<table>
+<tr><th>管线</th><th>复用轮子</th><th>需自研</th><th>难度</th><th>预期产出</th></tr>
+<tr><td><b>① 口播</b></td><td>字幕直取、map-reduce 写作规范、80%覆盖率检查（全部已有）</td><td>说话人分离接入、观点结构化 prompt</td><td><span class="pill green">1-2 周</span></td><td>观点文/书单/播客笔记，质量上限=写作模型</td></tr>
+<tr><td><b>② 课程</b></td><td>Pix2Text 公式OCR、pHash 去重、Video2Book pipeline 参考</td><td>板书帧检测器、LaTeX 模板+编译校验、符号一致性检查</td><td><span class="pill amber">2-4 周</span></td><td>可编译 LaTeX 讲义 PDF + 板书页索引</td></tr>
+<tr><td><b>③ 实操（A级）</b></td><td>watch-cli 素材包模式、let-ai 失败闭环模式、场景检测</td><td><b>操作序列JSON规范、执行沙箱、verify体系、实验报告生成</b></td><td><span class="pill rose">4-8 周</span></td><td>代码/提示词类教程的复刻项目+实验报告</td></tr>
+<tr><td><b>③ 实操（B/C级）</b></td><td>PaddleOCR 屏幕文字、GUI agent（实验性）</td><td>精确操作手册生成、截图验证</td><td><span class="pill slate">v2 再做</span></td><td>操作手册（稳定）+ GUI 复刻（实验）</td></tr>
+</table>
+
+<div class="card" style="background:linear-gradient(135deg,#eef4ff,#f6f0ff);border:1px solid #d6ddfa">
+  <h3 style="margin-top:0">🚀 建议实施顺序</h3>
+  <div class="finding"><span class="dot" style="background:var(--green)">P0</span><p><b>先把共用底座跑通</b>（获取+语音+基础抽帧+分型器），用一个真实 B 站视频验证三路分流正确。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--green)">P1</span><p><b>管线一上线</b>——最快见效，且写作层成果（文体模板、覆盖率检查）直接被管线二三复用。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--amber)">P2</span><p><b>管线二接公式 OCR</b>，拿一集数学讲座做端到端验证（编译通过+公式对照）。</p></div>
+  <div class="finding"><span class="dot" style="background:var(--rose)">P3</span><p><b>管线三从 A 级起步</b>：选一个"跟做型"开发教程（如 three.js/WebGL 小项目），跑通"操作序列→执行→验证→报告"最小闭环，再逐步扩 B 级。</p></div>
+</div>
+
+<div class="foot">
+  本方案承接 2026-09-16《源码级技术调研报告》。新增调研：watch-cli（看视频建项目已验证案例）、watch-skill（本地视频索引+置信度）、Video-Use、Pix2Text/LaTeX_OCR_PRO/Texo（公式OCR）、Video2Book（视频→LaTeX讲义 pipeline）。可执行性分级（A/B/C）为本方案的核心设计决策，决定了管线三"真复刻/半复刻/讲义"三档产出。
+</div>
+
+</div>
+</body>
+</html>
