@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "echonotes-practice"
+version = "0.1.0"
+description = "EchoNotes pipeline 3: tutorial evidence, real execution, and reports"
+requires-python = ">=3.10"
+dependencies = ["bleach>=6,<7", "markdown>=3.5,<4"]
+
+[project.optional-dependencies]
+asr = ["faster-whisper>=1.1,<2"]
+
+[project.scripts]
+echonotes-practice = "echonotes_practice.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["echonotes_practice*"]

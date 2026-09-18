@@ -3,6 +3,7 @@
 research/repos/
 work/pipeline1/models/
 work/pipeline1/runs/
+work/pipeline3/runs/
 work/pipeline1/audio.*
 work/pipeline1/transcript.*
 work/pipeline1/polished.*
@@ -14,6 +15,7 @@ work/pipeline1/video_list.json
 *.png
 __pycache__/
 *.pyc
+*.egg-info/
 # 调试临时文件
 work/pipeline1/probe*.py
 work/pipeline1/snap*.txt
