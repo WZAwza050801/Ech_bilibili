@@ -1,0 +1,3 @@
+Pillow>=10,<13
+# Optional when running ASR in this same environment.
+faster-whisper>=1.1,<2
