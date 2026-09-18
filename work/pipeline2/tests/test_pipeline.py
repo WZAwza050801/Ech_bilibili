@@ -6,6 +6,7 @@ from pathlib import Path
 from work.pipeline2.core import cached, read_json, validate_outline, write_json
 from work.pipeline2.media import Bilibili
 from work.pipeline2.pipeline2 import parser, run
+from work.pipeline2.writing import outline
 
 
 class ContractTests(unittest.TestCase):
@@ -21,6 +22,34 @@ class ContractTests(unittest.TestCase):
         for ids in [["b1"], ["b1", "b2", "b1"], ["b1", "invented"]]:
             with self.assertRaises(ValueError):
                 validate_outline({"sections": [{"title": "标题", "block_ids": ids}]}, blocks)
+
+    def test_final_reduce_repairs_singleton_sections(self):
+        blocks = [
+            {"id": f"b{i}", "kind": "explanation", "title": f"主题 {i}",
+             "start": i, "end": i + 1, "text": "摘要"}
+            for i in range(3)
+        ]
+
+        class RepairingChat:
+            identity = {"model": "fixture"}
+
+            def json(self, _system, payload, images=()):
+                if isinstance(payload, list):
+                    return {"sections": [
+                        {"title": "主体", "block_ids": ["b0", "b1"]},
+                        {"title": "零散主题", "block_ids": ["b2"]},
+                    ]}
+                if "draft" in payload:
+                    return {"sections": [
+                        {"title": "合并主题", "block_ids": ["b0", "b1", "b2"]},
+                    ]}
+                return {"sections": payload["candidate_sections"]}
+
+        with tempfile.TemporaryDirectory() as directory:
+            result = outline(blocks, RepairingChat(), Path(directory))
+        self.assertEqual(result["sections"], [
+            {"title": "合并主题", "block_ids": ["b0", "b1", "b2"]},
+        ])
 
     def test_multi_part_uses_selected_cid_and_duration(self):
         api = Bilibili()
@@ -43,6 +72,8 @@ class FixtureChat:
 
     def json(self, system, payload, images=()):
         self.calls += 1
+        if isinstance(payload, dict) and "candidate_sections" in payload:
+            return {"sections": payload["candidate_sections"]}
         if isinstance(payload, dict):
             second = payload["start"] >= 12
             formula = r"\lim_{h\to 0}\frac{(x+h)^2-x^2}{h}=2x" if second else r"f'(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}"

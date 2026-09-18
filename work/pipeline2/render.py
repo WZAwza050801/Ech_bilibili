@@ -15,6 +15,7 @@ mod bmod pmod operatorname mathrm mathbf mathit mathsf mathtt mathcal mathbb bol
 text textrm textnormal mathnormal overline underline widehat widetilde hat bar vec dot ddot
 left right big Big bigg Bigg bigl bigr Bigl Bigr
 cdot cdots ldots vdots ddots times div pm mp circ bullet ast star
+odot otimes oplus
 le leq ge geq neq ne approx sim simeq equiv cong propto
 in notin ni subset subseteq supset supseteq cup cap setminus emptyset varnothing
 forall exists nexists neg land lor wedge vee implies iff
@@ -29,10 +30,41 @@ nonumber notag
 """.split())
 MATH_ENVS = {"aligned", "gathered", "cases", "matrix", "pmatrix", "bmatrix", "vmatrix", "Vmatrix", "smallmatrix"}
 
+UNICODE_MATH = {
+    "∈": r"\in ", "∉": r"\notin ", "∀": r"\forall ", "∃": r"\exists ",
+    "∧": r"\wedge ", "∨": r"\vee ", "∝": r"\propto ", "≤": r"\le ",
+    "≥": r"\ge ", "≠": r"\neq ", "≈": r"\approx ", "⊙": r"\odot ",
+    "⊗": r"\otimes ", "⊕": r"\oplus ", "→": r"\to ", "×": r"\times ",
+    "−": "-", "·": r"\cdot ", "∞": r"\infty ",
+    "ℝ": r"\mathbb{R}", "ℤ": r"\mathbb{Z}", "ℕ": r"\mathbb{N}", "ℂ": r"\mathbb{C}",
+    "α": r"\alpha ", "β": r"\beta ", "γ": r"\gamma ", "δ": r"\delta ",
+    "ε": r"\epsilon ", "θ": r"\theta ", "λ": r"\lambda ", "μ": r"\mu ",
+    "ξ": r"\xi ", "π": r"\pi ", "ρ": r"\rho ", "σ": r"\sigma ",
+    "φ": r"\phi ", "ω": r"\omega ", "Σ": r"\Sigma ", "Δ": r"\Delta ",
+}
+SUBSCRIPTS = str.maketrans("₀₁₂₃₄₅₆₇₈₉ₖⱼ", "0123456789kj")
+SUPERSCRIPTS = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻ˣ", "0123456789-x")
+TEXT_SUBSCRIPTS = dict(zip("₀₁₂₃₄₅₆₇₈₉ₖⱼ", "0123456789kj"))
+TEXT_SUPERSCRIPTS = dict(zip("⁰¹²³⁴⁵⁶⁷⁸⁹⁻ˣ", "0123456789-x"))
+TEXT_UNICODE_MATH = {
+    char: r"\ensuremath{" + latex.strip() + "}"
+    for char, latex in UNICODE_MATH.items()
+}
+
+
+def normalize_unicode_math(value):
+    value = "".join(UNICODE_MATH.get(char, char) for char in value)
+    value = re.sub(r"[₀₁₂₃₄₅₆₇₈₉ₖⱼ]+",
+                   lambda match: "_{" + match.group().translate(SUBSCRIPTS) + "}", value)
+    value = re.sub(r"[⁰¹²³⁴⁵⁶⁷⁸⁹⁻ˣ]+",
+                   lambda match: "^{" + match.group().translate(SUPERSCRIPTS) + "}", value)
+    return re.sub(r"[ \t]+", " ", value).strip()
+
 
 def math_tex(value):
     if not isinstance(value, str) or not value.strip():
         raise ValueError("Empty math")
+    value = normalize_unicode_math(value)
     if re.search(r"[%#$~\x00-\x08\x0b-\x1f]", value) or "^^" in value:
         raise ValueError("Unsupported math characters")
     commands = re.findall(r"\\([A-Za-z]+|.)", value, flags=re.S)
@@ -67,7 +99,15 @@ ESCAPES = {"\\": r"\textbackslash{}", "{": r"\{", "}": r"\}", "$": r"\$",
 
 
 def escape(value):
-    return "".join(ESCAPES.get(c, c) for c in str(value))
+    output = []
+    for char in str(value):
+        if char in TEXT_SUBSCRIPTS:
+            output.append(r"\textsubscript{" + TEXT_SUBSCRIPTS[char] + "}")
+        elif char in TEXT_SUPERSCRIPTS:
+            output.append(r"\textsuperscript{" + TEXT_SUPERSCRIPTS[char] + "}")
+        else:
+            output.append(TEXT_UNICODE_MATH.get(char, ESCAPES.get(char, char)))
+    return "".join(output)
 
 
 def prose_tex(value):
@@ -106,6 +146,7 @@ PREAMBLE = r"""\documentclass[UTF8,a4paper,11pt,fontset=fandol]{ctexart}
 \setlength{\headheight}{15pt}
 \setlength{\emergencystretch}{3em}
 \setlength{\parskip}{0.45em}
+\sloppy
 \newtheorem{definition}{定义}[section]
 \newtheorem{theorem}[definition]{定理}
 \newtheorem{example}[definition]{例题}

@@ -33,6 +33,7 @@ python -m work.pipeline2.pipeline2 run 'https://www.bilibili.com/video/BV.../?p=
 | `BILIBILI_COOKIE` | 本地提供的完整 cookie 请求头 |
 | `ECHONOTES_ASR_PYTHON` | 已安装 faster-whisper 的解释器 |
 | `ECHONOTES_ASR_MODEL` | 本地模型路径或 `small` |
+| `ECHONOTES_ASR_CPU_THREADS` / `ECHONOTES_ASR_BEAM_SIZE` | 默认 `2` / `3`，内存紧张时可设为 `1` / `1` |
 
 无 cookie 环境变量时，只读取相邻管线一源码中的既有浏览器 cookie 字面量，不导入其有副作用的入口。
 不会读取浏览器登录数据库，也不把运行时 cookie / 密钥 / CDN 签名 URL 存到产物。
@@ -44,6 +45,11 @@ python -m work.pipeline2.pipeline2 run 'https://www.bilibili.com/video/BV.../?p=
 ```powershell
 # 已有本地视频和时间戳转写：跳过下载与 ASR
 python -m work.pipeline2.pipeline2 run 'course.mp4' --transcript 'transcript.json'
+
+# 本地 Whisper 被其他任务占用时，可生成诚实标注为30秒粒度的云端 ASR
+python -m work.pipeline2.cloud_asr 'audio.wav' 'cloud-transcript.json' `
+  --secrets '外部密钥文件路径' --chunk-seconds 30
+python -m work.pipeline2.pipeline2 run 'course.mp4' --transcript 'cloud-transcript.json'
 
 # 只准备音画证据，不调用云模型
 python -m work.pipeline2.pipeline2 run 'course.mp4' --prepare-only
@@ -85,6 +91,8 @@ python -m work.pipeline2.pipeline2 run 'BV...' --no-polish --no-verify --no-comp
 同一视频有运行锁；异常退出后清理锁，进程被强制结束留下的锁需确认旧进程已停后移除。
 模型 JSON 编码失败或出现疑似 LaTeX 转义控制字符时，最多请求一次仅编码修复；
 再次失败则停止，不静默接受损坏公式。
+本地 ASR 默认限制 CTranslate2/MKL 并发，避免按 CPU 核心数放大内存；每 50 段写一次
+`asr-output.partial.json` 检查点。该检查点仅用于故障诊断，完整成功后才进入正式缓存。
 
 ## 产物
 
@@ -116,4 +124,6 @@ python -m work.pipeline2.tests.test_pipeline 'output/pipeline2-integration'
 - “所有生成知识块都保留”不是“原视频语义全覆盖”；未引用转写/帧清单辅助人工审查。
 - 不自动补全没有证据的证明；模糊符号、音画矛盾必须保留疑点。
 - API 可用性、地区与账户权限由所选服务决定；不自动充值或绕过限制。
+- 云端 ASR 兜底默认使用 SiliconFlow `TeleAI/TeleSpeechASR`，时间戳仅精确到切片区间；
+  产物中的 `timestamp_precision` 会保留这一限制，不能冒充逐句精确时间。
 - 真实长课质量需用用户指定视频验收，合成样例只证明管线连通和接口契约。

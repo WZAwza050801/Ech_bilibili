@@ -109,6 +109,54 @@ def string_list(value):
     return isinstance(value, list) and all(isinstance(x, str) for x in value)
 
 
+def normalize_uncertainties(value):
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value.strip() else []
+    if not isinstance(value, list):
+        raise ValueError("Uncertainties must be null, a string, or a list")
+    result = []
+    for item in value:
+        if isinstance(item, str):
+            if item.strip():
+                result.append(item)
+        elif isinstance(item, dict):
+            text = next((item.get(key) for key in ("note", "reason", "text", "description")
+                         if isinstance(item.get(key), str) and item[key].strip()), None)
+            if text is None:
+                raise ValueError("Uncertainty object has no textual note")
+            result.append(text)
+        else:
+            raise ValueError("Uncertainty list contains a non-text value")
+    return result
+
+
+def normalize_map(data, window=None):
+    allowed_frames = {f["id"] for f in window["frames"]} if window else None
+    if isinstance(data, dict) and isinstance(data.get("blocks"), list):
+        for block in data["blocks"]:
+            if isinstance(block, dict):
+                block["uncertainties"] = normalize_uncertainties(block.get("uncertainties"))
+                kind = block.get("kind")
+                if isinstance(kind, str) and kind not in KINDS:
+                    block["uncertainties"].append(
+                        f"模型原始知识块类型为“{kind}”，已按 explanation 排版。")
+                    block["kind"] = "explanation"
+                for name in ("formulas", "symbols"):
+                    value = block.get(name)
+                    if value is None:
+                        block[name] = []
+                    elif isinstance(value, dict):
+                        block[name] = [value]
+                if allowed_frames is not None and isinstance(block.get("frame_ids"), list):
+                    for formula in block["formulas"]:
+                        source = formula.get("frame_id") if isinstance(formula, dict) else None
+                        if source is not None and source in allowed_frames and source not in block["frame_ids"]:
+                            block["frame_ids"].append(source)
+    return data
+
+
 def validate_map(data, window):
     if not isinstance(data, dict) or not isinstance(data.get("title"), str):
         raise ValueError("Map requires a title")
