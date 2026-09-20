@@ -9,7 +9,7 @@ EchoNotes 是一个视频观看 agent 项目，目标是输入视频链接，输
 | 平台 | 音频/视频获取 | 状态 |
 |------|--------------|------|
 | Bilibili | playurl API 音频直取（完整浏览器头防 412）+ wbi 签名列表拉取 | ✅ 已实现 |
-| YouTube | yt-dlp（无 B 站式风控，反而简单） | 📋 规划中，欢迎 PR |
+| YouTube（Ech_youtube） | yt-dlp（无 B 站式风控，反而简单） | 📋 规划中，见 [Ech_youtube/](Ech_youtube/) |
 
 > B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `work/pipeline1/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
 
