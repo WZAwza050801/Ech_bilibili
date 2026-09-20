@@ -90,29 +90,42 @@ def find_splits(path, duration, target=900.0, tol=150.0):
         k += 1
     return [0.0] + splits + [duration]
 
-# ---- 转写(分段 + 每段独立断点缓存 + OOM 冷却重试) ----
-def transcribe_chunked(run_dir, lang, duration):
-    import gc
+# ---- 单段转写 worker(子进程模式, 可被看门狗击杀) ----
+def worker_chunk(run_dir, i, a, b, lang, threads=4, beam=5):
     from faster_whisper import WhisperModel
+    model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
+    model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=threads)
+    audio = read_wav_slice(run_dir / "audio.wav", a, b)
+    segments, info = model.transcribe(audio, language=lang,
+                                      vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
+                                      condition_on_previous_text=False, beam_size=beam)
+    segs = []
+    for s in segments:
+        segs.append({"start": round(s.start + a, 2), "end": round(s.end + a, 2), "text": s.text.strip()})
+        if len(segs) % 50 == 0:
+            log(f"t={(a+s.end)/60:.1f}min 段数={len(segs)}")
+    cov = (segs[-1]["end"] - a) if segs else 0.0
+    ok = cov >= (b - a) * 0.85 or (b - a) < 60
+    (run_dir / "chunks" / f"chunk_{i:03d}.json").write_text(
+        json.dumps({"ok": ok, "segments": segs}, ensure_ascii=False), encoding="utf-8")
+    log(f"written ok={ok} cov={cov:.0f}s/{b-a:.0f}s")
+
+# ---- 转写总控(分段断点 + 子进程看门狗 + OOM/卡死自适应重试) ----
+CHUNK_TIMEOUT = 1800  # 单段 30min 硬上限(正常 ~6min)
+
+def transcribe_chunked(run_dir, lang, duration):
+    import subprocess
     chunks_dir = run_dir / "chunks"
     chunks_dir.mkdir(exist_ok=True)
-    bounds = find_splits(run_dir / "audio.wav", duration)
+    bounds_f = run_dir / "bounds.json"
+    if bounds_f.exists():
+        bounds = json.loads(bounds_f.read_text(encoding="utf-8"))
+    else:
+        bounds = find_splits(run_dir / "audio.wav", duration)
+        bounds_f.write_text(json.dumps(bounds), encoding="utf-8")
     n = len(bounds) - 1
     log(f"[asr] 音频 {duration/60:.0f}min → 分 {n} 段 (接缝藏在静音处)")
-    model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
     t0 = time.time()
-    model, threads = None, 4
-
-    def get_model(force=None):
-        nonlocal model, threads
-        if force and force != threads:
-            model = None
-        if model is None:
-            if force: threads = force
-            model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=threads)
-            log(f"[asr] 模型加载 (cpu_threads={threads}) {time.time()-t0:.1f}s")
-        return model
-
     done_t = 0.0
     for i in range(n):
         a, b = bounds[i], bounds[i + 1]
@@ -120,56 +133,42 @@ def transcribe_chunked(run_dir, lang, duration):
         if ck.exists():
             data = json.loads(ck.read_text(encoding="utf-8"))
             if data.get("ok"):
-                all_segs_ok = True
-                # 延迟到合并阶段处理; 这里只计数
                 done_t += b - a
                 log(f"[asr] chunk {i+1}/{n} 缓存命中")
                 continue
         segs, ok = None, False
         for attempt in range(3):
+            threads, beam = [(4, 5), (3, 1), (2, 1)][attempt]
+            log(f"[asr] chunk {i+1}/{n} 启动 worker (threads={threads}, beam={beam}, 超时 {CHUNK_TIMEOUT//60}min)")
             try:
-                m = get_model(force=threads if attempt == 0 else max(2, threads - attempt))
-                ta = time.time()
-                audio = read_wav_slice(run_dir / "audio.wav", a, b)
-                segments, info = m.transcribe(audio, language=lang,
-                                              vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
-                                              condition_on_previous_text=False, beam_size=5)
-                segs = []
-                for s in segments:
-                    segs.append({"start": round(s.start + a, 2), "end": round(s.end + a, 2), "text": s.text.strip()})
-                    if len(segs) % 50 == 0:
-                        log(f"[asr] chunk {i+1}/{n} t={(a+s.end)/60:.1f}min 段数={len(segs)}")
-                cov = (segs[-1]["end"] - a) if segs else 0.0
-                ok = cov >= (b - a) * 0.85 or (b - a) < 60
-                del audio
-                break
-            except (RuntimeError, MemoryError) as e:
-                if re.search(r"mkl_malloc|Unable to allocate|MemoryError|bad allocation", str(e)):
-                    wait = 90 * (attempt + 1)
-                    log(f"[asr] chunk {i+1}/{n} OOM, 冷却 {wait}s 后降线程重试 ({attempt+1}/3)")
-                    model = None; gc.collect(); time.sleep(wait)
-                    segs, ok = None, False
-                else:
-                    raise
-        if not ok and segs is not None:
-            log(f"[asr] chunk {i+1}/{n} 覆盖不足({cov:.0f}s/{b-a:.0f}s), 标记待重跑")
+                r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--worker",
+                                    str(run_dir), str(i), str(a), str(b), lang, str(threads), str(beam)],
+                                   timeout=CHUNK_TIMEOUT)
+                if ck.exists():
+                    data = json.loads(ck.read_text(encoding="utf-8"))
+                    segs, ok = data["segments"], data.get("ok", False)
+                if ok:
+                    break  # 成功即止, 不再重试
+            except subprocess.TimeoutExpired:
+                log(f"[asr] chunk {i+1}/{n} 看门狗超时(疑似解码卡死), 换参数重试 ({attempt+1}/3)")
+            except Exception as e:
+                log(f"[asr] chunk {i+1}/{n} worker 异常: {str(e)[:120]} ({attempt+1}/3)")
         if segs is None:
-            raise RuntimeError(f"chunk {i} 转写失败(OOM 重试 3 次后)")
-        ck.write_text(json.dumps({"ok": ok, "segments": segs}, ensure_ascii=False), encoding="utf-8")
+            raise RuntimeError(f"chunk {i} 三次尝试(含看门狗击杀)均失败")
+        if not ok:
+            log(f"[asr] chunk {i+1}/{n} 覆盖不足, 已标记(继续, 后续总校验兜底)")
+        ck_read = json.loads(ck.read_text(encoding="utf-8"))
         done_t += b - a
-        gc.collect()
         spd = done_t / max(time.time() - t0, 1)
         eta = (duration - done_t) / max(spd, 0.1) / 60
-        log(f"[asr] chunk {i+1}/{n} 完成 {time.time()-ta:.0f}s (t={b/60:.0f}min, 预计还剩 {eta:.0f}min)")
-    # 合并(含缓存命中的段)
+        log(f"[asr] chunk {i+1}/{n} 完成 (t={b/60:.0f}min, 预计还剩 {eta:.0f}min)")
     all_segs = []
     for i in range(n):
-        ck = chunks_dir / f"chunk_{i:03d}.json"
-        data = json.loads(ck.read_text(encoding="utf-8"))
+        data = json.loads((chunks_dir / f"chunk_{i:03d}.json").read_text(encoding="utf-8"))
         all_segs.extend(data["segments"])
     (run_dir / "transcript.json").write_text(json.dumps(
         {"language": lang, "duration": duration, "segments": all_segs,
-         "chunks": [str(b) for b in bounds]},
+         "chunks": bounds},
         ensure_ascii=False, indent=1), encoding="utf-8")
     log(f"[asr] 全部完成: {len(all_segs)} 段 / {duration/60:.0f}min / 耗时 {(time.time()-t0)/60:.0f}min")
 
@@ -336,6 +335,11 @@ details{{margin-top:26px}} summary{{cursor:pointer;font-family:"Segoe UI",sans-s
     log(f"博客笔记已生成: {out}")
 
 def main():
+    # --worker 模式: yt_blog.py --worker <run_dir> <i> <a> <b> <lang> <threads> <beam>
+    if "--worker" in sys.argv:
+        w = sys.argv[sys.argv.index("--worker") + 1:]
+        worker_chunk(Path(w[0]), int(w[1]), float(w[2]), float(w[3]), w[4], int(w[5]), int(w[6]))
+        return
     # deno (JS runtime) 供 yt-dlp 解 n-challenge, 必须在 PATH 里
     deno_bin = WORK / "bin"
     if (deno_bin / "deno.exe").exists():
@@ -350,14 +354,27 @@ def main():
     t0 = time.time()
     log(f"=== Ech_youtube 访谈管线开始: {vid} (host={host}, guest={guest}) ===")
 
-    meta = fetch_meta_blog(vid)
-    (run_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    wav = run_dir / "audio.wav"
+    meta_f = run_dir / "meta.json"
+    if meta_f.exists() and wav.exists():
+        meta = json.loads(meta_f.read_text(encoding="utf-8"))
+        log("meta/audio 本地缓存命中, 跳过 yt-dlp (避免风控)")
+    else:
+        for attempt in range(3):
+            try:
+                meta = fetch_meta_blog(vid)
+                break
+            except Exception as e:
+                wait = 60 * (attempt + 1)
+                log(f"yt-dlp 元数据失败({str(e)[:80]}), {wait}s 后重试 ({attempt+1}/3)")
+                time.sleep(wait)
+        else:
+            raise RuntimeError("yt-dlp 元数据三次失败")
+        (run_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+        if not wav.exists():
+            fetch_audio(vid, run_dir)
     chapters = meta["chapters"]
     log(f"视频: {meta['title']} | {fmt_ts(meta['duration'])} | 章节 {len(chapters)} 个")
-
-    wav = run_dir / "audio.wav"
-    if not wav.exists():
-        fetch_audio(vid, run_dir)
 
     # 转写(带完整性校验)
     need = True
