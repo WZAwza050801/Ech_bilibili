@@ -90,8 +90,8 @@ def find_splits(path, duration, target=900.0, tol=150.0):
         k += 1
     return [0.0] + splits + [duration]
 
-# ---- 转写(分段 + 每段独立断点缓存) ----
-def transcribe_chunked(run_dir, lang, duration, lang_prob=False):
+# ---- 转写(分段 + 每段独立断点缓存 + OOM 冷却重试) ----
+def transcribe_chunked(run_dir, lang, duration):
     import gc
     from faster_whisper import WhisperModel
     chunks_dir = run_dir / "chunks"
@@ -101,37 +101,72 @@ def transcribe_chunked(run_dir, lang, duration, lang_prob=False):
     log(f"[asr] 音频 {duration/60:.0f}min → 分 {n} 段 (接缝藏在静音处)")
     model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
     t0 = time.time()
-    model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=4)
-    log(f"[asr] 模型加载 {time.time()-t0:.1f}s")
-    all_segs = []
+    model, threads = None, 4
+
+    def get_model(force=None):
+        nonlocal model, threads
+        if force and force != threads:
+            model = None
+        if model is None:
+            if force: threads = force
+            model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=threads)
+            log(f"[asr] 模型加载 (cpu_threads={threads}) {time.time()-t0:.1f}s")
+        return model
+
+    done_t = 0.0
     for i in range(n):
         a, b = bounds[i], bounds[i + 1]
         ck = chunks_dir / f"chunk_{i:03d}.json"
         if ck.exists():
             data = json.loads(ck.read_text(encoding="utf-8"))
             if data.get("ok"):
-                all_segs.extend(data["segments"])
+                all_segs_ok = True
+                # 延迟到合并阶段处理; 这里只计数
+                done_t += b - a
                 log(f"[asr] chunk {i+1}/{n} 缓存命中")
                 continue
-        ta = time.time()
-        audio = read_wav_slice(run_dir / "audio.wav", a, b)
-        segments, info = model.transcribe(audio, language=lang,
-                                          vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
-                                          condition_on_previous_text=False, beam_size=5)
-        segs = []
-        for s in segments:
-            segs.append({"start": round(s.start + a, 2), "end": round(s.end + a, 2), "text": s.text.strip()})
-            if len(segs) % 50 == 0:
-                log(f"[asr] chunk {i+1}/{n} t={s.end/60:.1f}min 段数={len(segs)}")
-        # chunk 完整性: 末段覆盖 ≥85% 段长(尾静音除外), 不达标标记重跑
-        cov = (segs[-1]["end"] - a) if segs else 0.0
-        ok = cov >= (b - a) * 0.85 or (b - a) < 60
+        segs, ok = None, False
+        for attempt in range(3):
+            try:
+                m = get_model(force=threads if attempt == 0 else max(2, threads - attempt))
+                ta = time.time()
+                audio = read_wav_slice(run_dir / "audio.wav", a, b)
+                segments, info = m.transcribe(audio, language=lang,
+                                              vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
+                                              condition_on_previous_text=False, beam_size=5)
+                segs = []
+                for s in segments:
+                    segs.append({"start": round(s.start + a, 2), "end": round(s.end + a, 2), "text": s.text.strip()})
+                    if len(segs) % 50 == 0:
+                        log(f"[asr] chunk {i+1}/{n} t={(a+s.end)/60:.1f}min 段数={len(segs)}")
+                cov = (segs[-1]["end"] - a) if segs else 0.0
+                ok = cov >= (b - a) * 0.85 or (b - a) < 60
+                del audio
+                break
+            except (RuntimeError, MemoryError) as e:
+                if re.search(r"mkl_malloc|Unable to allocate|MemoryError|bad allocation", str(e)):
+                    wait = 90 * (attempt + 1)
+                    log(f"[asr] chunk {i+1}/{n} OOM, 冷却 {wait}s 后降线程重试 ({attempt+1}/3)")
+                    model = None; gc.collect(); time.sleep(wait)
+                    segs, ok = None, False
+                else:
+                    raise
+        if not ok and segs is not None:
+            log(f"[asr] chunk {i+1}/{n} 覆盖不足({cov:.0f}s/{b-a:.0f}s), 标记待重跑")
+        if segs is None:
+            raise RuntimeError(f"chunk {i} 转写失败(OOM 重试 3 次后)")
         ck.write_text(json.dumps({"ok": ok, "segments": segs}, ensure_ascii=False), encoding="utf-8")
-        all_segs.extend(segs)
-        del audio
+        done_t += b - a
         gc.collect()
-        eta = (time.time() - t0) / (i + 1) * (n - i - 1) / 60
+        spd = done_t / max(time.time() - t0, 1)
+        eta = (duration - done_t) / max(spd, 0.1) / 60
         log(f"[asr] chunk {i+1}/{n} 完成 {time.time()-ta:.0f}s (t={b/60:.0f}min, 预计还剩 {eta:.0f}min)")
+    # 合并(含缓存命中的段)
+    all_segs = []
+    for i in range(n):
+        ck = chunks_dir / f"chunk_{i:03d}.json"
+        data = json.loads(ck.read_text(encoding="utf-8"))
+        all_segs.extend(data["segments"])
     (run_dir / "transcript.json").write_text(json.dumps(
         {"language": lang, "duration": duration, "segments": all_segs,
          "chunks": [str(b) for b in bounds]},
