@@ -11,8 +11,10 @@ ASR / polish / 笔记渲染三层完全复用同一套设计(三重完整性校�
 import json, os, io, sys, re, subprocess, shutil, time
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+if not getattr(sys.stdout, "_ech_wrapped", False):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace"); sys.stdout._ech_wrapped = True
+if not getattr(sys.stderr, "_ech_wrapped", False):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
 WORK = Path(r"D:\视频观看agent编写\Ech_youtube")
 # 代理: 沙箱 env 代理(2213)是坏的, 默认走系统可用代理; 直连环境可设 YT_PROXY=direct
@@ -55,7 +57,8 @@ def fetch_audio(vid, run_dir):
     """yt-dlp 下载最佳音轨 → ffmpeg 转 16k 单声道 wav"""
     from yt_dlp import YoutubeDL
     opts = _ydl_opts({"format": "bestaudio/best",
-                      "outtmpl": str(run_dir / "audio_src.%(ext)s")})
+                      "outtmpl": str(run_dir / "audio_src.%(ext)s"),
+                      "concurrent_fragment_downloads": 8})
     with YoutubeDL(opts) as ydl:
         ydl.download([f"https://www.youtube.com/watch?v={vid}"])
     srcs = [p for p in run_dir.glob("audio_src.*") if p.suffix not in (".part", ".wav")]

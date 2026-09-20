@@ -37,6 +37,7 @@ work/pipeline1/ab.log
 work/pipeline1/browser_list_result.txt
 # Ech_youtube 产物与大文件
 Ech_youtube/runs/
+Ech_youtube/bin/
 Ech_youtube/models/
 Ech_youtube/audio.*
 Ech_youtube/transcript.*
