@@ -1,15 +1,15 @@
-# 拾音笺 EchoNotes
+# Ech_bilibili（拾音笺）
 
 > 把口播视频"听"成一份可查证的读书笔记。
 
-EchoNotes 是一个视频观看 agent 项目，目标是输入视频链接，输出结构化、可查证的完整内容整理（读书笔记 / 讲义 / 实验报告）。
+Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版），目标是输入视频链接，输出结构化、可查证的完整内容整理（读书笔记 / 讲义 / 实验报告）。
 
-**多平台设计**：感知层按平台适配，笔记层平台无关。
+**多平台设计**：感知层按平台适配，笔记层平台无关。GitHub 仓库：`WZAwza050801/Ech_bilibili`（原名 EchoNotes）。
 
 | 平台 | 音频/视频获取 | 状态 |
 |------|--------------|------|
-| Bilibili | playurl API 音频直取（完整浏览器头防 412）+ wbi 签名列表拉取 | ✅ 已实现 |
-| YouTube（Ech_youtube） | yt-dlp（无 B 站式风控，反而简单） | 📋 规划中，见 [Ech_youtube/](Ech_youtube/) |
+| Bilibili（本仓库） | playurl API 音频直取（完整浏览器头防 412）+ wbi 签名列表拉取 | ✅ 已实现 |
+| YouTube（Ech_youtube） | yt-dlp（无 B 站式风控，反而简单） | ✅ 已实现并跑通，见 [Ech_youtube/](Ech_youtube/) |
 
 > B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `work/pipeline1/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
 
