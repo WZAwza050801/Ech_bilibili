@@ -15,7 +15,7 @@ from faster_whisper import WhisperModel
 
 t0 = time.time()
 print("[asr] 加载模型 small / int8 (CPU)...")
-model = WhisperModel(str(work / "models" / "faster-whisper-small"), device="cpu", compute_type="int8")
+model = WhisperModel(str(work / "models" / "faster-whisper-small"), device="cpu", compute_type="int8", cpu_threads=4)
 print(f"[asr] 模型加载完成 {time.time()-t0:.1f}s，开始转写...")
 
 t1 = time.time()
