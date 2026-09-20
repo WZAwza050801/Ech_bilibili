@@ -56,26 +56,87 @@ def fetch_meta_blog(vid):
             "duration": int(v.get("duration") or 0), "webpage_url": v.get("webpage_url", ""),
             "chapters": [{"title": c["title"], "start": float(c["start_time"])} for c in (v.get("chapters") or [])]}
 
-# ---- 转写(进程内, 参数与 B 站版一致) ----
-def transcribe(run_dir, lang="en"):
+# ---- 长音频分段: 在静音处下刀(藏好接缝), 每 ~15min 一段 ----
+def wav_duration(path):
+    import wave
+    with wave.open(str(path), "rb") as w:
+        return w.getnframes() / w.getframerate()
+
+def read_wav_slice(path, t0, t1):
+    """按时间切片读 wav 为 float32 numpy(16k 单声道 PCM), 不整块载入"""
+    import wave
+    import numpy as np
+    with wave.open(str(path), "rb") as w:
+        fr = w.getframerate()
+        a, b = int(t0 * fr), min(int(t1 * fr), w.getnframes())
+        w.setpos(a)
+        raw = w.readframes(b - a)
+    return np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
+
+def find_splits(path, duration, target=900.0, tol=150.0):
+    """目标每 target 秒一段; 优先切在静音中点(±tol 内找最近), 找不到才硬切"""
+    import subprocess
+    ff = shutil.which("ffmpeg")
+    r = subprocess.run([ff, "-i", str(path), "-af", "silencedetect=noise=-35dB:d=0.3",
+                        "-f", "null", "-"], capture_output=True, text=True, errors="replace")
+    starts = [float(m.group(1)) for m in re.finditer(r"silence_start:\s*([\d.]+)", r.stderr)]
+    ends = [float(m.group(1)) for m in re.finditer(r"silence_end:\s*([\d.]+)", r.stderr)]
+    mids = [(s + (ends[i] if i < len(ends) else s + 0.3)) / 2 for i, s in enumerate(starts)]
+    splits, k = [], 1
+    while k * target < duration - 60:
+        tgt = k * target
+        cands = [p for p in mids if abs(p - tgt) <= tol]
+        splits.append(min(cands, key=lambda p: abs(p - tgt)) if cands else tgt)
+        k += 1
+    return [0.0] + splits + [duration]
+
+# ---- 转写(分段 + 每段独立断点缓存) ----
+def transcribe_chunked(run_dir, lang, duration, lang_prob=False):
+    import gc
     from faster_whisper import WhisperModel
+    chunks_dir = run_dir / "chunks"
+    chunks_dir.mkdir(exist_ok=True)
+    bounds = find_splits(run_dir / "audio.wav", duration)
+    n = len(bounds) - 1
+    log(f"[asr] 音频 {duration/60:.0f}min → 分 {n} 段 (接缝藏在静音处)")
     model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
     t0 = time.time()
-    log("[asr] 加载 small/int8 (cpu_threads=4)...")
     model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=4)
-    segments, info = model.transcribe(str(run_dir / "audio.wav"), language=lang,
-                                      vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
-                                      condition_on_previous_text=False, beam_size=5)
-    segs = []
-    for seg in segments:
-        segs.append({"start": round(seg.start, 2), "end": round(seg.end, 2), "text": seg.text.strip()})
-        if len(segs) % 50 == 0:
-            log(f"[asr] t={seg.end/60:.0f}min 段数={len(segs)} 耗时{time.time()-t0:.0f}s")
+    log(f"[asr] 模型加载 {time.time()-t0:.1f}s")
+    all_segs = []
+    for i in range(n):
+        a, b = bounds[i], bounds[i + 1]
+        ck = chunks_dir / f"chunk_{i:03d}.json"
+        if ck.exists():
+            data = json.loads(ck.read_text(encoding="utf-8"))
+            if data.get("ok"):
+                all_segs.extend(data["segments"])
+                log(f"[asr] chunk {i+1}/{n} 缓存命中")
+                continue
+        ta = time.time()
+        audio = read_wav_slice(run_dir / "audio.wav", a, b)
+        segments, info = model.transcribe(audio, language=lang,
+                                          vad_filter=True, vad_parameters={"min_silence_duration_ms": 500},
+                                          condition_on_previous_text=False, beam_size=5)
+        segs = []
+        for s in segments:
+            segs.append({"start": round(s.start + a, 2), "end": round(s.end + a, 2), "text": s.text.strip()})
+            if len(segs) % 50 == 0:
+                log(f"[asr] chunk {i+1}/{n} t={s.end/60:.1f}min 段数={len(segs)}")
+        # chunk 完整性: 末段覆盖 ≥85% 段长(尾静音除外), 不达标标记重跑
+        cov = (segs[-1]["end"] - a) if segs else 0.0
+        ok = cov >= (b - a) * 0.85 or (b - a) < 60
+        ck.write_text(json.dumps({"ok": ok, "segments": segs}, ensure_ascii=False), encoding="utf-8")
+        all_segs.extend(segs)
+        del audio
+        gc.collect()
+        eta = (time.time() - t0) / (i + 1) * (n - i - 1) / 60
+        log(f"[asr] chunk {i+1}/{n} 完成 {time.time()-ta:.0f}s (t={b/60:.0f}min, 预计还剩 {eta:.0f}min)")
     (run_dir / "transcript.json").write_text(json.dumps(
-        {"language": info.language, "duration": info.duration, "segments": segs},
+        {"language": lang, "duration": duration, "segments": all_segs,
+         "chunks": [str(b) for b in bounds]},
         ensure_ascii=False, indent=1), encoding="utf-8")
-    log(f"[asr] 完成: {len(segs)} 段 / {info.duration/60:.0f}min / 耗时 {time.time()-t0:.0f}s")
-    return info.duration
+    log(f"[asr] 全部完成: {len(all_segs)} 段 / {duration/60:.0f}min / 耗时 {(time.time()-t0)/60:.0f}min")
 
 # ---- 合并成小段(18s, 减少单段跨说话人) ----
 def make_paras(segs, span=18.0):
@@ -272,9 +333,10 @@ def main():
         else:
             log(f"转写不完整({tr.get('duration',0):.0f}s), 重跑"); rm(run_dir / "transcript.json")
     if need:
-        dur = transcribe(run_dir, lang="en")
-        if dur < meta["duration"] * 0.95:
-            raise RuntimeError(f"转写时长不足: {dur:.0f}s / {meta['duration']}s")
+        duration = wav_duration(wav)  # 以 wav 实际时长为准
+        if duration < meta["duration"] * 0.95:
+            raise RuntimeError(f"音频时长不足: {duration:.0f}s / {meta['duration']}s")
+        transcribe_chunked(run_dir, lang="en", duration=duration)
 
     # 说话人标注(缓存+校验)
     segs = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))["segments"]
