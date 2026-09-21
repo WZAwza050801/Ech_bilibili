@@ -8,7 +8,7 @@
 - **GitHub 仓库已更名**：EchoNotes → **WZAwza050801/Ech_bilibili**（旧地址自动跳转），本地 remote 已同步，Ech_youtube 代码已推送（179a2b2）
 - **OOM 已修复**：ctranslate2 "bad allocation" —— `transcribe_local.py` 已加 `cpu_threads=4`（限制线程降内存峰值），实测连续多个视频稳定通过，勿改回
 - **假产物已清零**：23 篇假笔记全删并重做
-- **进度**：真品 56/114，剩 58 个待跑；batch_run.py 断点续跑 + OOM 冷却重试已内置
+- **进度**：✅ 管线一收官（2026-09-21）——114 期清单：完成 111，充电专属 3 期无法获取（页面实测充电+试看标记，仅 180s 试看流），真实性复检全过，index 终版 + 归档报告.md 已生成并推送 GitHub（586df6e）
 - **教训**：不要并发跑两个 batch（work 根中转文件互相踩，踩过一次）
 
 ## 一、当前进度
@@ -18,7 +18,7 @@
 | GitHub 仓库 | ✅ https://github.com/WZAwza050801/Ech_bilibili（已更名） |
 | Ech_youtube | ✅ 已实现并跑通（yt_pipeline.py / yt_batch.py / 双语言 polish），代理默认走 127.0.0.1:12000（YT_PROXY 可覆盖） |
 | 视频列表 | ✅ 114/124（差最老 10 个，可后续冷却重试 fetch_list_retry2.cjs 或搜索兜底） |
-| 读书笔记批量 | ⏸ 暂停时：真品 56 篇，剩 58 个待跑 |
+| 读书笔记批量 | ✅ 收官：111/114 完成，3 期充电专属（BV1bH4aeAE7E / BV1o4421Q7KG / BV1FJ4m1W71F），详见 江左道卡卡-读书笔记/归档报告.md |
 
 ## 二、踩坑记录（重要）
 
