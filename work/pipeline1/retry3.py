@@ -24,8 +24,8 @@ for bvid, dur in TARGETS:
     rd = WORK / "runs" / bvid
     rd.mkdir(parents=True, exist_ok=True)
     print(f"=== {bvid} (应有时长 {dur}s) ===", flush=True)
-    # 1) yt-dlp 下载最佳音轨 (Firefox 登录态)
-    r = run([VENV, "-m", "yt_dlp", "--cookies-from-browser", "firefox",
+    # 1) yt-dlp 下载最佳音轨 (B 站登录态 cookie)
+    r = run([VENV, "-m", "yt_dlp", "--cookies", str(WORK / "bili_cookies.txt"),
              "-f", "bestaudio/best", "-o", str(rd / "audio_dlp.%(ext)s"),
              "--no-playlist", f"https://www.bilibili.com/video/{bvid}"])
     files = list(rd.glob("audio_dlp.*"))

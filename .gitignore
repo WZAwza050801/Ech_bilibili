@@ -43,3 +43,15 @@ Ech_youtube/audio.*
 Ech_youtube/transcript.*
 Ech_youtube/polished.*
 Ech_youtube/videos.txt
+
+# 鍑嵿潅鍑嵿瘯(鍖呭惈鐧诲綍鍑椤?), 2026-09-21
+work/pipeline1/bili_cookies.txt
+work/pipeline1/*.sqlite
+work/pipeline1/chrome_cdp_profile/
+work/pipeline1/debug_out.txt
+work/pipeline1/probe_out.txt
+work/pipeline1/qr_log.txt
+work/pipeline1/qr_status.txt
+work/pipeline1/bili_qr_login.py
+work/pipeline1/chrome_cdp_cookies.py
+work/pipeline1/ck_try.sqlite
