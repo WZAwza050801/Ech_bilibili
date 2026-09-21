@@ -10,14 +10,11 @@ from pathlib import Path
 import urllib.request
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-work = Path(r"D:\视频观看agent编写\Ech_youtube")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ech_config import ECH_YT_DIR as work, llm_credentials
 
-# ---- 从密码书读 deepseek key（不在日志中打印 key）----
-secrets = json.load(open(r"D:\密码书\private\private-ai-api-secrets.json", encoding="utf-8"))
-entry = next(e for e in secrets["entries"] if e.get("label") == "Environment DEEPSEEK_API_KEY")
-API_KEY = entry["apiKey"]
-BASE_URL = (entry.get("baseUrl") or "https://api.deepseek.com").rstrip("/")
-MODEL = "deepseek-chat"
+# ---- LLM 凭据(ech_config: 环境变量优先, 回退密码书; 不在日志中打印 key) ----
+API_KEY, BASE_URL, MODEL = llm_credentials()
 
 SYS_ZH = (
 "你是一个 ASR 转写稿格式整理器。用户会给你视频口播的语音转写片段（可能无标点、繁简混杂、有同音错字）。"

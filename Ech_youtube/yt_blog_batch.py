@@ -10,7 +10,8 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-WORK = Path(r"D:\视频观看agent编写\Ech_youtube")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ech_config import ECH_YT_DIR as WORK
 OUT = WORK / (sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].isdigit() else "LexFridman-博客笔记")
 LIMIT = int(sys.argv[-1]) if sys.argv[-1].isdigit() else 9999
 LOG = OUT / "batch_log.txt"
@@ -82,8 +83,12 @@ def main():
             done_items.append(ep)
             log(f"[{i}/{len(queue)}] 完成 {time.time()-t0:.0f}s → {dst.name}")
         except Exception as e:
-            failed.append({"vid": vid, "num": ep["num"], "guest": guest, "err": str(e)[:300]})
-            log(f"[{i}/{len(queue)}] 失败: {str(e)[:200]}")
+            err = str(e)
+            failed.append({"vid": vid, "num": ep["num"], "guest": guest, "err": err[:300]})
+            log(f"[{i}/{len(queue)}] 失败: {err[:200]}")
+            if re.search(r"Sign in to confirm|not a bot|Use --cookies", err):
+                log("YouTube 风控(bot-check), 冷却 30 分钟后继续下一期")
+                time.sleep(1800)
         render_index(len(done_items), len(queue), done_items)
         # 席位顺延: 失败的不占卡位, 已有卡片重编号可能导致 glob 断点错位 — 接受(卡片按完成顺序编号)
 

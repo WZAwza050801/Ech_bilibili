@@ -20,14 +20,12 @@ if not getattr(sys.stdout, "_ech_wrapped", False):
 if not getattr(sys.stderr, "_ech_wrapped", False):
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
-WORK = Path(r"D:\视频观看agent编写\Ech_youtube")
-sys.path.insert(0, str(WORK))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ech_config import ECH_YT_DIR as WORK, ECH_MODEL_DIR, llm_credentials
 from yt_pipeline import fetch_audio, fmt_ts, rm, log, TRASH  # 复用平台感知层工具
 
-# ---- LLM (与 polish.py 同款) ----
-secrets = json.load(open(r"D:\密码书\private\private-ai-api-secrets.json", encoding="utf-8"))
-_entry = next(e for e in secrets["entries"] if e.get("label") == "Environment DEEPSEEK_API_KEY")
-API_KEY, BASE_URL, MODEL = _entry["apiKey"], (_entry.get("baseUrl") or "https://api.deepseek.com").rstrip("/"), "deepseek-chat"
+# ---- LLM (ech_config: 环境变量优先, 回退密码书) ----
+API_KEY, BASE_URL, MODEL = llm_credentials()
 
 def call_llm(system, user, temp=0.2, retry=3, timeout=300):
     import urllib.request
@@ -49,8 +47,9 @@ def call_llm(system, user, temp=0.2, retry=3, timeout=300):
 # ---- 元数据(含章节) ----
 def fetch_meta_blog(vid):
     from yt_dlp import YoutubeDL
-    proxy = os.environ.get("YT_PROXY", "http://127.0.0.1:12000")
-    with YoutubeDL({"quiet": True, "no_warnings": True, "skip_download": True, "proxy": proxy}) as ydl:
+    from ech_config import ydl_proxy
+    with YoutubeDL({"quiet": True, "no_warnings": True, "skip_download": True,
+                    "proxy": ydl_proxy()}) as ydl:
         v = ydl.extract_info(f"https://www.youtube.com/watch?v={vid}", download=False)
     return {"vid": vid, "title": v.get("title", vid), "owner": v.get("uploader", ""),
             "duration": int(v.get("duration") or 0), "webpage_url": v.get("webpage_url", ""),
@@ -93,7 +92,7 @@ def find_splits(path, duration, target=900.0, tol=150.0):
 # ---- 单段转写 worker(子进程模式, 可被看门狗击杀) ----
 def worker_chunk(run_dir, i, a, b, lang, threads=4, beam=5):
     from faster_whisper import WhisperModel
-    model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
+    model_dir = ECH_MODEL_DIR
     model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=threads)
     audio = read_wav_slice(run_dir / "audio.wav", a, b)
     segments, info = model.transcribe(audio, language=lang,

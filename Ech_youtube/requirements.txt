@@ -1,0 +1,7 @@
+# Ech 管线依赖 (Linux 服务器 / Windows 本机通用)
+# 安装: pip install -r requirements.txt
+faster-whisper>=1.0.0
+yt-dlp>=2026.8.19
+# 系统依赖(非 pip):
+#   ffmpeg   — apt install ffmpeg / winget install ffmpeg
+#   deno     — yt-dlp 解 YouTube n-challenge 必需 (https://deno.com, 放进 PATH)

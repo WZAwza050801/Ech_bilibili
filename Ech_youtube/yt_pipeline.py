@@ -16,11 +16,8 @@ if not getattr(sys.stdout, "_ech_wrapped", False):
 if not getattr(sys.stderr, "_ech_wrapped", False):
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
-WORK = Path(r"D:\视频观看agent编写\Ech_youtube")
-# 代理: 沙箱 env 代理(2213)是坏的, 默认走系统可用代理; 直连环境可设 YT_PROXY=direct
-PROXY = os.environ.get("YT_PROXY", "http://127.0.0.1:12000")
-# whisper 模型与 Ech_bilibili 共享, 避免 480MB 重复下载
-SHARED_MODEL = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ech_config import ECH_YT_DIR as WORK, ECH_MODEL_DIR as SHARED_MODEL, ECH_PROXY as PROXY
 
 def log(m): print(f"[yt_pipeline] {m}", flush=True)
 

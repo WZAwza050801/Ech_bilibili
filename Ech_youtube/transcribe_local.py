@@ -11,14 +11,15 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-work = Path(r"D:\视频观看agent编写\Ech_youtube")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ech_config import ECH_YT_DIR as work, ECH_MODEL_DIR
 lang = sys.argv[1] if len(sys.argv) > 1 else "auto"
 
 from faster_whisper import WhisperModel
 
 model_dir = work / "models" / "faster-whisper-small"
 if not model_dir.exists():
-    model_dir = Path(r"D:\视频观看agent编写\work\pipeline1\models\faster-whisper-small")
+    model_dir = ECH_MODEL_DIR
 
 t0 = time.time()
 print(f"[asr] 加载模型 small / int8 (CPU, {model_dir}) ...")
