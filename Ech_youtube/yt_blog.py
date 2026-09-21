@@ -229,16 +229,24 @@ def label_speakers(paras, host, guest):
     return out
 
 # ---- 翻译 ----
-GLOSSARY = ("专有名词对照（务必遵守）：Terence Tao=陶哲轩；Lex Fridman=莱克斯·弗里德曼。"
-            "数学/物理专业术语首次出现时中文后括注英文，如：纳维-斯托克斯方程（Navier-Stokes）。")
-SYS_TR = ("你是专业的播客访谈译者。把英文对话段落翻译成自然流畅的简体中文书面语（博客阅读风格）。要求：\n"
-          "1. 忠实原意，不增删观点，可以适度意译让中文通顺；\n"
-          "2. 口语冗余（um, you know, I mean）可省略；\n"
-          "3. " + GLOSSARY + "\n"
-          "4. 人名、例子、数字必须保留；\n"
-          "5. 输入每段以 [n] 开头，输出同样以 [n] 开头、一行一段、顺序不变。只输出译文。")
+CN_NAMES = {"Terence Tao": "陶哲轩", "Elon Musk": "埃隆·马斯克", "Mark Zuckerberg": "马克·扎克伯格",
+            "Jeff Bezos": "杰夫·贝索斯", "Donald Trump": "唐纳德·特朗普", "Sam Altman": "山姆·奥特曼",
+            "Sundar Pichai": "桑达尔·皮查伊", "Yuval Noah Harari": "尤瓦尔·赫拉利",
+            "Jordan Peterson": "乔丹·彼得森", "Ray Dalio": "瑞·达利欧"}
 
-def translate(spk_items):
+def sys_tr(guest):
+    g_cn = CN_NAMES.get(guest, "")
+    g_rule = f"{guest}={g_cn}" if g_cn else f"{guest} 保留英文原名"
+    return ("你是专业的播客访谈译者。把英文对话段落翻译成自然流畅的简体中文书面语（博客阅读风格）。要求：\n"
+            "1. 忠实原意，不增删观点，可以适度意译让中文通顺；\n"
+            "2. 口语冗余（um, you know, I mean）可省略；\n"
+            f"3. 专有名词对照（务必遵守）：Lex Fridman=莱克斯·弗里德曼；{g_rule}。"
+            "数学/物理/技术术语首次出现时中文后括注英文，如：纳维-斯托克斯方程（Navier-Stokes）。\n"
+            "4. 人名、例子、数字必须保留；\n"
+            "5. 输入每段以 [n] 开头，输出同样以 [n] 开头、一行一段、顺序不变。只输出译文。")
+
+def translate(spk_items, guest="Terence Tao"):
+    SYS_TR = sys_tr(guest)
     out = [dict(x) for x in spk_items]
     for bi in range(0, len(out), 5):
         batch = out[bi:bi + 5]
@@ -273,7 +281,12 @@ def render(meta, run_dir, chapters, host, guest):
         groups[cur].append(it)
     def chip(spk):
         cls = "tao" if spk == guest else "lex"
-        name = "陶哲轩" if spk == guest else ("莱克斯" if spk == host else H.escape(spk))
+        if spk == host:
+            name = "莱克斯"
+        elif spk == guest:
+            name = CN_NAMES.get(spk, spk)
+        else:
+            name = H.escape(CN_NAMES.get(spk, spk))
         return f'<span class="who {cls}">{name}</span>'
     zh_secs, pair_secs, toc = [], [], []
     for n, (title, st) in enumerate(chap_order, 1):
@@ -318,10 +331,10 @@ details{{margin-top:26px}} summary{{cursor:pointer;font-family:"Segoe UI",sans-s
 </style></head><body><div class="page">
 <div class="hero"><h1>{H.escape(meta['title'])}</h1>
 <p>{H.escape(meta['owner'])} · Ech_youtube 访谈类博客笔记（说话人标注 + 中英对照）</p></div>
-<div class="info"><span><b>频道</b> {H.escape(meta['owner'])}</span><span><b>嘉宾</b> 陶哲轩 Terence Tao</span>
+<div class="info"><span><b>频道</b> {H.escape(meta['owner'])}</span><span><b>嘉宾</b> {H.escape(CN_NAMES.get(guest, guest))}</span>
 <span><b>时长</b> {fmt_ts(meta['duration'])}</span><span><b>链接</b> youtu.be/{meta['vid']}</span></div>
 <div class="toc">{''.join(toc)}</div>
-<div class="notice">📝 说明：逐字稿由 faster-whisper 转写；<b>说话人由 LLM 依据对话内容语义标注</b>（双人访谈，非声学分离，极少数段落可能归属存疑）；译文由 LLM 翻译（陶哲轩/莱克斯·弗里德曼等专名已按对照表统一）。文末附<b>中英对照全文</b>与原始机器转写折叠。</div>
+<div class="notice">📝 说明：逐字稿由 faster-whisper 转写；<b>说话人由 LLM 依据对话内容语义标注</b>（双人访谈，非声学分离，极少数段落可能归属存疑）；译文由 LLM 翻译（人名/术语已按对照表统一）。文末附<b>中英对照全文</b>与原始机器转写折叠。</div>
 <h2>一、中文译读版</h2>
 {''.join(zh_secs)}
 <h2>二、中英对照全文</h2>
@@ -421,7 +434,7 @@ def main():
     else:
         tr_items = None
     if tr_items is None:
-        tr_items = translate(spk)
+        tr_items = translate(spk, guest)
         miss = sum(1 for x in tr_items if not x.get("zh"))
         if miss > max(2, len(tr_items) * 0.02):
             raise RuntimeError(f"翻译缺失 {miss}/{len(tr_items)} 段")

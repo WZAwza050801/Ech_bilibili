@@ -1,0 +1,1794 @@
+{
+ "source": "podcast_full",
+ "count": 447,
+ "entries": [
+  {
+   "vid": "s7d2d8FhevU",
+   "title": "Psychiatry, Insane Asylums, Mental Illness, ECT, Lobotomies, Freud & Jung | Lex Fridman Podcast #502"
+  },
+  {
+   "vid": "NYFGCESmikA",
+   "title": "DHH: Future of Programming, AI, Agentic Engineering, Vibe Coding & Linux | Lex Fridman Podcast #501"
+  },
+  {
+   "vid": "l6USUAIKJls",
+   "title": "Khabib Nurmagomedov: Dagestan, MMA, UFC, Islam, Conor, Fedor & Football | Lex Fridman Podcast #500"
+  },
+  {
+   "vid": "XyXBwO5jYpw",
+   "title": "Gary Gallagher: American Civil War, Slavery, Lincoln, Grant & Lee | Lex Fridman Podcast #499"
+  },
+  {
+   "vid": "pv1TUJSEM2k",
+   "title": "The Rise and Fall of the Roman Empire and the Byzantine Empire | Lex Fridman Podcast #498"
+  },
+  {
+   "vid": "1M3Vdl6DRkU",
+   "title": "Biggest Mysteries in Physics: Antimatter, Dark Energy & ToE - Don Lincoln | Lex Fridman Podcast #497"
+  },
+  {
+   "vid": "nepKKz-MzFM",
+   "title": "FFmpeg: The Incredible Technology Behind Video on the Internet | Lex Fridman Podcast #496"
+  },
+  {
+   "vid": "iKx3gAODybU",
+   "title": "Vikings, Ragnar, Berserkers, Valhalla & the Warriors of the Viking Age | Lex Fridman Podcast #495"
+  },
+  {
+   "vid": "vif8NQcjVf0",
+   "title": "Jensen Huang: NVIDIA - The $4 Trillion Company & the AI Revolution | Lex Fridman Podcast #494"
+  },
+  {
+   "vid": "H9rF1CSSh-w",
+   "title": "Jeff Kaplan: World of Warcraft, Overwatch, Blizzard, and Future of Gaming | Lex Fridman Podcast #493"
+  },
+  {
+   "vid": "1SJiTwbSI58",
+   "title": "Rick Beato: Greatest Guitarists of All Time, History & Future of Music | Lex Fridman Podcast #492"
+  },
+  {
+   "vid": "YFjfBk8HI5o",
+   "title": "OpenClaw: The Viral AI Agent that Broke the Internet - Peter Steinberger | Lex Fridman Podcast #491"
+  },
+  {
+   "vid": "EV7WhVT270Q",
+   "title": "State of AI in 2026: LLMs, Coding, Scaling Laws, China, Agents, GPUs, AGI | Lex Fridman Podcast #490"
+  },
+  {
+   "vid": "Z-FRe5AKmCU",
+   "title": "Paul Rosolie: Uncontacted Tribes in the Amazon Jungle | Lex Fridman Podcast #489"
+  },
+  {
+   "vid": "14OPT6CcsH4",
+   "title": "Infinity, Paradoxes, Gödel Incompleteness & the Mathematical Multiverse | Lex Fridman Podcast #488"
+  },
+  {
+   "vid": "_bBRVNkAfkQ",
+   "title": "Deciphering Secrets of Ancient Civilizations, Noah's Ark, and Flood Myths | Lex Fridman Podcast #487"
+  },
+  {
+   "vid": "Qp0rCU49lMs",
+   "title": "Michael Levin: Hidden Reality of Alien Intelligence & Biological Life | Lex Fridman Podcast #486"
+  },
+  {
+   "vid": "m_CFCyc2Shs",
+   "title": "David Kirtley: Nuclear Fusion, Plasma Physics, and the Future of Energy | Lex Fridman Podcast #485"
+  },
+  {
+   "vid": "o3gbXDjNWyI",
+   "title": "Dan Houser: GTA, Red Dead Redemption, Rockstar, Absurd & Future of Gaming | Lex Fridman Podcast #484"
+  },
+  {
+   "vid": "7OLVwZeMCfY",
+   "title": "Julia Shaw: Criminal Psychology of Murder, Serial Killers, Memory & Sex | Lex Fridman Podcast #483"
+  },
+  {
+   "vid": "qjPH9njnaVU",
+   "title": "Pavel Durov: Telegram, Freedom, Censorship, Money, Power & Human Nature | Lex Fridman Podcast #482"
+  },
+  {
+   "vid": "SvKv7D4pBjE",
+   "title": "Norman Ohler: Hitler, Nazis, Drugs, WW2, Blitzkrieg, LSD, MKUltra & CIA | Lex Fridman Podcast #481"
+  },
+  {
+   "vid": "-Qm1_On71Oo",
+   "title": "Dave Hone: T-Rex, Dinosaurs, Extinction, Evolution, and Jurassic Park | Lex Fridman Podcast #480"
+  },
+  {
+   "vid": "HsLgZzgpz9Y",
+   "title": "Dave Plummer: Programming, Autism, and Old-School Microsoft Stories | Lex Fridman Podcast #479"
+  },
+  {
+   "vid": "jdCKiEJpwf4",
+   "title": "Scott Horton: The Case Against War and the Military Industrial Complex | Lex Fridman Podcast #478"
+  },
+  {
+   "vid": "y3yAVZk3tyA",
+   "title": "Keyu Jin: China's Economy, Tariffs, Trade, Trump, Communism & Capitalism | Lex Fridman Podcast #477"
+  },
+  {
+   "vid": "U1H1Ob7jk8Q",
+   "title": "Jack Weatherford: Genghis Khan and the Mongol Empire | Lex Fridman Podcast #476"
+  },
+  {
+   "vid": "-HzgcbRXUK8",
+   "title": "Demis Hassabis: Future of AI, Simulating Reality, Physics and Video Games | Lex Fridman Podcast #475"
+  },
+  {
+   "vid": "vagyIcmIGOQ",
+   "title": "DHH: Future of Programming, AI, Ruby on Rails, Productivity & Parenting | Lex Fridman Podcast #474"
+  },
+  {
+   "vid": "gtmJi8LbAts",
+   "title": "Iran War Debate: Nuclear Weapons, Trump, Peace, Power & the Middle East | Lex Fridman Podcast #473"
+  },
+  {
+   "vid": "HUkBz-cdB-k",
+   "title": "Terence Tao: Hardest Problems in Mathematics, Physics & the Future of AI | Lex Fridman Podcast #472"
+  },
+  {
+   "vid": "9V6tWC4CdFQ",
+   "title": "Sundar Pichai: CEO of Google and Alphabet | Lex Fridman Podcast #471"
+  },
+  {
+   "vid": "cp1lprZUQcE",
+   "title": "James Holland: World War II, Hitler, Churchill, Stalin & Biggest Battles | Lex Fridman Podcast #470"
+  },
+  {
+   "vid": "4OyB3hFb2AA",
+   "title": "Oliver Anthony: Country Music, Blue-Collar America, Fame, Money, and Pain | Lex Fridman Podcast #469"
+  },
+  {
+   "vid": "A6m4iJIw_84",
+   "title": "Janna Levin: Black Holes, Wormholes, Aliens, Paradoxes & Extra Dimensions | Lex Fridman Podcast #468"
+  },
+  {
+   "vid": "477qF6QNSvc",
+   "title": "Tim Sweeney: Fortnite, Unreal Engine, and the Future of Gaming | Lex Fridman Podcast #467"
+  },
+  {
+   "vid": "3W5FWUN5w2Q",
+   "title": "Jeffrey Wasserstrom: China, Xi Jinping, Trade War, Taiwan, Hong Kong, Mao | Lex Fridman Podcast #466"
+  },
+  {
+   "vid": "xJoT3bJyHuA",
+   "title": "Robert Rodriguez: Sin City, Desperado, El Mariachi, Alita, and Filmmaking | Lex Fridman Podcast #465"
+  },
+  {
+   "vid": "1V0bJfqEaa4",
+   "title": "Dave Smith: Israel, Hamas, Ukraine, Russia, Conspiracies & Antisemitism | Lex Fridman Podcast #464"
+  },
+  {
+   "vid": "HvI42TyE5Ww",
+   "title": "Douglas Murray: Putin, Zelenskyy, Trump, Israel, Netanyahu, Hamas & Gaza | Lex Fridman Podcast #463"
+  },
+  {
+   "vid": "DTPSeeKokdo",
+   "title": "Ezra Klein and Derek Thompson: Politics, Trump, AOC, Elon & DOGE | Lex Fridman Podcast #462"
+  },
+  {
+   "vid": "tNZnLkRBYA8",
+   "title": "ThePrimeagen: Programming, AI, ADHD, Productivity, Addiction, and God | Lex Fridman Podcast #461"
+  },
+  {
+   "vid": "ZPUtA3W-7_I",
+   "title": "Narendra Modi: Prime Minister of India - Power, Democracy, War & Peace | Lex Fridman Podcast #460"
+  },
+  {
+   "vid": "_1f-o0nqpEI",
+   "title": "DeepSeek, China, OpenAI, NVIDIA, xAI, TSMC, Stargate, and AI Megaclusters | Lex Fridman Podcast #459"
+  },
+  {
+   "vid": "OHWnPOKh_S0",
+   "title": "Marc Andreessen: Trump, Power, Tech, AI, Immigration & Future of America | Lex Fridman Podcast #458"
+  },
+  {
+   "vid": "Rz-4ulRKnz4",
+   "title": "Jennifer Burns: Milton Friedman, Ayn Rand, Economics, Capitalism, Freedom | Lex Fridman Podcast #457"
+  },
+  {
+   "vid": "u321m25rKXc",
+   "title": "Volodymyr Zelenskyy: Ukraine, War, Peace, Putin, Trump, NATO, and Freedom | Lex Fridman Podcast #456"
+  },
+  {
+   "vid": "yhZAXXI83-4",
+   "title": "Adam Frank: Alien Civilizations and the Search for Extraterrestrial Life | Lex Fridman Podcast #455"
+  },
+  {
+   "vid": "9xz8i90Hp2A",
+   "title": "Saagar Enjeti: Trump, MAGA, DOGE, Obama, FDR, JFK, History & Politics | Lex Fridman Podcast #454"
+  },
+  {
+   "vid": "8NLzc9kobDk",
+   "title": "Javier Milei: President of Argentina - Freedom, Economics, and Corruption | Lex Fridman Podcast #453"
+  },
+  {
+   "vid": "ugvHCXCOmm4",
+   "title": "Dario Amodei: Anthropic CEO on Claude, AGI & the Future of AI & Humanity | Lex Fridman Podcast #452"
+  },
+  {
+   "vid": "abd5hguWKz0",
+   "title": "Rick Spence: CIA, KGB, Illuminati, Secret Societies, Cults & Conspiracies | Lex Fridman Podcast #451"
+  },
+  {
+   "vid": "MzkgWDCucNY",
+   "title": "Bernie Sanders Interview | Lex Fridman Podcast #450"
+  },
+  {
+   "vid": "NMHiLvirCb0",
+   "title": "Graham Hancock: Lost Civilization of the Ice Age & Ancient Human History | Lex Fridman Podcast #449"
+  },
+  {
+   "vid": "q8VePUwjB9Y",
+   "title": "Jordan Peterson: Nietzsche, Hitler, God, Psychopathy, Suffering & Meaning | Lex Fridman Podcast #448"
+  },
+  {
+   "vid": "oFfVt3S51T4",
+   "title": "Cursor Team: Future of Programming with AI | Lex Fridman Podcast #447"
+  },
+  {
+   "vid": "AzzE7GOvYz8",
+   "title": "Ed Barnhart: Maya, Aztec, Inca, and Lost Civilizations of South America | Lex Fridman Podcast #446"
+  },
+  {
+   "vid": "Q8Qk_3a3lUw",
+   "title": "Vivek Ramaswamy: Trump, Conservatism, Nationalism, Immigration, and War | Lex Fridman Podcast #445"
+  },
+  {
+   "vid": "s1oTH4Sjvzg",
+   "title": "Vejas Liulevicius: Communism, Marxism, Nazism, Stalin, Mao, and Hitler | Lex Fridman Podcast #444"
+  },
+  {
+   "vid": "DyoVVSggPjY",
+   "title": "Gregory Aldrete: The Roman Empire - Rise and Fall of Ancient Rome | Lex Fridman Podcast #443"
+  },
+  {
+   "vid": "qCbfTN-caFI",
+   "title": "Donald Trump Interview | Lex Fridman Podcast #442"
+  },
+  {
+   "vid": "QJtPROVsePk",
+   "title": "Cenk Uygur: Trump vs Harris, Progressive Politics, Communism & Capitalism | Lex Fridman Podcast #441"
+  },
+  {
+   "vid": "oFtjKbXKqbg",
+   "title": "Pieter Levels: Programming, Viral AI Startups, and Digital Nomad Life | Lex Fridman Podcast #440"
+  },
+  {
+   "vid": "J7aiEwp1x9k",
+   "title": "Craig Jones: Jiu Jitsu, $2 Million Prize, CJI, ADCC, Ukraine & Trolling | Lex Fridman Podcast #439"
+  },
+  {
+   "vid": "Kbk9BiPhm7o",
+   "title": "Elon Musk: Neuralink and the Future of Humanity | Lex Fridman Podcast #438"
+  },
+  {
+   "vid": "WA9gVKKPsBo",
+   "title": "Jordan Jonas: Survival, Hunting, Siberia, God, and Winning Alone Season 6 | Lex Fridman Podcast #437"
+  },
+  {
+   "vid": "2oxdDKHdcM8",
+   "title": "Ivanka Trump: Politics, Family, Real Estate, Fashion, Music, and Life | Lex Fridman Podcast #436"
+  },
+  {
+   "vid": "ZIyB9e_7a4c",
+   "title": "Andrew Huberman: Focus, Controversy, Politics, and Relationships | Lex Fridman Podcast #435"
+  },
+  {
+   "vid": "e-gwvmhyU7A",
+   "title": "Aravind Srinivas: Perplexity CEO on Future of AI, Search & the Internet | Lex Fridman Podcast #434"
+  },
+  {
+   "vid": "wwhTfyX9J34",
+   "title": "Sara Walker: Physics of Life, Time, Complexity, and Aliens | Lex Fridman Podcast #433"
+  },
+  {
+   "vid": "XJTMQtE-MIo",
+   "title": "Kevin Spacey: Power, Controversy, Betrayal, Truth & Love in Film and Life | Lex Fridman Podcast #432"
+  },
+  {
+   "vid": "NNr6gPelJ3E",
+   "title": "Roman Yampolskiy: Dangers of Superintelligent AI | Lex Fridman Podcast #431"
+  },
+  {
+   "vid": "4iuepdI3wCU",
+   "title": "Charan Ranganath: Human Memory, Imagination, Deja Vu, and False Memories | Lex Fridman Podcast #430"
+  },
+  {
+   "vid": "pwN8u6HFH8U",
+   "title": "Paul Rosolie: Jungle, Apex Predators, Aliens, Uncontacted Tribes, and God | Lex Fridman Podcast #429"
+  },
+  {
+   "vid": "tdv7r2JSokI",
+   "title": "Sean Carroll: General Relativity, Quantum Mechanics, Black Holes & Aliens | Lex Fridman Podcast #428"
+  },
+  {
+   "vid": "TXabC2Ave74",
+   "title": "Neil Adams: Judo, Olympics, Winning, Losing, and the Champion Mindset | Lex Fridman Podcast #427"
+  },
+  {
+   "vid": "F3Jd9GI6XqE",
+   "title": "Edward Gibson: Human Language, Psycholinguistics, Syntax, Grammar & LLMs | Lex Fridman Podcast #426"
+  },
+  {
+   "vid": "yEou104m_P0",
+   "title": "Andrew Callaghan: Channel 5, Gonzo, QAnon, O-Block, Politics & Alex Jones | Lex Fridman Podcast #425"
+  },
+  {
+   "vid": "sG8u6owzad4",
+   "title": "Bassem Youssef: Israel-Palestine, Gaza, Hamas, Middle East, Satire & Fame | Lex Fridman Podcast #424"
+  },
+  {
+   "vid": "_El9riy9Zjw",
+   "title": "Tulsi Gabbard: War, Politics, and the Military Industrial Complex | Lex Fridman Podcast #423"
+  },
+  {
+   "vid": "0cn3VBjfN8g",
+   "title": "Mark Cuban: Shark Tank, DEI & Wokeism Debate, Elon Musk, Politics & Drugs | Lex Fridman Podcast #422"
+  },
+  {
+   "vid": "k7aQEqDbuf8",
+   "title": "Dana White: UFC, Fighting, Khabib, Conor, Tyson, Ali, Rogan, Elon & Zuck | Lex Fridman Podcast #421"
+  },
+  {
+   "vid": "GXgGR8KxFao",
+   "title": "Annie Jacobsen: Nuclear War, CIA, KGB, Aliens, Area 51, Roswell & Secrecy | Lex Fridman Podcast #420"
+  },
+  {
+   "vid": "jvqFAi7vkBc",
+   "title": "Sam Altman: OpenAI, GPT-5, Sora, Board Saga, Elon Musk, Ilya, Power & AGI | Lex Fridman Podcast #419"
+  },
+  {
+   "vid": "1X_KdkoGxSs",
+   "title": "Israel-Palestine Debate: Finkelstein, Destiny, M. Rabbani & Benny Morris | Lex Fridman Podcast #418"
+  },
+  {
+   "vid": "iAlwZyRUOVM",
+   "title": "Kimbal Musk: The Art of Cooking, Tesla, SpaceX, Zip2, and Family | Lex Fridman Podcast #417"
+  },
+  {
+   "vid": "5t1vTLU7s40",
+   "title": "Yann Lecun: Meta AI, Open Source, Limits of LLMs, AGI & the Future of AI | Lex Fridman Podcast #416"
+  },
+  {
+   "vid": "qa-wl8_wpZA",
+   "title": "Serhii Plokhy: History of Ukraine, Russia, Soviet Union, KGB, Nazis & War | Lex Fridman Podcast #415"
+  },
+  {
+   "vid": "f_lRdkH_QoY",
+   "title": "Tucker Carlson: Putin, Navalny, Trump, CIA, NSA, War, Politics & Freedom | Lex Fridman Podcast #414"
+  },
+  {
+   "vid": "PgGKhsWhUu8",
+   "title": "Bill Ackman: Investing, Financial Battles, Harvard, DEI, X & Free Speech | Lex Fridman Podcast #413"
+  },
+  {
+   "vid": "5VnbBCm_ZyQ",
+   "title": "Marc Raibert: Boston Dynamics and the Future of Robotics | Lex Fridman Podcast #412"
+  },
+  {
+   "vid": "oFSyNdQf5uk",
+   "title": "Omar Suleiman: Palestine, Gaza, Oct 7, Israel, Resistance, Faith & Islam | Lex Fridman Podcast #411"
+  },
+  {
+   "vid": "tYrdMjVXyNg",
+   "title": "Ben Shapiro vs Destiny Debate: Politics, Jan 6, Israel, Ukraine & Wokeism | Lex Fridman Podcast #410"
+  },
+  {
+   "vid": "zMYvGf7BA9o",
+   "title": "Matthew Cox: FBI Most Wanted Con Man - $55 Million in Bank Fraud | Lex Fridman Podcast #409"
+  },
+  {
+   "vid": "9qfwPv7clEw",
+   "title": "Tal Wilkenfeld: Music, Guitar, Bass, Jeff Beck, Prince, and Leonard Cohen | Lex Fridman Podcast #408"
+  },
+  {
+   "vid": "8fEEbKJoNbU",
+   "title": "Guillaume Verdon: Beff Jezos, E/acc Movement, Physics, Computation & AGI | Lex Fridman Podcast #407"
+  },
+  {
+   "vid": "CVx9IB_U9X4",
+   "title": "Teddy Atlas: Mike Tyson, Cus D'Amato, Boxing, Loyalty, Fear & Greatness | Lex Fridman Podcast #406"
+  },
+  {
+   "vid": "DcWqzZ3I2cY",
+   "title": "Jeff Bezos: Amazon and Blue Origin | Lex Fridman Podcast #405"
+  },
+  {
+   "vid": "CGiDqhSdLHk",
+   "title": "Lee Cronin: Controversial Nature Paper on Evolution of Life and Universe | Lex Fridman Podcast #404"
+  },
+  {
+   "vid": "VPaOy3G1-2A",
+   "title": "Lisa Randall: Dark Matter, Theoretical Physics, and Extinction Events | Lex Fridman Podcast #403"
+  },
+  {
+   "vid": "2yHr9DPnSzk",
+   "title": "Michael Malice: Thanksgiving Pirate Special | Lex Fridman Podcast #402"
+  },
+  {
+   "vid": "r4wLXNydzeY",
+   "title": "John Mearsheimer: Israel-Palestine, Russia-Ukraine, China, NATO, and WW3 | Lex Fridman Podcast #401"
+  },
+  {
+   "vid": "JN3KPFbWCy8",
+   "title": "Elon Musk: War, AI, Aliens, Politics, Physics, Video Games, and Humanity | Lex Fridman Podcast #400"
+  },
+  {
+   "vid": "co_MeKSnyAo",
+   "title": "Jared Kushner: Israel, Palestine, Hamas, Gaza, Iran, and the Middle East | Lex Fridman Podcast #399"
+  },
+  {
+   "vid": "MVYrJJNdrEg",
+   "title": "Mark Zuckerberg: First Interview in the Metaverse | Lex Fridman Podcast #398"
+  },
+  {
+   "vid": "buarAx_u2qg",
+   "title": "Greg Lukianoff: Cancel Culture, Deplatforming, Censorship & Free Speech | Lex Fridman Podcast #397"
+  },
+  {
+   "vid": "fUEjCXpOjPY",
+   "title": "James Sexton: Divorce Lawyer on Marriage, Relationships, Sex, Lies & Love | Lex Fridman Podcast #396"
+  },
+  {
+   "vid": "aGOV5R7M1Js",
+   "title": "Walter Isaacson: Elon Musk, Steve Jobs, Einstein, Da Vinci & Ben Franklin | Lex Fridman Podcast #395"
+  },
+  {
+   "vid": "XbPHojL_61U",
+   "title": "Neri Oxman: Biology, Art, and Science of Design & Engineering with Nature | Lex Fridman Podcast #394"
+  },
+  {
+   "vid": "eTBAxD6lt2g",
+   "title": "Andrew Huberman: Relationships, Drama, Betrayal, Sex, and Love | Lex Fridman Podcast #393"
+  },
+  {
+   "vid": "e8qJsk1j2zE",
+   "title": "Joscha Bach: Life, Intelligence, Consciousness, AI & the Future of Humans | Lex Fridman Podcast #392"
+  },
+  {
+   "vid": "34wA_bdG6QQ",
+   "title": "Mohammed El-Kurd: Palestine | Lex Fridman Podcast #391"
+  },
+  {
+   "vid": "Mde2q7GFCrw",
+   "title": "Yuval Noah Harari: Human Nature, Intelligence, Power, and Conspiracies | Lex Fridman Podcast #390"
+  },
+  {
+   "vid": "XpC7SVDXimg",
+   "title": "Benjamin Netanyahu: Israel, Palestine, Power, Corruption, Hate, and Peace | Lex Fridman Podcast #389"
+  },
+  {
+   "vid": "NPtBkw5uD-0",
+   "title": "Robert F. Kennedy Jr: CIA, Power, Corruption, War, Freedom, and Meaning | Lex Fridman Podcast #388"
+  },
+  {
+   "vid": "dNrTrx42DGQ",
+   "title": "George Hotz: Tiny Corp, Twitter, AI Safety, Self-Driving, GPT, AGI & God | Lex Fridman Podcast #387"
+  },
+  {
+   "vid": "-hxeDjAxvJ8",
+   "title": "Marc Andreessen: Future of the Internet, Technology, and AI | Lex Fridman Podcast #386"
+  },
+  {
+   "vid": "diJp4zoQPqo",
+   "title": "Jimmy Wales: Wikipedia | Lex Fridman Podcast #385"
+  },
+  {
+   "vid": "8qgIFD0PaWo",
+   "title": "Matthew McConaughey: Freedom, Truth, Family, Hardship, and Love | Lex Fridman Podcast #384"
+  },
+  {
+   "vid": "Ff4fRgnuFgQ",
+   "title": "Mark Zuckerberg: Future of AI at Meta, Facebook, Instagram, and WhatsApp | Lex Fridman Podcast #383"
+  },
+  {
+   "vid": "8TmV6KEYkK0",
+   "title": "Bert Kreischer: Comedy, Drinking, Rogan, Segura, Churchill & Kim Jong Un | Lex Fridman Podcast #382"
+  },
+  {
+   "vid": "pdJQ8iVTwj8",
+   "title": "Chris Lattner: Future of Programming and AI | Lex Fridman Podcast #381"
+  },
+  {
+   "vid": "YDjOS0VHEr4",
+   "title": "Neil Gershenfeld: Self-Replicating Robots and the Future of Fabrication | Lex Fridman Podcast #380"
+  },
+  {
+   "vid": "iFXGpKf9VBU",
+   "title": "Randall Kennedy: The N-Word - History of Race, Law, Politics, and Power | Lex Fridman Podcast #379"
+  },
+  {
+   "vid": "IQnUa5Bq5x4",
+   "title": "Anna Frebel: Origin and Evolution of the Universe, Galaxies, and Stars | Lex Fridman Podcast #378"
+  },
+  {
+   "vid": "DgTjSrrf6GQ",
+   "title": "Harvey Silverglate: Freedom of Speech | Lex Fridman Podcast #377"
+  },
+  {
+   "vid": "PdE-waSx-d8",
+   "title": "Stephen Wolfram: ChatGPT and the Nature of Truth, Reality & Computation | Lex Fridman Podcast #376"
+  },
+  {
+   "vid": "2i31fDkaK9A",
+   "title": "David Pakman: Politics of Trump, Biden, Bernie, AOC, Socialism & Wokeism | Lex Fridman Podcast #375"
+  },
+  {
+   "vid": "cLVdsZ3I5os",
+   "title": "Robert Playter: Boston Dynamics CEO on Humanoid and Legged Robotics | Lex Fridman Podcast #374"
+  },
+  {
+   "vid": "wMavKrA-4do",
+   "title": "Manolis Kellis: Evolution of Human Civilization and Superintelligent AI | Lex Fridman Podcast #373"
+  },
+  {
+   "vid": "OgIo36F6Fsg",
+   "title": "Simone Giertz: Queen of Sh*tty Robots, Innovative Engineering, and Design | Lex Fridman Podcast #372"
+  },
+  {
+   "vid": "VcVfceTsD0A",
+   "title": "Max Tegmark: The Case for Halting AI Development | Lex Fridman Podcast #371"
+  },
+  {
+   "vid": "Osh0-J3T2nY",
+   "title": "Edward Frenkel: Reality is a Paradox - Mathematics, Physics, Truth & Love | Lex Fridman Podcast #370"
+  },
+  {
+   "vid": "gPfriiHBBek",
+   "title": "Paul Rosolie: Amazon Jungle, Uncontacted Tribes, Anacondas, and Ayahuasca | Lex Fridman Podcast #369"
+  },
+  {
+   "vid": "AaTRHFaaPG8",
+   "title": "Eliezer Yudkowsky: Dangers of AI and the End of Human Civilization | Lex Fridman Podcast #368"
+  },
+  {
+   "vid": "L_Guz73e6fw",
+   "title": "Sam Altman: OpenAI CEO on GPT-4, ChatGPT, and the Future of AI | Lex Fridman Podcast #367"
+  },
+  {
+   "vid": "qtOKrG_wK5A",
+   "title": "Shannon Curry: Johnny Depp & Amber Heard Trial, Marriage, Dating & Love | Lex Fridman Podcast #366"
+  },
+  {
+   "vid": "Qyrjgf-_Vdk",
+   "title": "Sam Harris: Trump, Pandemic, Twitter, Elon, Bret, IDW, Kanye, AI & UFOs | Lex Fridman Podcast #365"
+  },
+  {
+   "vid": "8EguLJgkc54",
+   "title": "Chris Voss: FBI Hostage Negotiator | Lex Fridman Podcast #364"
+  },
+  {
+   "vid": "hLZ6PACCBy8",
+   "title": "B-Team Jiu Jitsu: Craig Jones, Nicky Rod, and Nicky Ryan | Lex Fridman Podcast #363"
+  },
+  {
+   "vid": "XiCxj-bXu5M",
+   "title": "Ginni Rometty: IBM CEO on Leadership, Power, and Adversity | Lex Fridman Podcast #362"
+  },
+  {
+   "vid": "J1lN9zkK_k0",
+   "title": "Aaron Smith-Levin: Scientology | Lex Fridman Podcast #361"
+  },
+  {
+   "vid": "GkZz2I6sK08",
+   "title": "Tim Urban: Tribalism, Marxism, Liberalism, Social Justice, and Politics | Lex Fridman Podcast #360"
+  },
+  {
+   "vid": "y3cw_9ELpQw",
+   "title": "Andrew Strominger: Black Holes, Quantum Gravity, and Theoretical Physics | Lex Fridman Podcast #359"
+  },
+  {
+   "vid": "cFSrxSBrgSc",
+   "title": "Aella: Sex Work, OnlyFans, Porn, Escorting, Dating, and Human Sexuality | Lex Fridman Podcast #358"
+  },
+  {
+   "vid": "jRBksDVs4tg",
+   "title": "Paul Conti: Narcissism, Sociopathy, Envy, and the Nature of Good and Evil | Lex Fridman Podcast #357"
+  },
+  {
+   "vid": "5eK5A_43pkE",
+   "title": "Tim Dodd: SpaceX, Starship, Rocket Engines, and Future of Space Travel | Lex Fridman Podcast #356"
+  },
+  {
+   "vid": "uZN5xjoS6TU",
+   "title": "David Kipping: Alien Civilizations and Habitable Worlds | Lex Fridman Podcast #355"
+  },
+  {
+   "vid": "GvX-heRWFfA",
+   "title": "Jeremi Suri: Civil War, Slavery, Freedom, and Democracy | Lex Fridman Podcast #354"
+  },
+  {
+   "vid": "aJoRMFWn2Jk",
+   "title": "Dennis Whyte: Nuclear Fusion and the Future of Energy | Lex Fridman Podcast #353"
+  },
+  {
+   "vid": "BOKCNUqbpH0",
+   "title": "Omar Suleiman: Islam | Lex Fridman Podcast #352"
+  },
+  {
+   "vid": "Z3_PwvvfxIU",
+   "title": "MrBeast: Future of YouTube, Twitter, TikTok, and Instagram | Lex Fridman Podcast #351"
+  },
+  {
+   "vid": "NXU_M4030nE",
+   "title": "Betül Kaçar: Origin of Life, Ancient DNA, Panspermia, and Aliens | Lex Fridman Podcast #350"
+  },
+  {
+   "vid": "pNlfHgHJweQ",
+   "title": "Bhaskar Sunkara: Socialism and Communism | Lex Fridman Podcast #349"
+  },
+  {
+   "vid": "yyBosLx7bbM",
+   "title": "Nathalie Cabrol: Search for Alien Life | Lex Fridman Podcast #348"
+  },
+  {
+   "vid": "NUkXluf3OYA",
+   "title": "Michael Malice: Christmas Special | Lex Fridman Podcast #347"
+  },
+  {
+   "vid": "9PIOoJMMptA",
+   "title": "Ed Calderon: Mexican Drug Cartels | Lex Fridman Podcast #346"
+  },
+  {
+   "vid": "hi9Rf0oLdHk",
+   "title": "Coffeezilla: SBF, FTX, Fraud, Scams, Fake Gurus, Money, Fame, and Power | Lex Fridman Podcast #345"
+  },
+  {
+   "vid": "2oHH4aClJQs",
+   "title": "Noam Brown: AI vs Humans in Poker and Games of Strategic Negotiation | Lex Fridman Podcast #344"
+  },
+  {
+   "vid": "FhfmGM6hswI",
+   "title": "Roger Gracie: Greatest Jiu Jitsu Competitor of All Time | Lex Fridman Podcast #343"
+  },
+  {
+   "vid": "H9AAnV59ddE",
+   "title": "Todd Howard: Skyrim, Elder Scrolls 6, Fallout, and Starfield | Lex Fridman Podcast #342"
+  },
+  {
+   "vid": "-DVyjdw4t9I",
+   "title": "Guido van Rossum: Python and the Future of Programming | Lex Fridman Podcast #341"
+  },
+  {
+   "vid": "4KiO8GRgwDk",
+   "title": "Chris Tarbell: FBI Agent Who Took Down Silk Road | Lex Fridman Podcast #340"
+  },
+  {
+   "vid": "5Gk9gIpGvSE",
+   "title": "Climate Change Debate: Bjørn Lomborg and Andrew Revkin | Lex Fridman Podcast #339"
+  },
+  {
+   "vid": "kFQUDCgMjRc",
+   "title": "Chamath Palihapitiya: Money, Success, Startups, Energy, Poker & Happiness | Lex Fridman Podcast #338"
+  },
+  {
+   "vid": "bqeuFiAUU4o",
+   "title": "Destiny: Politics, Free Speech, Controversy, Sex, War, and Relationships | Lex Fridman Podcast #337"
+  },
+  {
+   "vid": "AF8DOS4C2KM",
+   "title": "Ben Shapiro: Politics, Kanye, Trump, Biden, Hitler, Extremism, and War | Lex Fridman Podcast #336"
+  },
+  {
+   "vid": "vNhSCF9i8Qs",
+   "title": "Fiona Hill: Vladimir Putin and Donald Trump | Lex Fridman Podcast #335"
+  },
+  {
+   "vid": "OYsYgzzsdT0",
+   "title": "Abbas Amanat: Iran Protests, Mahsa Amini, History, CIA & Nuclear Weapons | Lex Fridman Podcast #334"
+  },
+  {
+   "vid": "cdiD-9MMpb0",
+   "title": "Andrej Karpathy: Tesla AI, Self-Driving, Optimus, Aliens, and AGI | Lex Fridman Podcast #333"
+  },
+  {
+   "vid": "4AWLcxTGZPA",
+   "title": "Kanye 'Ye' West Interview | Lex Fridman Podcast #332"
+  },
+  {
+   "vid": "VeH7qKZr0WI",
+   "title": "Balaji Srinivasan: How to Fix Government, Twitter, Science, and the FDA | Lex Fridman Podcast #331"
+  },
+  {
+   "vid": "oJNvxYEcVAY",
+   "title": "Hikaru Nakamura: Chess, Magnus, Kasparov, and the Psychology of Greatness | Lex Fridman Podcast #330"
+  },
+  {
+   "vid": "ZFntEFXKDHM",
+   "title": "Kate Darling: Social Robots, Ethics, Privacy and the Future of MIT | Lex Fridman Podcast #329"
+  },
+  {
+   "vid": "iZRbD7q1n-U",
+   "title": "John Danaher: Grappling, Jiu Jitsu, ADCC, and Animal Combat | Lex Fridman Podcast #328"
+  },
+  {
+   "vid": "iSMpTmibeDw",
+   "title": "GothamChess: Hans Niemann, Magnus Carlsen, Cheating Scandal & Chess Bots | Lex Fridman Podcast #327"
+  },
+  {
+   "vid": "q6zEzZCtkXw",
+   "title": "Annaka Harris: Free Will, Consciousness, and the Nature of Reality | Lex Fridman Podcast #326"
+  },
+  {
+   "vid": "p3lsYlod5OU",
+   "title": "Michael Levin: Biology, Life, Aliens, Evolution, Embryogenesis & Xenobots | Lex Fridman Podcast #325"
+  },
+  {
+   "vid": "rKnoNfajUgM",
+   "title": "Daniel Negreanu: Poker | Lex Fridman Podcast #324"
+  },
+  {
+   "vid": "xewD1apJNhw",
+   "title": "Will Sasso: Comedy, MADtv, AI, Friendship, Madness, and Pro Wrestling | Lex Fridman Podcast #323"
+  },
+  {
+   "vid": "36_rM7wpN5A",
+   "title": "Rana el Kaliouby: Emotion AI, Social Robots, and Self-Driving Cars | Lex Fridman Podcast #322"
+  },
+  {
+   "vid": "ykY69lSpDdo",
+   "title": "Ray Kurzweil: Singularity, Superintelligence, and Immortality | Lex Fridman Podcast #321"
+  },
+  {
+   "vid": "SK4kMPmgKW0",
+   "title": "Christopher Capozzola: World War I, Ideology, Propaganda, and Politics | Lex Fridman Podcast #320"
+  },
+  {
+   "vid": "srUlKNLZTas",
+   "title": "Botez Sisters: Chess, Streaming, and Fame | Lex Fridman Podcast #319"
+  },
+  {
+   "vid": "tOtdJcco3YM",
+   "title": "Nick Lane: Origin of Life, Evolution, Aliens, Biology, and Consciousness | Lex Fridman Podcast #318"
+  },
+  {
+   "vid": "yImlXr5Tr8g",
+   "title": "John Vervaeke: Meaning Crisis, Atheism, Religion & the Search for Wisdom | Lex Fridman Podcast #317"
+  },
+  {
+   "vid": "7uHGlfeCBbE",
+   "title": "Noam Chomsky: Putin, Ukraine, China, and Nuclear War | Lex Fridman Podcast #316"
+  },
+  {
+   "vid": "0ZO28NtkwwQ",
+   "title": "Magnus Carlsen: Greatest Chess Player of All Time | Lex Fridman Podcast #315"
+  },
+  {
+   "vid": "eF-E40pxxbI",
+   "title": "Liv Boeree: Poker, Game Theory, AI, Simulation, Aliens & Existential Risk | Lex Fridman Podcast #314"
+  },
+  {
+   "vid": "sY8aFSY2zv4",
+   "title": "Jordan Peterson: Life, Death, Power, Fame, and Meaning | Lex Fridman Podcast #313"
+  },
+  {
+   "vid": "jdIyNMkusLE",
+   "title": "Duncan Trussell: Comedy, Sentient Robots, Suffering, Love & Burning Man | Lex Fridman Podcast #312"
+  },
+  {
+   "vid": "Q6tDV3BhrcM",
+   "title": "Magatte Wade: Africa, Capitalism, Communism, and the Future of Humanity | Lex Fridman Podcast #311"
+  },
+  {
+   "vid": "T3FC7qIAGZk",
+   "title": "Andrew Bustamante: CIA Spy | Lex Fridman Podcast #310"
+  },
+  {
+   "vid": "I845O57ZSy4",
+   "title": "John Carmack: Doom, Quake, VR, AGI, Programming, Video Games, and Rockets | Lex Fridman Podcast #309"
+  },
+  {
+   "vid": "qLDp-aYnR1Y",
+   "title": "Ryan Graves: UFOs, Fighter Jets, and Aliens | Lex Fridman Podcast #308"
+  },
+  {
+   "vid": "VBPTFlpv31k",
+   "title": "Brian Armstrong: Coinbase, Cryptocurrency, and Government Regulation | Lex Fridman Podcast #307"
+  },
+  {
+   "vid": "aGBLRlLe7X8",
+   "title": "Oriol Vinyals: Deep Learning and Artificial General Intelligence | Lex Fridman Podcast #306"
+  },
+  {
+   "vid": "50r-5ULcWgY",
+   "title": "Martin Rees: Black Holes, Alien Life, Dark Matter, and the Big Bang | Lex Fridman Podcast #305"
+  },
+  {
+   "vid": "WgytXF0SPh0",
+   "title": "Bishop Robert Barron: Christianity and the Catholic Church | Lex Fridman Podcast #304"
+  },
+  {
+   "vid": "1XGiTDWfdpM",
+   "title": "Steve Keen: Marxism, Capitalism, and Economics | Lex Fridman Podcast #303"
+  },
+  {
+   "vid": "hppbxV9C63g",
+   "title": "Richard Haier: IQ Tests, Human Intelligence, and Group Differences | Lex Fridman Podcast #302"
+  },
+  {
+   "vid": "dSVLjAdo8UA",
+   "title": "Jack Barsky: KGB Spy | Lex Fridman Podcast #301"
+  },
+  {
+   "vid": "gk4tEO4jDUM",
+   "title": "Joe Rogan: Comedy, Controversy, Aliens, UFOs, Putin, CIA, and Freedom | Lex Fridman Podcast #300"
+  },
+  {
+   "vid": "Gfr50f6ZBvo",
+   "title": "Demis Hassabis: DeepMind - AI, Superintelligence & the Future of Humanity | Lex Fridman Podcast #299"
+  },
+  {
+   "vid": "j4PEu4sVD40",
+   "title": "Susan Cain: The Power of Introverts and Loneliness | Lex Fridman Podcast #298"
+  },
+  {
+   "vid": "XOPO9J7DIXw",
+   "title": "Jonathan Reisman: The Human Body - From Sex & Sperm to Hands & Heart | Lex Fridman Podcast #297"
+  },
+  {
+   "vid": "EG7I6Bt_NZY",
+   "title": "Douglas Murray: Racism, Marxism, and the War on the West | Lex Fridman Podcast #296"
+  },
+  {
+   "vid": "o0Bi-q89j5Y",
+   "title": "Richard Wolff: Marxism and Communism | Lex Fridman Podcast #295"
+  },
+  {
+   "vid": "4oDZyOf6CW4",
+   "title": "Tony Fadell: iPhone, iPod, Nest, Steve Jobs, Design, and Engineering | Lex Fridman Podcast #294"
+  },
+  {
+   "vid": "reYdQYZ9Rj4",
+   "title": "Donald Hoffman: Reality is an Illusion - How Evolution Hid the Truth | Lex Fridman Podcast #293"
+  },
+  {
+   "vid": "KBZP4rLk6bk",
+   "title": "Robin Hanson: Alien Civilizations, UFOs, and the Future of Humanity | Lex Fridman Podcast #292"
+  },
+  {
+   "vid": "jvGZkf87aCs",
+   "title": "Dan Reynolds: Imagine Dragons | Lex Fridman Podcast #290"
+  },
+  {
+   "vid": "2a7CDKqWcZ0",
+   "title": "Stephen Kotkin: Putin, Stalin, Hitler, Zelenskyy, and War in Ukraine | Lex Fridman Podcast #289"
+  },
+  {
+   "vid": "iZjby1LkTWQ",
+   "title": "Sarma Melngailis: Bad Vegan, Fraud, Prison, and Sociopathy | Lex Fridman Podcast #288"
+  },
+  {
+   "vid": "ygAqYC8JOQI",
+   "title": "Oliver Stone: Vladimir Putin and War in Ukraine | Lex Fridman Podcast #286"
+  },
+  {
+   "vid": "YbJZnShMQAo",
+   "title": "Glenn Loury: Race, Racism, Identity Politics, and Cancel Culture | Lex Fridman Podcast #285"
+  },
+  {
+   "vid": "gp4U5aH_T6A",
+   "title": "Saifedean Ammous: Bitcoin, Anarchy, and Austrian Economics | Lex Fridman Podcast #284"
+  },
+  {
+   "vid": "1C2tPFCGL1U",
+   "title": "Chris Mason: Space Travel, Colonization, and Long-Term Survival in Space | Lex Fridman Podcast #283"
+  },
+  {
+   "vid": "f0un-l1L8Zw",
+   "title": "Jonathan Haidt: The Case Against Social Media | Lex Fridman Podcast #291"
+  },
+  {
+   "vid": "sndW9hzX-wA",
+   "title": "David Buss: Sex, Dating, Relationships, and Sex Differences | Lex Fridman Podcast #282"
+  },
+  {
+   "vid": "KOwm7GUjcg8",
+   "title": "Grimes: Music, AI, and the Future of Humanity | Lex Fridman Podcast #281"
+  },
+  {
+   "vid": "KMgPxVnKLSk",
+   "title": "Cristiano Amon: Qualcomm CEO | Lex Fridman Podcast #280"
+  },
+  {
+   "vid": "SFxIazwNP_0",
+   "title": "Alien Debate: Sara Walker and Lee Cronin | Lex Fridman Podcast #279"
+  },
+  {
+   "vid": "dHTgffkpeYo",
+   "title": "Skye Fitzgerald: Hunger, War, and Human Suffering | Lex Fridman Podcast #278"
+  },
+  {
+   "vid": "lvh3g7eszVQ",
+   "title": "Andrew Huberman: Focus, Stress, Relationships, and Friendship | Lex Fridman Podcast #277"
+  },
+  {
+   "vid": "mC43pZkpTec",
+   "title": "Michael Saylor: Bitcoin, Inflation, and the Future of Money | Lex Fridman Podcast #276"
+  },
+  {
+   "vid": "H_szemxPcTI",
+   "title": "Rick Rubin: Legendary Music Producer | Lex Fridman Podcast #275"
+  },
+  {
+   "vid": "OaeYUm06in0",
+   "title": "Karl Deisseroth: Depression, Schizophrenia, and Psychiatry | Lex Fridman Podcast #274"
+  },
+  {
+   "vid": "DbXjoXnIxQo",
+   "title": "Chris Blattman: War and Violence | Lex Fridman Podcast #273"
+  },
+  {
+   "vid": "cC1LFC0KFSw",
+   "title": "Brett Johnson: US Most Wanted Cybercriminal | Lex Fridman Podcast #272"
+  },
+  {
+   "vid": "KW8Vjs84Fxg",
+   "title": "Ariel Ekblaw: Space Colonization and Self-Assembling Space Megastructures | Lex Fridman Podcast #271"
+  },
+  {
+   "vid": "urdNsyZBqhQ",
+   "title": "David Wolpe: Judaism | Lex Fridman Podcast #270"
+  },
+  {
+   "vid": "ZecQ64l-gKM",
+   "title": "Lee Cronin: Origin of Life, Aliens, Complexity, and Consciousness | Lex Fridman Podcast #269"
+  },
+  {
+   "vid": "tOTenjh_8hw",
+   "title": "Bobby Lee: Comedy, Skyrim, Sex Robots, Love, Fame, and Power | Lex Fridman Podcast #287"
+  },
+  {
+   "vid": "Y3VBCWIDEzk",
+   "title": "Robert Proctor: Nazi Science and Ideology | Lex Fridman Podcast #268"
+  },
+  {
+   "vid": "5zOHSysMmH0",
+   "title": "Mark Zuckerberg: Meta, Facebook, Instagram, and the Metaverse | Lex Fridman Podcast #267"
+  },
+  {
+   "vid": "hy2G3PhGm-g",
+   "title": "Nicole Perlroth: Cybersecurity and the Weapons of Cyberwar | Lex Fridman Podcast #266"
+  },
+  {
+   "vid": "nvBEXXnNaNQ",
+   "title": "Devon Larratt: Arm Wrestling | Lex Fridman Podcast #265"
+  },
+  {
+   "vid": "0Jd7fJgFkPU",
+   "title": "Tim Urban: Elon Musk, Neuralink, AI, Aliens, and the Future of Humanity | Lex Fridman Podcast #264"
+  },
+  {
+   "vid": "arrokG3wCdE",
+   "title": "John Abramson: Big Pharma | Lex Fridman Podcast #263"
+  },
+  {
+   "vid": "uTCc2-1tbBQ",
+   "title": "Garry Nolan: UFOs and Aliens | Lex Fridman Podcast #262"
+  },
+  {
+   "vid": "BCdV6BMMpOo",
+   "title": "Philip Goff: Consciousness, Panpsychism, and the Philosophy of Mind | Lex Fridman Podcast #261"
+  },
+  {
+   "vid": "KdmDtqB46Jc",
+   "title": "Georges St-Pierre, John Danaher & Gordon Ryan: The Greatest of All Time | Lex Fridman Podcast #260"
+  },
+  {
+   "vid": "3Z7WimACqG8",
+   "title": "Thomas Tull: From Batman Dark Knight Trilogy to AI and The Rolling Stones | Lex Fridman Podcast #259"
+  },
+  {
+   "vid": "SGzMElJ11Cc",
+   "title": "Yann LeCun: Dark Matter of Intelligence and Self-Supervised Learning | Lex Fridman Podcast #258"
+  },
+  {
+   "vid": "nhGwJLXzHs8",
+   "title": "Brian Keating: Cosmology, Astrophysics, Aliens & Losing the Nobel Prize | Lex Fridman Podcast #257"
+  },
+  {
+   "vid": "Q24cpnHzx8I",
+   "title": "Nationalism Debate: Yaron Brook and Yoram Hazony | Lex Fridman Podcast #256"
+  },
+  {
+   "vid": "WzsivT_Ap1w",
+   "title": "Mark Normand: Comedy! | Lex Fridman Podcast #255"
+  },
+  {
+   "vid": "oIOGUYOPAsA",
+   "title": "Jay Bhattacharya: The Case Against Lockdowns | Lex Fridman Podcast #254"
+  },
+  {
+   "vid": "B2tXN7ZnSfU",
+   "title": "Michael Malice: New Year's Special | Lex Fridman Podcast #253"
+  },
+  {
+   "vid": "DxREm3s1scA",
+   "title": "Elon Musk: SpaceX, Mars, Tesla Autopilot, Self-Driving, Robotics, and AI | Lex Fridman Podcast #252"
+  },
+  {
+   "vid": "TISMidxdZoc",
+   "title": "Ray Dalio: Money, Power, and the Collapse of Empires | Lex Fridman Podcast #251"
+  },
+  {
+   "vid": "X0-SXS6zdEQ",
+   "title": "Peter Wang: Python and the Source Code of Humans, Computers, and Reality | Lex Fridman Podcast #250"
+  },
+  {
+   "vid": "Z_LhPMhkEdw",
+   "title": "Albert Bourla: Pfizer CEO | Lex Fridman Podcast #249"
+  },
+  {
+   "vid": "Vrz8YDl9CeA",
+   "title": "Norman Naimark: Genocide, Stalin, Hitler, Mao, and Absolute Power | Lex Fridman Podcast #248"
+  },
+  {
+   "vid": "K78jqx9fx2I",
+   "title": "Jamie Metzl: Lab Leak Theory | Lex Fridman Podcast #247"
+  },
+  {
+   "vid": "nDDJFvuFXdc",
+   "title": "Peter Woit: Theories of Everything & Why String Theory is Not Even Wrong | Lex Fridman Podcast #246"
+  },
+  {
+   "vid": "Ww6pfsWmkdY",
+   "title": "Tom Brands: Iowa Wrestling | Lex Fridman Podcast #245"
+  },
+  {
+   "vid": "CDiqA4SJNpA",
+   "title": "Robert Crews: Afghanistan, Taliban, Bin Laden, and War in the Middle East | Lex Fridman Podcast #244"
+  },
+  {
+   "vid": "3pvpNKUPbIY",
+   "title": "Kevin Systrom: Instagram | Lex Fridman Podcast #243"
+  },
+  {
+   "vid": "tApj7Q37P2k",
+   "title": "Ben Askren: Wrestling and MMA | Lex Fridman Podcast #242"
+  },
+  {
+   "vid": "U_AREIyd0Fc",
+   "title": "Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics | Lex Fridman Podcast #241"
+  },
+  {
+   "vid": "xAfdSak2fs8",
+   "title": "Neal Stephenson: Sci-Fi, Space, Aliens, AI, VR & the Future of Humanity | Lex Fridman Podcast #240"
+  },
+  {
+   "vid": "xF6x1ftN-H4",
+   "title": "Niall Ferguson: History of Money, Power, War, and Truth | Lex Fridman Podcast #239"
+  },
+  {
+   "vid": "mRZE-SJShkE",
+   "title": "Francis Collins: National Institutes of Health (NIH) | Lex Fridman Podcast #238"
+  },
+  {
+   "vid": "a3Wpy6gE4So",
+   "title": "Steve Viscelli: Trucking and the Decline of the American Dream | Lex Fridman Podcast #237"
+  },
+  {
+   "vid": "uy1fX2vOAEE",
+   "title": "Jimmy Pedro: Judo and the Forging of Champions | Lex Fridman Podcast #236"
+  },
+  {
+   "vid": "80OvNaEgmmw",
+   "title": "Michael Mina: Rapid COVID Testing | Lex Fridman Podcast #235"
+  },
+  {
+   "vid": "4-SGpEInX_c",
+   "title": "Stephen Wolfram: Complexity and the Fabric of Reality | Lex Fridman Podcast #234"
+  },
+  {
+   "vid": "3LWNY70Oj4A",
+   "title": "Carl Hart: Heroin, Cocaine, MDMA, Alcohol & the Role of Drugs in Society | Lex Fridman Podcast #233"
+  },
+  {
+   "vid": "98HZanvAJ8Y",
+   "title": "Brian Greene: Quantum Gravity, The Big Bang, Aliens, Death, and Meaning | Lex Fridman Podcast #232"
+  },
+  {
+   "vid": "kSbMU5CbFM0",
+   "title": "Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights | Lex Fridman Podcast #231"
+  },
+  {
+   "vid": "PbN3HzKkW4M",
+   "title": "Kelsi Sheren: War, Artillery, PTSD, and Love | Lex Fridman Podcast #230"
+  },
+  {
+   "vid": "YJF01_ztxwY",
+   "title": "Richard Wrangham: Violence, Sex, and Fire in Human Evolution | Lex Fridman Podcast #229"
+  },
+  {
+   "vid": "Iau6W5pjy9Y",
+   "title": "RZA: Wu-Tang Clan, Kung Fu, Chess, God, Life, and Death | Lex Fridman Podcast #228"
+  },
+  {
+   "vid": "cC1HszE5Hcw",
+   "title": "Sean Kelly: Existentialism, Nihilism, and the Search for Meaning | Lex Fridman Podcast #227"
+  },
+  {
+   "vid": "KZnGSVwIpeU",
+   "title": "Jo Boaler: How to Learn Math | Lex Fridman Podcast #226"
+  },
+  {
+   "vid": "EwueqdgIvq4",
+   "title": "Jeffrey Shainline: Neuromorphic Computing and Optoelectronic Intelligence | Lex Fridman Podcast #225"
+  },
+  {
+   "vid": "gFEE3w7F0ww",
+   "title": "Travis Oliphant: NumPy, SciPy, Anaconda, Python & Scientific Programming | Lex Fridman Podcast #224"
+  },
+  {
+   "vid": "uiNpESmPioQ",
+   "title": "Travis Stevens: Judo, Olympics, and Mental Toughness | Lex Fridman Podcast #223"
+  },
+  {
+   "vid": "Ui38ZzTymDY",
+   "title": "Jay McClelland: Neural Networks and the Emergence of Cognition | Lex Fridman Podcast #222"
+  },
+  {
+   "vid": "3wMKoSRbGVs",
+   "title": "Douglas Lenat: Cyc and the Quest to Solve Common Sense Reasoning in AI | Lex Fridman Podcast #221"
+  },
+  {
+   "vid": "hZenJc1fa70",
+   "title": "Niels Jorgensen: New York Firefighters and the Heroes of 9/11 | Lex Fridman Podcast #220"
+  },
+  {
+   "vid": "EE1R8FYUJm0",
+   "title": "Donald Knuth: Programming, Algorithms, Hard Problems & the Game of Life | Lex Fridman Podcast #219"
+  },
+  {
+   "vid": "Fx0G6DHMfXM",
+   "title": "Jaron Lanier: Virtual Reality, Social Media & the Future of Humans and AI | Lex Fridman Podcast #218"
+  },
+  {
+   "vid": "nre0QT9LN6w",
+   "title": "Rodney Brooks: Robotics | Lex Fridman Podcast #217"
+  },
+  {
+   "vid": "G433fa01oMU",
+   "title": "Vincent Racaniello: Viruses and Vaccines | Lex Fridman Podcast #216"
+  },
+  {
+   "vid": "U5OD8MjYnOM",
+   "title": "Wojciech Zaremba: OpenAI Codex, GPT-3, Robotics, and the Future of AI | Lex Fridman Podcast #215"
+  },
+  {
+   "vid": "TRdL6ZzWBS0",
+   "title": "Jed Buchwald: Isaac Newton and the Philosophy of Science | Lex Fridman Podcast #214"
+  },
+  {
+   "vid": "J48bm21q8_A",
+   "title": "Barry Barish: Gravitational Waves and the Most Precise Device Ever Built | Lex Fridman Podcast #213"
+  },
+  {
+   "vid": "rIpUf-Vy2JA",
+   "title": "Joscha Bach: Nature of Reality, Dreams, and Consciousness | Lex Fridman Podcast #212"
+  },
+  {
+   "vid": "oYQh1ZNkC70",
+   "title": "Brian Muraresku: The Secret History of Psychedelics | Lex Fridman Podcast #211"
+  },
+  {
+   "vid": "Hc4XvHTlW3s",
+   "title": "Matt Walker: Sleep | Lex Fridman Podcast #210"
+  },
+  {
+   "vid": "ndMahzDCH1Y",
+   "title": "Luís and João Batalha: Fermat's Library and the Art of Studying Papers | Lex Fridman Podcast #209"
+  },
+  {
+   "vid": "Z1KwkpTUbkg",
+   "title": "Jeff Hawkins: The Thousand Brains Theory of Intelligence | Lex Fridman Podcast #208"
+  },
+  {
+   "vid": "e4Bet29PVPY",
+   "title": "Chris Duffin: The Mad Scientist of Strength | Lex Fridman Podcast #207"
+  },
+  {
+   "vid": "FUS6ceIvUnI",
+   "title": "Ishan Misra: Self-Supervised Deep Learning in Computer Vision | Lex Fridman Podcast #206"
+  },
+  {
+   "vid": "0RTWSJAqTPg",
+   "title": "Zach Bitter: Ultramarathon Running | Lex Fridman Podcast #205"
+  },
+  {
+   "vid": "j4_VyRDOmN4",
+   "title": "Cumrun Vafa: String Theory | Lex Fridman Podcast #204"
+  },
+  {
+   "vid": "ew8U43IXTfk",
+   "title": "Anya Fernald: Regenerative Farming and the Art of Cooking Meat | Lex Fridman Podcast #203"
+  },
+  {
+   "vid": "2tUiLxtrLxk",
+   "title": "Rick Doblin: Psychedelics | Lex Fridman Podcast #202"
+  },
+  {
+   "vid": "tm7poMupE8k",
+   "title": "Konstantin Batygin: Planet 9 and the Edge of Our Solar System | Lex Fridman Podcast #201"
+  },
+  {
+   "vid": "R5rNoV1Qy_Q",
+   "title": "Michael Malice: Totalitarianism and Anarchy | Lex Fridman Podcast #200"
+  },
+  {
+   "vid": "Udh22kuLebg",
+   "title": "Roger Reaves: Smuggling Drugs for Pablo Escobar and the Medellin Cartel | Lex Fridman Podcast #199"
+  },
+  {
+   "vid": "-tDQ74I3Ovs",
+   "title": "Sara Walker: The Origin of Life on Earth and Alien Worlds | Lex Fridman Podcast #198"
+  },
+  {
+   "vid": "n2RcVEftY48",
+   "title": "Jocko Willink: War, Leadership, and Discipline | Lex Fridman Podcast #197"
+  },
+  {
+   "vid": "usDqSEKDVsA",
+   "title": "Yeonmi Park: North Korea | Lex Fridman Podcast #196"
+  },
+  {
+   "vid": "CGAvsmokB4c",
+   "title": "Clara Sousa-Silva: Searching for Signs of Life on Venus and Other Planets | Lex Fridman Podcast #195"
+  },
+  {
+   "vid": "TG6BuSjwP4o",
+   "title": "Bret Weinstein: Truth, Science, and Censorship in the Time of a Pandemic | Lex Fridman Podcast #194"
+  },
+  {
+   "vid": "cuD9uNFXnU8",
+   "title": "Rob Reid: The Existential Threat of Engineered Viruses and Lab Leaks | Lex Fridman Podcast #193"
+  },
+  {
+   "vid": "FKh8hjJNhWc",
+   "title": "Charles Hoskinson: Cardano | Lex Fridman Podcast #192"
+  },
+  {
+   "vid": "hGRNUw559SE",
+   "title": "Daniel Schmachtenberger: Steering Civilization Away from Self-Destruction | Lex Fridman Podcast #191"
+  },
+  {
+   "vid": "tueAcSiiqYA",
+   "title": "Jordan Ellenberg: Mathematics of High-Dimensional Shapes and Geometries | Lex Fridman Podcast #190"
+  },
+  {
+   "vid": "jhKZIq3SlYE",
+   "title": "David Sinclair: Extending the Human Lifespan Beyond 100 Years | Lex Fridman Podcast #189"
+  },
+  {
+   "vid": "XW0QZmtbjvs",
+   "title": "Vitalik Buterin: Ethereum 2.0 | Lex Fridman Podcast #188"
+  },
+  {
+   "vid": "LDTe8uFqbws",
+   "title": "Frank Wilczek: Physics of Quarks, Dark Matter, Complexity, Life & Aliens | Lex Fridman Podcast #187"
+  },
+  {
+   "vid": "1YbcB6b4A2U",
+   "title": "Bryan Johnson: Kernel Brain-Computer Interfaces | Lex Fridman Podcast #186"
+  },
+  {
+   "vid": "4dC_nRYIDZU",
+   "title": "Sam Harris: Consciousness, Free Will, Psychedelics, AI, UFOs, and Meaning | Lex Fridman Podcast #185"
+  },
+  {
+   "vid": "85F0FDsPHf8",
+   "title": "Katherine de Kleer: Planets, Moons, Asteroids & Life in Our Solar System | Lex Fridman Podcast #184"
+  },
+  {
+   "vid": "6z1JwZbX4dQ",
+   "title": "Po-Shen Loh: Mathematics, Math Olympiad, Combinatorics & Contact Tracing | Lex Fridman Podcast #183"
+  },
+  {
+   "vid": "ktuw6Ow4sd0",
+   "title": "John Danaher: The Path to Mastery in Jiu Jitsu, Grappling, Judo, and MMA | Lex Fridman Podcast #182"
+  },
+  {
+   "vid": "TPXTmVdlyoc",
+   "title": "Sergey Nazarov: Chainlink, Smart Contracts, and Oracle Networks | Lex Fridman Podcast #181"
+  },
+  {
+   "vid": "USnqkUAr_3w",
+   "title": "Jeremi Suri: History of American Power | Lex Fridman Podcast #180"
+  },
+  {
+   "vid": "fIPxfzfOTxk",
+   "title": "Georges St-Pierre: The Science of Fighting | Lex Fridman Podcast #179"
+  },
+  {
+   "vid": "Pl3x4GINtBQ",
+   "title": "Michael Malice and Yaron Brook: Ayn Rand, Human Nature, and Anarchy | Lex Fridman Podcast #178"
+  },
+  {
+   "vid": "CY_LEa9xQtg",
+   "title": "Risto Miikkulainen: Neuroevolution and Evolutionary Computation | Lex Fridman Podcast #177"
+  },
+  {
+   "vid": "HrehEWYj16s",
+   "title": "Robert Breedlove: Philosophy of Bitcoin from First Principles | Lex Fridman Podcast #176"
+  },
+  {
+   "vid": "dmVqpx4YOY4",
+   "title": "Yannis Pappas: History and Comedy | Lex Fridman Podcast #175"
+  },
+  {
+   "vid": "7Grseeycor4",
+   "title": "Tyler Cowen: Economic Growth & the Fight Against Conformity & Mediocrity | Lex Fridman Podcast #174"
+  },
+  {
+   "vid": "mDyBbGCiBUU",
+   "title": "Nic Carter: Bitcoin Core Values, Layered Scaling, and Blocksize Debates | Lex Fridman Podcast #173"
+  },
+  {
+   "vid": "UOEpe17nPhE",
+   "title": "Ryan Schiller: Librex and the Free Exchange of Ideas on College Campuses | Lex Fridman Podcast #172"
+  },
+  {
+   "vid": "IHg6ixt3CKc",
+   "title": "Anthony Pompliano: Bitcoin | Lex Fridman Podcast #171"
+  },
+  {
+   "vid": "Iuven0crywo",
+   "title": "Ronald Sullivan: The Ideal of Justice in the Face of Controversy and Evil | Lex Fridman Podcast #170"
+  },
+  {
+   "vid": "VHg9sfOzBbY",
+   "title": "Ryan Hall: Solving Martial Arts from First Principles | Lex Fridman Podcast #169"
+  },
+  {
+   "vid": "zNdhgOk4-fE",
+   "title": "Silvio Micali: Cryptocurrency, Blockchain, Algorand, Bitcoin & Ethereum | Lex Fridman Podcast #168"
+  },
+  {
+   "vid": "grceJbuPUXI",
+   "title": "Saagar Enjeti: Politics, History, and Power | Lex Fridman Podcast #167"
+  },
+  {
+   "vid": "y3Umo_jd5AA",
+   "title": "Cal Newport: Deep Work, Focus, Productivity, Email, and Social Media | Lex Fridman Podcast #166"
+  },
+  {
+   "vid": "YJWPowbCK_I",
+   "title": "Josh Barnett: Philosophy of Violence, Power, and the Martial Arts | Lex Fridman #165"
+  },
+  {
+   "vid": "ClxRHJPz8aQ",
+   "title": "Andrew Huberman: Sleep, Dreams, Creativity, Fasting, and Neuroplasticity | Lex Fridman Podcast #164"
+  },
+  {
+   "vid": "ifX_JnBfxTY",
+   "title": "Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics | Lex Fridman Podcast #163"
+  },
+  {
+   "vid": "G4hL5Om4IJ4",
+   "title": "Jim Keller: The Future of Computing, AI, Life, and Consciousness | Lex Fridman Podcast #162"
+  },
+  {
+   "vid": "d2bYwYxqJCM",
+   "title": "Jason Calacanis: Startups, Angel Investing, Capitalism, and Friendship | Lex Fridman Podcast #161"
+  },
+  {
+   "vid": "krB0enBeSiE",
+   "title": "Brendan Eich: JavaScript, Firefox, Mozilla, and Brave | Lex Fridman Podcast #160"
+  },
+  {
+   "vid": "ziQSpuST6Es",
+   "title": "Richard Craib: WallStreetBets, Numerai, and the Future of Stock Trading | Lex Fridman Podcast #159"
+  },
+  {
+   "vid": "QSPtSNqUCUw",
+   "title": "Zev Weinstein: The Next Generation of Big Ideas and Brave Minds | Lex Fridman Podcast #158"
+  },
+  {
+   "vid": "CejJ2aVRUE8",
+   "title": "Natalya Bailey: Rocket Engines and Electric Spacecraft Propulsion | Lex Fridman Podcast #157"
+  },
+  {
+   "vid": "8wYZjOzfTUk",
+   "title": "Tim Dillon: Comedy, Power, Conspiracy Theories, and Freedom | Lex Fridman Podcast #156"
+  },
+  {
+   "vid": "RL4j4KPwNGM",
+   "title": "Max Tegmark: AI and Physics | Lex Fridman Podcast #155"
+  },
+  {
+   "vid": "plcc6E-E1uU",
+   "title": "Avi Loeb: Aliens, Black Holes, and the Mystery of the Oumuamua | Lex Fridman Podcast #154"
+  },
+  {
+   "vid": "I51DuprOb0o",
+   "title": "Dmitry Korkin: Evolution of Proteins, Viruses, Life, and AI | Lex Fridman Podcast #153"
+  },
+  {
+   "vid": "pRzelZlKl7E",
+   "title": "Dan Gable: Olympic Wrestling, Mental Toughness & the Making of Champions | Lex Fridman Podcast #152"
+  },
+  {
+   "vid": "yTWa-Z1UQwU",
+   "title": "Dan Kokotov: Speech Recognition with AI and Humans | Lex Fridman Podcast #151"
+  },
+  {
+   "vid": "uykM3NhJbso",
+   "title": "Michael Malice: Freedom, Hope, and Happiness Amidst Chaos | Lex Fridman Podcast #150"
+  },
+  {
+   "vid": "iqBh7G4uDR8",
+   "title": "Diana Walsh Pasulka: Aliens, Technology, Religion & the Nature of Belief | Lex Fridman Podcast #149"
+  },
+  {
+   "vid": "yzMVEbs8Zz0",
+   "title": "Charles Isbell and Michael Littman: Machine Learning and Education | Lex Fridman Podcast #148"
+  },
+  {
+   "vid": "P6prRXkI5HM",
+   "title": "Dmitri Dolgov: Waymo and the Future of Self-Driving Cars | Lex Fridman Podcast #147"
+  },
+  {
+   "vid": "L-RuvUkcyJI",
+   "title": "Michael Mina: Rapid Testing, Viruses, and the Engineering Mindset | Lex Fridman Podcast #146"
+  },
+  {
+   "vid": "ICj8p5jPd3Y",
+   "title": "Matthew Johnson: Psychedelics | Lex Fridman Podcast #145"
+  },
+  {
+   "vid": "c9AbECvRt20",
+   "title": "Michael Littman: Reinforcement Learning and the Future of AI | Lex Fridman Podcast #144"
+  },
+  {
+   "vid": "RvhpncC5jZ8",
+   "title": "John Clarke: The Art of Fighting and the Pursuit of Excellence | Lex Fridman Podcast #143"
+  },
+  {
+   "vid": "bgNzUxyS-kQ",
+   "title": "Manolis Kellis: Meaning of Life, the Universe, and Everything | Lex Fridman Podcast #142"
+  },
+  {
+   "vid": "NOReE-3EBhI",
+   "title": "Erik Brynjolfsson: Economics of AI, Social Networks, and Technology | Lex Fridman Podcast #141"
+  },
+  {
+   "vid": "S_AFc_BXht4",
+   "title": "Lisa Feldman Barrett: Love, Evolution, and the Human Brain | Lex Fridman Podcast #140"
+  },
+  {
+   "vid": "Ktj050DxG7Q",
+   "title": "Andrew Huberman: Neuroscience of Optimal Performance | Lex Fridman Podcast #139"
+  },
+  {
+   "vid": "SOr1YYRljV8",
+   "title": "Yaron Brook: Ayn Rand and the Philosophy of Objectivism | Lex Fridman Podcast #138"
+  },
+  {
+   "vid": "WxfA1OSev4c",
+   "title": "Alex Filippenko: Supernovae, Dark Energy, Aliens & the Expanding Universe | Lex Fridman Podcast #137"
+  },
+  {
+   "vid": "-k-ztNsBM54",
+   "title": "Dan Carlin: Hardcore History | Lex Fridman Podcast #136"
+  },
+  {
+   "vid": "LAyZ8IYfGxQ",
+   "title": "Charles Isbell: Computing, Interactive AI, and Race in America | Lex Fridman Podcast #135"
+  },
+  {
+   "vid": "o2nG7-eXxko",
+   "title": "Eric Weinstein: On the Nature of Good and Evil, Genius and Madness | Lex Fridman Podcast #134"
+  },
+  {
+   "vid": "Aq9UPIXbtKI",
+   "title": "Manolis Kellis: Biology of Disease | Lex Fridman Podcast #133"
+  },
+  {
+   "vid": "_L3gNaAVjQ4",
+   "title": "George Hotz: Hacking the Simulation & Learning to Drive with Neural Nets | Lex Fridman Podcast #132"
+  },
+  {
+   "vid": "nWTvXbQHwWs",
+   "title": "Chris Lattner: The Future of Computing and Programming Languages | Lex Fridman Podcast #131"
+  },
+  {
+   "vid": "nAMjv0NAESM",
+   "title": "Scott Aaronson: Computational Complexity and Consciousness | Lex Fridman Podcast #130"
+  },
+  {
+   "vid": "NbdRIVCBqNI",
+   "title": "Lisa Feldman Barrett: Counterintuitive Ideas About How the Brain Works | Lex Fridman Podcast #129"
+  },
+  {
+   "vid": "BIk1zUy8ehU",
+   "title": "Michael Malice: Anarchy, Democracy, Libertarianism, Love, and Trolling | Lex Fridman Podcast #128"
+  },
+  {
+   "vid": "FKCJWkPehdY",
+   "title": "Joe Rogan: Fear, Love, Chaos, and the Joe Rogan Experience | Lex Fridman Podcast #127"
+  },
+  {
+   "vid": "IT__Nrr3PNI",
+   "title": "James Gosling: Java, JVM, Emacs, and the Early Days of Computing | Lex Fridman Podcast #126"
+  },
+  {
+   "vid": "hhEwWghH_XM",
+   "title": "Ryan Hall: Martial Arts and the Philosophy of Violence, Power, and Grace | Lex Fridman Podcast #125"
+  },
+  {
+   "vid": "-t1_ffaFXao",
+   "title": "Stephen Wolfram: Fundamental Theory of Physics, Life, and the Universe | Lex Fridman Podcast #124"
+  },
+  {
+   "vid": "t06rkOOUa7g",
+   "title": "Manolis Kellis: Origin of Life, Humans, Ideas, Suffering, and Happiness | Lex Fridman Podcast #123"
+  },
+  {
+   "vid": "aB8zcAttP1E",
+   "title": "David Fravor: UFOs, Aliens, Fighter Jets, and Aerospace Engineering | Lex Fridman Podcast #122"
+  },
+  {
+   "vid": "_AGPbvCDBCk",
+   "title": "Eugenia Kuyda: Friendship with an AI Companion | Lex Fridman Podcast #121"
+  },
+  {
+   "vid": "PUAdj3w3wO4",
+   "title": "François Chollet: Measures of Intelligence | Lex Fridman Podcast #120"
+  },
+  {
+   "vid": "386s-y1aRRo",
+   "title": "David Eagleman: Neuroplasticity and the Livewired Brain | Lex Fridman Podcast #119"
+  },
+  {
+   "vid": "U_6AYX42gkU",
+   "title": "Grant Sanderson: Math, Manim, Neural Networks & Teaching with 3Blue1Brown | Lex Fridman Podcast #118"
+  },
+  {
+   "vid": "qfKyNxfyWbo",
+   "title": "Sheldon Solomon: Death and Meaning | Lex Fridman Podcast #117"
+  },
+  {
+   "vid": "-jA2ABHBc6Y",
+   "title": "Sara Seager: Search for Planets and Life Outside Our Solar System | Lex Fridman Podcast #116"
+  },
+  {
+   "vid": "M1-v-dXIzho",
+   "title": "Sertac Karaman: Robots That Fly and Robots That Drive | Lex Fridman Podcast #97"
+  },
+  {
+   "vid": "A22Ej6kb2wo",
+   "title": "Russ Tedrake: Underactuated Robotics, Control, Dynamics and Touch | Lex Fridman Podcast #114"
+  },
+  {
+   "vid": "KllCrlfLuzs",
+   "title": "Richard Karp: Algorithms and Computational Complexity | Lex Fridman Podcast #111"
+  },
+  {
+   "vid": "PgtedwKGhXs",
+   "title": "Steven Pressfield: The War of Art | Lex Fridman Podcast #102"
+  },
+  {
+   "vid": "brslF-Cy3HU",
+   "title": "Manolis Kellis: Human Genome and Evolutionary Dynamics | Lex Fridman Podcast #113"
+  },
+  {
+   "vid": "llh-2pqSGrs",
+   "title": "Peter Singer: Suffering in Humans, Animals, and AI | Lex Fridman Podcast #107"
+  },
+  {
+   "vid": "9LQffCdHHlQ",
+   "title": "Robert Langer: Edison of Medicine | Lex Fridman Podcast #105"
+  },
+  {
+   "vid": "pDSEjaDCtOU",
+   "title": "Ian Hutchinson: Nuclear Fusion, Plasma Physics, and Religion | Lex Fridman Podcast #112"
+  },
+  {
+   "vid": "NwzuibY5kUs",
+   "title": "Karl Friston: Neuroscience and the Free Energy Principle | Lex Fridman Podcast #99"
+  },
+  {
+   "vid": "3t06ajvBtl0",
+   "title": "Matt Botvinick: Neuroscience, Psychology, and AI at DeepMind | Lex Fridman Podcast #106"
+  },
+  {
+   "vid": "7KTbEn7PiaY",
+   "title": "Kate Darling: Social Robotics | Lex Fridman Podcast #98"
+  },
+  {
+   "vid": "tg_m_LxxRwM",
+   "title": "Dileep George: Brain-Inspired AI | Lex Fridman Podcast #115"
+  },
+  {
+   "vid": "P-2P3MSZrBM",
+   "title": "Joscha Bach: Artificial Consciousness and the Nature of Reality | Lex Fridman Podcast #101"
+  },
+  {
+   "vid": "naed4C4hfAg",
+   "title": "David Patterson: Computer Architecture and Data Storage | Lex Fridman Podcast #104"
+  },
+  {
+   "vid": "OpSmCKe27WE",
+   "title": "Ben Goertzel: Artificial General Intelligence | Lex Fridman Podcast #103"
+  },
+  {
+   "vid": "LRYkH-fAVGE",
+   "title": "Jitendra Malik: Computer Vision | Lex Fridman Podcast #110"
+  },
+  {
+   "vid": "O9upVbGSBFo",
+   "title": "Brian Kernighan: UNIX, C, AWK, AMPL, and Go Programming | Lex Fridman Podcast #109"
+  },
+  {
+   "vid": "kxi-_TT_-Nc",
+   "title": "Sergey Levine: Robotics and Machine Learning | Lex Fridman Podcast #108"
+  },
+  {
+   "vid": "rIAZJNe7YtE",
+   "title": "Eric Weinstein: Geometric Unity and the Call for New Ideas & Institutions | Lex Fridman Podcast #88"
+  },
+  {
+   "vid": "xlMTWfkQqbY",
+   "title": "Daphne Koller: Biomedicine and Machine Learning | Lex Fridman Podcast #93"
+  },
+  {
+   "vid": "rfKiTGj-zeQ",
+   "title": "Nick Bostrom: Simulation and Superintelligence | Lex Fridman Podcast #83"
+  },
+  {
+   "vid": "DKyzcbNr8WE",
+   "title": "John Hopfield: Physics View of the Mind and Neurobiology | Lex Fridman Podcast #76"
+  },
+  {
+   "vid": "EYIKy_FM9x0",
+   "title": "Michael I. Jordan: Machine Learning, Recommender Systems, and Future of AI | Lex Fridman Podcast #74"
+  },
+  {
+   "vid": "13CZPWmke6A",
+   "title": "Ilya Sutskever: Deep Learning | Lex Fridman Podcast #94"
+  },
+  {
+   "vid": "uPUEq8d73JI",
+   "title": "David Silver: AlphaGo, AlphaZero, and Deep Reinforcement Learning | Lex Fridman Podcast #86"
+  },
+  {
+   "vid": "8A-5gIW0-eI",
+   "title": "Harry Cliff: Particle Physics and the Large Hadron Collider | Lex Fridman Podcast #92"
+  },
+  {
+   "vid": "0jspaMLxBig",
+   "title": "Andrew Ng: Deep Learning, Education, and Real-World AI | Lex Fridman Podcast #73"
+  },
+  {
+   "vid": "3x1b_S6Qp2Q",
+   "title": "Vitalik Buterin: Ethereum, Cryptocurrency, and the Future of Money | Lex Fridman Podcast #80"
+  },
+  {
+   "vid": "CwyOUS8TSl0",
+   "title": "Dmitry Korkin: Computational Biology of Coronavirus | Lex Fridman Podcast #90"
+  },
+  {
+   "vid": "gU-mkuMU428",
+   "title": "Alex Garland: Ex Machina, Devs, Annihilation, and the Poetry of Science | Lex Fridman Podcast #77"
+  },
+  {
+   "vid": "aYwDs9LTN50",
+   "title": "Stephen Schwarzman: Going Big in Business, Investing, and AI | Lex Fridman Podcast #96"
+  },
+  {
+   "vid": "7jFdxd1qX2g",
+   "title": "Ann Druyan: Cosmos, Carl Sagan, Voyager, and the Beauty of Science | Lex Fridman Podcast #78"
+  },
+  {
+   "vid": "iOCfIFBBpVY",
+   "title": "Anca Dragan: Human-Robot Interaction and Reward Engineering | Lex Fridman Podcast #81"
+  },
+  {
+   "vid": "E1AxVXt2Gv4",
+   "title": "Marcus Hutter: Universal Artificial Intelligence, AIXI, and AGI | Lex Fridman Podcast #75"
+  },
+  {
+   "vid": "WgLo4gmEraU",
+   "title": "Lee Smolin: Quantum Gravity and Einstein's Unfinished Revolution | Lex Fridman Podcast #79"
+  },
+  {
+   "vid": "5f-JlzBuUUU",
+   "title": "Richard Dawkins: Evolution, Intelligence, Simulation, and Memes | Lex Fridman Podcast #87"
+  },
+  {
+   "vid": "orMtwOz6Db0",
+   "title": "Roger Penrose: Physics of Consciousness and the Infinite Universe | Lex Fridman Podcast #85"
+  },
+  {
+   "vid": "U_lKUK2MCsg",
+   "title": "Grant Sanderson: 3Blue1Brown and the Beauty of Mathematics | Lex Fridman Podcast #64"
+  },
+  {
+   "vid": "Nb2tebYAaOA",
+   "title": "Jim Keller: Moore's Law, Microprocessors, and First Principles | Lex Fridman Podcast #70"
+  },
+  {
+   "vid": "bQa7hpUpMzM",
+   "title": "Vladimir Vapnik: Predicates, Invariants, and the Essence of Intelligence | Lex Fridman Podcast #71"
+  },
+  {
+   "vid": "oCkkjnpS2f8",
+   "title": "Stephen Kotkin: Stalin, Putin, and the Nature of Power | Lex Fridman Podcast #63"
+  },
+  {
+   "vid": "IUHkhB366tE",
+   "title": "Jim Gates: Supersymmetry, String Theory and Proving Einstein Right | Lex Fridman Podcast #60"
+  },
+  {
+   "vid": "uX5t8EivCaM",
+   "title": "Scott Aaronson: Quantum Computing | Lex Fridman Podcast #72"
+  },
+  {
+   "vid": "LW59lMvxmY4",
+   "title": "David Chalmers: The Hard Problem of Consciousness | Lex Fridman Podcast #69"
+  },
+  {
+   "vid": "Ad89JYS-uZM",
+   "title": "Rohit Prasad: Amazon Alexa and Conversational AI | Lex Fridman Podcast #57"
+  },
+  {
+   "vid": "M95m2EFb7IQ",
+   "title": "Ray Dalio: Principles, the Economic Machine, AI & the Arc of Life | Lex Fridman Podcast #54"
+  },
+  {
+   "vid": "pEBI0vF45ic",
+   "title": "Judea Pearl: Causal Reasoning, Counterfactuals, and the Path to AGI | Lex Fridman Podcast #56"
+  },
+  {
+   "vid": "OJQepiqSWvg",
+   "title": "Paul Krugman: Economics of Innovation, Automation, Safety Nets & UBI | Lex Fridman Podcast #67"
+  },
+  {
+   "vid": "ZPPAOakITeQ",
+   "title": "Sebastian Thrun: Flying Cars, Autonomous Vehicles, and Education | Lex Fridman Podcast #59"
+  },
+  {
+   "vid": "UwwBG-MbniY",
+   "title": "Daniel Kahneman: Thinking Fast and Slow, Deep Learning, and AI | Lex Fridman Podcast #65"
+  },
+  {
+   "vid": "0-3kw5BEKB8",
+   "title": "Whitney Cummings: Comedy, Robotics, Neurology, and Love | Lex Fridman Podcast #55"
+  },
+  {
+   "vid": "nkWmiNRPU-c",
+   "title": "Cristos Goodrow: YouTube Algorithm | Lex Fridman Podcast #68"
+  },
+  {
+   "vid": "8RVa0THWUWw",
+   "title": "Garry Kasparov: Chess, Deep Blue, AI, and Putin | Lex Fridman Podcast #46"
+  },
+  {
+   "vid": "_TTNGq9djU4",
+   "title": "Simon Sinek: Leadership, Hard Work, Optimism and the Infinite Game | Lex Fridman Podcast #82"
+  },
+  {
+   "vid": "uTxRF5ag27A",
+   "title": "Bjarne Stroustrup: C++ | Lex Fridman Podcast #48"
+  },
+  {
+   "vid": "_VPxEcT_Adc",
+   "title": "Peter Norvig: Artificial Intelligence: A Modern Approach | Lex Fridman Podcast #42"
+  },
+  {
+   "vid": "iNqqOLscOBY",
+   "title": "Sean Carroll: Quantum Mechanics and the Many-Worlds Interpretation | Lex Fridman Podcast #47"
+  },
+  {
+   "vid": "AzdxbzHtjgs",
+   "title": "Michael Kearns: Algorithmic Fairness, Privacy & Ethics | Lex Fridman Podcast #50"
+  },
+  {
+   "vid": "x0-zGdlpTeg",
+   "title": "Regina Barzilay: Deep Learning for Cancer Diagnosis and Treatment | Lex Fridman Podcast #40"
+  },
+  {
+   "vid": "Whtt2H5_isM",
+   "title": "David Ferrucci: IBM Watson, Jeopardy & Deep Conversations with AI | Lex Fridman Podcast #44"
+  }
+ ]
+}
