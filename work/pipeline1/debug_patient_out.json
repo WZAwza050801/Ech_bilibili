@@ -1,0 +1,126 @@
+{
+ "嬉皮夜话": {
+  "title": "【嬉皮夜话】摇滚和livehouse都只是你人生的一个阶段，摇滚到老你的人生该多贫乏啊",
+  "rights": {
+   "download": 1,
+   "no_reprint": 1
+  },
+  "playurl": {
+   "quality": 32,
+   "is_preview": null,
+   "accept_desc": [
+    "清晰 480P"
+   ],
+   "keys": [
+    "accept_description",
+    "accept_format",
+    "accept_quality",
+    "auto_qn_resp",
+    "cur_language",
+    "cur_production_type",
+    "durl",
+    "format",
+    "from",
+    "high_format",
+    "last_play_cid",
+    "last_play_time",
+    "message",
+    "play_conf",
+    "quality",
+    "result",
+    "seek_param",
+    "seek_type",
+    "support_formats",
+    "timelength",
+    "video_codecid",
+    "view_info"
+   ],
+   "durl_len": 1,
+   "durl_size": 11629714
+  }
+ },
+ "杨德昌": {
+  "title": "提督定制视频--漫谈杨德昌",
+  "rights": {
+   "download": 1,
+   "no_reprint": 1
+  },
+  "playurl": {
+   "quality": 32,
+   "is_preview": null,
+   "accept_desc": [
+    "清晰 480P"
+   ],
+   "keys": [
+    "accept_description",
+    "accept_format",
+    "accept_quality",
+    "auto_qn_resp",
+    "cur_language",
+    "cur_production_type",
+    "durl",
+    "format",
+    "from",
+    "high_format",
+    "last_play_cid",
+    "last_play_time",
+    "message",
+    "play_conf",
+    "quality",
+    "result",
+    "seek_param",
+    "seek_type",
+    "support_formats",
+    "timelength",
+    "video_codecid",
+    "view_info"
+   ],
+   "durl_len": 1,
+   "durl_size": 8290647
+  }
+ },
+ "昆德拉": {
+  "title": "一周书影音推荐-昆德拉《好笑的爱》",
+  "rights": {
+   "download": 1,
+   "no_reprint": 1
+  },
+  "playurl": {
+   "quality": 32,
+   "is_preview": null,
+   "accept_desc": [
+    "高清 1080P+",
+    "高清 1080P",
+    "高清 720P",
+    "清晰 480P",
+    "流畅 360P"
+   ],
+   "keys": [
+    "accept_description",
+    "accept_format",
+    "accept_quality",
+    "auto_qn_resp",
+    "cur_language",
+    "cur_production_type",
+    "durl",
+    "format",
+    "from",
+    "high_format",
+    "last_play_cid",
+    "last_play_time",
+    "message",
+    "play_conf",
+    "quality",
+    "result",
+    "seek_param",
+    "seek_type",
+    "support_formats",
+    "timelength",
+    "video_codecid",
+    "view_info"
+   ],
+   "durl_len": 1,
+   "durl_size": 9724028
+  }
+ }
+}

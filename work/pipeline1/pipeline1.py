@@ -14,6 +14,13 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="repla
 WORK = Path(r"D:\视频观看agent编写\work\pipeline1")
 VENV_PY = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+# 优先使用 fresh_buvid.json 现场申请的真指纹（假 buvid 连跑一批后会被 412 拉黑）
+_b3, _b4 = "FD0E1A9D-8D6B-4E0C-9B7E-2C3D4E5F6A7Binfoc", "9A8B7C6D-5E4F-3A2B-1C0D-9E8F7A6B5C4D-1240000000"
+try:
+    _fb = json.loads((WORK / "fresh_buvid.json").read_text(encoding="utf-8"))
+    _b3, _b4 = _fb["buvid3"], _fb["buvid4"]
+except Exception:
+    pass
 HDRS = {
     "User-Agent": _UA,
     "Accept": "application/json, text/plain, */*",
@@ -21,9 +28,9 @@ HDRS = {
     "Origin": "https://www.bilibili.com",
     "Referer": "https://www.bilibili.com/",
     # 关键: 完整 cookie 组（仅 buvid3 一项会被 412 风控拦截）
-    "Cookie": ("buvid3=FD0E1A9D-8D6B-4E0C-9B7E-2C3D4E5F6A7Binfoc; "
+    "Cookie": (f"buvid3={_b3}; "
+               f"buvid4={_b4}; "
                "b_nut=1726400000; "
-               "buvid4=9A8B7C6D-5E4F-3A2B-1C0D-9E8F7A6B5C4D-1240000000; "
                "b_lsid=ABC12DEF_198ABC12; "
                "enable_web_push=DISABLE; "
                "header_theme_version=CUSTOM; "
@@ -55,7 +62,7 @@ def http_get(url, headers, timeout=30, retries=3):
         except urllib.error.HTTPError as e:
             last = e
             if e.code in (412, 429, 500, 502, 503) and i < retries - 1:
-                wait = 3 * (i + 1)
+                wait = 25 * (i + 1) if e.code == 412 else 3 * (i + 1)
                 log(f"HTTP {e.code}，{wait}s 后重试 ({i+1}/{retries-1})")
                 time.sleep(wait)
             else:
@@ -74,10 +81,32 @@ def fetch_meta(bvid):
 def fetch_audio(bvid, cid, dst):
     url = f"https://api.bilibili.com/x/player/playurl?bvid={bvid}&cid={cid}&fnval=16&platform=pc&high_quality=1"
     d = json.loads(http_get(url, HDRS).decode("utf-8"))
-    audios = (d["data"].get("dash") or {}).get("audio", [])
-    audios.sort(key=lambda a: -a.get("bandwidth", 0))
-    best = audios[0]
-    for attempt in [best["baseUrl"]] + (best.get("backupUrl") or []):
+    data = d.get("data") or {}
+    # 新转码视频走 dash(音视频分离); 老视频只回 durl(单文件流, 音频内嵌), 用 ffmpeg 照样能抽
+    dash_audios = (data.get("dash") or {}).get("audio") or []
+    if dash_audios:
+        dash_audios.sort(key=lambda a: -a.get("bandwidth", 0))
+        best = dash_audios[0]
+    else:
+        durl = data.get("durl") or []
+        if not durl:
+            raise RuntimeError(f"playurl 既无 dash 音频也无 durl (code={d.get('code')}, msg={d.get('message')})")
+        best = durl[0]
+        log(f"无 dash, 回退 durl 模式 ({data.get('format')}, {best.get('size', 0)/1048576:.1f}MB)")
+    def _cands(b):
+        out = []
+        for k in ("baseUrl", "base_url"):
+            if b.get(k): out.append(b[k]); break
+        for k in ("backupUrl", "backup_url"):
+            v = b.get(k)
+            if isinstance(v, list): out.extend(v)
+            elif v: out.append(v)
+        for k in ("url",):
+            v = b.get(k)
+            if isinstance(v, list): out.extend(v)
+            elif v and not out: out.append(v)
+        return out or [None]
+    for attempt in _cands(best):
         try:
             req = urllib.request.Request(attempt, headers=HDRS)
             tmp = str(dst) + ".part"
@@ -95,7 +124,7 @@ def fetch_audio(bvid, cid, dst):
                 os.path.exists(tmp) and os.remove(tmp)
                 continue
             os.replace(tmp, str(dst))
-            log(f"音频下载 {got/1048576:.1f}MB (bandwidth={best.get('bandwidth')})")
+            log(f"音频下载 {got/1048576:.1f}MB (bandwidth={best.get('bandwidth', 'durl')})")
             return
         except Exception as e:
             log(f"下载失败回退: {e}")
