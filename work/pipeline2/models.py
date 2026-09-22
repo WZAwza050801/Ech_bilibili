@@ -18,6 +18,7 @@ class Chat:
     api_key: str = field(repr=False)
     direct: bool = False
     max_tokens: int = 8192
+    temperature: float = 0.15
 
     @property
     def identity(self):
@@ -29,7 +30,7 @@ class Chat:
             content.append({"type": "text", "text": "Evidence frame ID: " + frame_id})
             content.append({"type": "image_url", "image_url": {
                 "url": "data:image/jpeg;base64," + base64.b64encode(path.read_bytes()).decode()}})
-        body = json.dumps({"model": self.model, "temperature": 0.15,
+        body = json.dumps({"model": self.model, "temperature": self.temperature,
                            "messages": [{"role": "system", "content": system},
                                         {"role": "user", "content": content if images else content[0]["text"]}],
                            "max_tokens": self.max_tokens, "stream": False,
@@ -103,8 +104,12 @@ def load_chat(kind, secrets_path=None):
         raise ValueError("Model base URL must use HTTPS without credentials/query/fragment")
     max_tokens = int(os.getenv(prefix + "_MAX_TOKENS", "16384" if kind in {"planner", "writer"} else "8192"))
     if max_tokens < 1:
-        raise ValueError("Output token budget must be positive")
-    return Chat(base.rstrip("/"), model, key, direct=provider == "deepseek", max_tokens=max_tokens)
+        raise ValueError(f"Configure positive {prefix}_MAX_TOKENS")
+    temperature = float(os.getenv(prefix + "_TEMPERATURE", "0.15"))
+    if not 0 < temperature <= 2:
+        raise ValueError(f"Configure {prefix}_TEMPERATURE within (0, 2]")
+    return Chat(base.rstrip("/"), model, key, direct=provider == "deepseek", max_tokens=max_tokens,
+                temperature=temperature)
 
 
 def check_json_strings(value, key=""):
