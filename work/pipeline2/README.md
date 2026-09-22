@@ -96,6 +96,43 @@ python -m work.pipeline2.pipeline2 run 'BV...' --no-polish --no-verify --no-comp
 
 ## 产物
 
+### 一体化学习笔记（推荐阅读版）
+
+在 `run` 已生成的 `lecture.json` 上，可以继续生成带学习目标和理解批注的单一 PDF：
+
+```powershell
+$env:ECHONOTES_PLANNER_MODEL = 'deepseek-v4-pro'
+$env:ECHONOTES_WRITER_MODEL = 'deepseek-v4-pro'
+python -m work.pipeline2.study '归档路径/lecture.json' `
+  --output-root 'output/学习讲义' --secrets '外部密钥文件路径'
+```
+
+规划器和写作者默认通过 DeepSeek 直连；可分别配置
+`ECHONOTES_PLANNER_PROVIDER / BASE_URL / KEY_LABEL / MODEL / MAX_TOKENS` 和
+`ECHONOTES_WRITER_*`。视觉识别复用 `ECHONOTES_VISION_*`。
+必须显式指定规划、写作模型，避免自动回落到清洗模型。外部密钥格式与主流程一致。
+
+全课规划生成可检查的基础、深入、迁移目标及课程专属写作指导；按连续语义单元选一张代表图。
+每单元包含整理后的讲解、LaTeX 笔记、标明来源的补充推导、理解批注与自测。
+
+写作是四道工序，全部带缓存与一次编码修复：初稿（`study-unit.md`）→
+出版级深化（`study-deepen.md`：补全跳步推导、加最小可算例子、深化批注；
+source 证据 ID 逐条保留，代码会拒绝丢失课堂来源的扩写）→
+逐单元数学审校（`study-review.md`，`quality.json` 记录修订理由）→
+全书文风统一（`study-style.md`：只允许改写各单元批注，统一术语与口吻，findings 记入 quality）。
+模型审校不是严格证明，疑点需回看原视频。
+
+课程地图锁定后，规划模型另生成一张**课程概念地图**（`concept-map.md` +
+`concept_map.py`）：8-20 个概念节点按学习单元分列，边标注依赖/推广/应用/对比等关系；
+Python 负责全部排版布局，模型只决定概念与关系。地图页印在目录前，随 study.json 存档。
+
+产出两种排版，内容同源：
+- `学习讲义.pdf`（`book.tex`，出版编排）：连续行文为主，〔补充〕标题标记编辑推导，
+  批注用绿色竖线段，思考题与疑点弱化为节末元素。
+- `学习讲义-卡片版.pdf`（`lecture.tex`，卡片编排）：蓝/绿/紫/红 `tcolorbox` 色块版。
+`study.json`、`learning-plan.json`、`writing-brief.md`、缓存与质量报告供复查和再次生成。
+本命令复用已有音画证据，当前尚未接入 Gemini 原生整视频上传。设计依据见 `LEARNING_DESIGN.md`。
+
 默认工作目录：`work/pipeline2/runs/<BV-P或本地内容ID>/`。
 
 默认归档：`output/课程讲义/课程讲义-标题-日期-来源ID-内容摘要/`。

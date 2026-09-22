@@ -11,7 +11,7 @@ xi pi varpi rho varrho sigma varsigma tau upsilon phi varphi chi psi omega
 Gamma Delta Theta Lambda Xi Pi Sigma Upsilon Phi Psi Omega
 sum prod coprod int iint iiint oint lim limsup liminf sup inf max min
 sin cos tan cot sec csc arcsin arccos arctan sinh cosh tanh log ln exp det dim ker gcd
-mod bmod pmod operatorname mathrm mathbf mathit mathsf mathtt mathcal mathbb boldsymbol
+mod bmod pmod operatorname mathrm mathbf mathit mathsf mathtt mathcal mathbb mathfrak boldsymbol
 text textrm textnormal mathnormal overline underline widehat widetilde hat bar vec dot ddot
 left right big Big bigg Bigg bigl bigr Bigl Bigr
 cdot cdots ldots vdots ddots times div pm mp circ bullet ast star
@@ -22,7 +22,7 @@ forall exists nexists neg land lor wedge vee implies iff
 to mapsto rightarrow leftarrow leftrightarrow Rightarrow Leftarrow Leftrightarrow
 longrightarrow longleftarrow Longrightarrow Longleftrightarrow
 infty partial nabla ell hbar Re Im top bot perp parallel angle triangle
-langle rangle lvert rvert lVert rVert vert Vert lfloor rfloor lceil rceil
+langle rangle lvert rvert lVert rVert vert Vert mid lfloor rfloor lceil rceil
 quad qquad space hspace phantom vphantom hphantom
 underbrace overbrace underset overset substack
 begin end cases aligned gathered matrix pmatrix bmatrix vmatrix Vmatrix smallmatrix
@@ -68,8 +68,10 @@ def math_tex(value):
     if re.search(r"[%#$~\x00-\x08\x0b-\x1f]", value) or "^^" in value:
         raise ValueError("Unsupported math characters")
     commands = re.findall(r"\\([A-Za-z]+|.)", value, flags=re.S)
-    if any(c not in MATH_COMMANDS and c not in {",", ";", ":", "!", " ", "\\", "{", "}", "|", "_", "&"} for c in commands):
-        raise ValueError("Unsupported LaTeX command")
+    unknown = [c for c in commands if c not in MATH_COMMANDS
+               and c not in {",", ";", ":", "!", " ", "\\", "{", "}", "|", "_", "&"}]
+    if unknown:
+        raise ValueError("Unsupported LaTeX command(s): " + ", ".join("\\" + c for c in unknown))
     environments = []
     for action, env in re.findall(r"\\(begin|end)\s*\{([^{}]+)\}", value):
         if env not in MATH_ENVS:
@@ -233,18 +235,20 @@ def render(lecture, run):
     return path
 
 
-def compile_pdf(run):
-    args = ["xelatex", "-no-shell-escape", "-interaction=nonstopmode", "-halt-on-error", "lecture.tex"]
+def compile_pdf(run, name="lecture"):
+    args = ["xelatex", "-no-shell-escape", "-interaction=nonstopmode", "-halt-on-error",
+            f"{name}.tex"]
     for pass_number in (1, 2):
         process = subprocess.run(args, cwd=run, capture_output=True, encoding="utf-8",
                                  errors="replace", timeout=180,
                                  env=os.environ | {"openin_any": "p", "openout_any": "p"})
-        (run / f"compile-{pass_number}.txt").write_text(process.stdout + process.stderr, encoding="utf-8")
+        (run / f"compile-{name}-{pass_number}.txt").write_text(
+            process.stdout + process.stderr, encoding="utf-8")
         if process.returncode:
-            raise RuntimeError(f"XeLaTeX failed; inspect {run / f'compile-{pass_number}.txt'}")
-    if not (run / "lecture.pdf").exists():
-        raise RuntimeError("XeLaTeX did not produce lecture.pdf")
-    log = (run / "lecture.log").read_text(encoding="utf-8", errors="replace")
-    return {"engine": "xelatex", "passes": 2, "pdf": "lecture.pdf",
+            raise RuntimeError(f"XeLaTeX failed; inspect {run / f'compile-{name}-{pass_number}.txt'}")
+    if not (run / f"{name}.pdf").exists():
+        raise RuntimeError(f"XeLaTeX did not produce {name}.pdf")
+    log = (run / f"{name}.log").read_text(encoding="utf-8", errors="replace")
+    return {"engine": "xelatex", "passes": 2, "pdf": f"{name}.pdf",
             "layout_warnings": [line for line in log.splitlines()
                                 if "Overfull" in line or "Missing character" in line]}

@@ -17,10 +17,11 @@ class Chat:
     model: str
     api_key: str = field(repr=False)
     direct: bool = False
+    max_tokens: int = 8192
 
     @property
     def identity(self):
-        return {"base_url": self.base_url, "model": self.model}
+        return {"base_url": self.base_url, "model": self.model, "max_tokens": self.max_tokens}
 
     def json(self, system, payload, images=(), _repair=False):
         content = [{"type": "text", "text": json.dumps(payload, ensure_ascii=False)}]
@@ -31,7 +32,7 @@ class Chat:
         body = json.dumps({"model": self.model, "temperature": 0.15,
                            "messages": [{"role": "system", "content": system},
                                         {"role": "user", "content": content if images else content[0]["text"]}],
-                           "max_tokens": 8192, "stream": False,
+                           "max_tokens": self.max_tokens, "stream": False,
                            "response_format": {"type": "json_object"}}).encode()
         opener = (urllib.request.build_opener(urllib.request.ProxyHandler({})) if self.direct
                   else urllib.request.build_opener())
@@ -71,9 +72,12 @@ class Chat:
 
 def load_chat(kind, secrets_path=None):
     prefix = "ECHONOTES_" + kind.upper()
-    provider = os.getenv(prefix + "_PROVIDER", "deepseek" if kind == "text" else "openrouter")
+    textual = kind in {"text", "planner", "writer"}
+    provider = os.getenv(prefix + "_PROVIDER", "deepseek" if textual else "openrouter")
     base = os.getenv(prefix + "_BASE_URL")
-    model = os.getenv(prefix + "_MODEL", "deepseek-chat" if kind == "text" else "qwen/qwen3-vl-235b-a22b-instruct")
+    default_model = ("deepseek-v4-pro" if kind in {"planner", "writer"} else
+                     "deepseek-chat" if kind == "text" else "qwen/qwen3-vl-235b-a22b-instruct")
+    model = os.getenv(prefix + "_MODEL", default_model)
     key = os.getenv(prefix + "_API_KEY")
     if not key and secrets_path:
         candidates = [e for e in read_json(secrets_path).get("entries", [])
@@ -97,7 +101,10 @@ def load_chat(kind, secrets_path=None):
         raise ValueError(f"Configure {prefix}_API_KEY / BASE_URL or supply --secrets")
     if not base.startswith("https://") or "@" in base or "?" in base or "#" in base:
         raise ValueError("Model base URL must use HTTPS without credentials/query/fragment")
-    return Chat(base.rstrip("/"), model, key, direct=provider == "deepseek")
+    max_tokens = int(os.getenv(prefix + "_MAX_TOKENS", "16384" if kind in {"planner", "writer"} else "8192"))
+    if max_tokens < 1:
+        raise ValueError("Output token budget must be positive")
+    return Chat(base.rstrip("/"), model, key, direct=provider == "deepseek", max_tokens=max_tokens)
 
 
 def check_json_strings(value, key=""):
