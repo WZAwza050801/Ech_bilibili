@@ -12,7 +12,7 @@ CK = APP / "Network" / "Cookies"
 LS = APP / "Local State"
 if len(sys.argv) >= 3:  # 指定其他 Chromium 内核浏览器: <Cookies路径> <LocalState路径>
     CK, LS = Path(sys.argv[1]), Path(sys.argv[2])
-OUT = Path(r"D:\视频观看agent编写\work\pipeline1\bili_cookies.txt")
+OUT = Path(r"D:\视频观看agent编写\Ech_bilibili\bili_cookies.txt")
 print(f"来源: {CK}")
 
 # ---------- DPAPI ----------

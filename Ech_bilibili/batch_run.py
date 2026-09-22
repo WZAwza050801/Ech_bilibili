@@ -8,8 +8,8 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-WORK = Path(r"D:\视频观看agent编写\work\pipeline1")
-NOTES = Path(r"D:\视频观看agent编写\江左道卡卡-读书笔记")
+WORK = Path(r"D:\视频观看agent编写\Ech_bilibili")
+NOTES = Path(r"D:\视频观看agent编写\Ech_bilibili\江左道卡卡-读书笔记")
 LOG = NOTES / "batch_log.txt"
 
 def log(m):

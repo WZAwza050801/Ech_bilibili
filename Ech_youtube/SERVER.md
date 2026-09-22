@@ -26,7 +26,8 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
 # whisper 模型 (两种方式二选一)
-#   A. 从本机拷贝: scp -r work/pipeline1/models/faster-whisper-small 服务器:Ech_bilibili/work/pipeline1/models/
+#   A. 从本机拷贝: scp -r Ech_bilibili/models/faster-whisper-small 服务器:~/Ech_bilibili/Ech_bilibili/models/
+#      (服务器上 git clone 出来的仓库目录也叫 Ech_bilibili, 所以路径里这个名字出现两次)
 #   B. 环境变量指向 HF 缓存目录(首次运行自动下载 small 模型)
 
 # 配置 (海外机直连 YouTube, 无需代理)
@@ -49,7 +50,8 @@ python yt_blog_batch.py
 |----------|--------------|------|
 | `ECH_ROOT` | `D:\视频观看agent编写` | 项目根目录 |
 | `ECH_YT_DIR` | `$ECH_ROOT/Ech_youtube` | YouTube 管线目录 |
-| `ECH_MODEL_DIR` | `work/pipeline1/models/faster-whisper-small` | whisper 模型 |
+| `ECH_BILI_DIR` | `$ECH_ROOT/Ech_bilibili` | Bilibili 管线目录(仅共享 whisper 模型时用到) |
+| `ECH_MODEL_DIR` | `Ech_bilibili/models/faster-whisper-small` | whisper 模型 |
 | `YT_PROXY` | `http://127.0.0.1:12000` | `direct`=直连(海外机) |
 | `DEEPSEEK_API_KEY` | 回退读 `ECH_SECRETS` 密码书 | LLM 凭据 |
 | `ECH_SECRETS` | `D:\密码书\private\...json` | 密码书路径(仅本机) |

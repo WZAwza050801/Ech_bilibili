@@ -5,7 +5,7 @@ v2: 逐字稿改为「整理版」（标点/简体/分章/修错字）+ 折叠�
 import json, html
 from pathlib import Path
 
-work = Path(r"D:\视频观看agent编写\work\pipeline1")
+work = Path(r"D:\视频观看agent编写\Ech_bilibili")
 paras_raw = json.loads((work / "paras.json").read_text(encoding="utf-8"))
 
 # ============ 整理版逐字稿（手工整理：标点、简体、按语境修正 ASR 错字） ============

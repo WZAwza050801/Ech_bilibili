@@ -9,7 +9,7 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-work = Path(r"D:\视频观看agent编写\work\pipeline1")
+work = Path(r"D:\视频观看agent编写\Ech_bilibili")
 
 from faster_whisper import WhisperModel
 

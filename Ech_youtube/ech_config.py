@@ -10,10 +10,10 @@ from pathlib import Path
 # ---- 根目录 ----
 ECH_ROOT = Path(os.environ.get("ECH_ROOT", r"D:\视频观看agent编写"))
 ECH_YT_DIR = Path(os.environ.get("ECH_YT_DIR", str(ECH_ROOT / "Ech_youtube")))
-ECH_BILI_WORK = Path(os.environ.get("ECH_BILI_WORK", str(ECH_ROOT / "work" / "pipeline1")))
+ECH_BILI_DIR = Path(os.environ.get("ECH_BILI_DIR", str(ECH_ROOT / "Ech_bilibili")))
 
 # ---- whisper 模型(共享目录) ----
-ECH_MODEL_DIR = Path(os.environ.get("ECH_MODEL_DIR", str(ECH_BILI_WORK / "models" / "faster-whisper-small")))
+ECH_MODEL_DIR = Path(os.environ.get("ECH_MODEL_DIR", str(ECH_BILI_DIR / "models" / "faster-whisper-small")))
 
 # ---- 网络代理 ----
 # direct = 直连(海外服务器推荐); 其他值 = http 代理地址

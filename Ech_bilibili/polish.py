@@ -14,7 +14,7 @@ from pathlib import Path
 import urllib.request
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-work = Path(r"D:\视频观看agent编写\work\pipeline1")
+work = Path(r"D:\视频观看agent编写\Ech_bilibili")
 
 # ---- 从密码书读 deepseek key（不在日志中打印 key）----
 secrets = json.load(open(r"D:\密码书\private\private-ai-api-secrets.json", encoding="utf-8"))

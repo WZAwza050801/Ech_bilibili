@@ -6,7 +6,7 @@ import json, io, sys
 from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-work = Path(r"D:\视频观看agent编写\work\pipeline1")
+work = Path(r"D:\视频观看agent编写\Ech_bilibili")
 data = json.loads((work / "transcript.json").read_text(encoding="utf-8"))
 segs = data["segments"]
 

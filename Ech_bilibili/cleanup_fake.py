@@ -2,8 +2,8 @@
 """cleanup_fake.py — 删除截断假产物对应的 NOTES 笔记"""
 import json, os, re
 
-WORK = r"D:\视频观看agent编写\work\pipeline1"
-NOTES = r"D:\视频观看agent编写\江左道卡卡-读书笔记"
+WORK = r"D:\视频观看agent编写\Ech_bilibili"
+NOTES = r"D:\视频观看agent编写\Ech_bilibili\江左道卡卡-读书笔记"
 
 def safe_name(s):
     return re.sub(r'[\\/:*?"<>|\s]+', "_", s)[:60]

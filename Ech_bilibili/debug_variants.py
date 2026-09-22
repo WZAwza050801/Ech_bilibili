@@ -4,7 +4,7 @@ import json, urllib.request, urllib.error, sys, io, time
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-bu = json.load(open(r"D:\视频观看agent编写\work\pipeline1\fresh_buvid.json", encoding="utf-8"))
+bu = json.load(open(r"D:\视频观看agent编写\Ech_bilibili\fresh_buvid.json", encoding="utf-8"))
 HDRS = {"User-Agent": _UA, "Accept": "application/json, text/plain, */*",
         "Referer": "https://www.bilibili.com/",
         "Cookie": f"buvid3={bu['buvid3']}; buvid4={bu['buvid4']}; dpi=192"}

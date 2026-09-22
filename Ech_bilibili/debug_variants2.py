@@ -62,5 +62,5 @@ for name, q in VARIANTS:
     except Exception as e:
         print(f"[{name}] EXC: {e}")
 
-json.dump({"b3": b3, "b4": b4}, open(r"D:\视频观看agent编写\work\pipeline1\fresh_buvid.json", "w"))
+json.dump({"b3": b3, "b4": b4}, open(r"D:\视频观看agent编写\Ech_bilibili\fresh_buvid.json", "w"))
 print("done")

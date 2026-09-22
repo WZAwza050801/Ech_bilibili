@@ -4,14 +4,22 @@
 
 Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版），目标是输入视频链接，输出结构化、可查证的完整内容整理（读书笔记 / 讲义 / 实验报告）。
 
-**多平台设计**：感知层按平台适配，笔记层平台无关。GitHub 仓库：`WZAwza050801/Ech_bilibili`（原名 EchoNotes）。
+**多平台设计**：感知层按平台适配，笔记层平台无关；每个平台一个自包含目录，各归各家。GitHub 仓库：`WZAwza050801/Ech_bilibili`（原名 EchoNotes）。
+
+```
+视频观看agent编写/            # 仓库根：只放通用文档与各平台目录
+├── Ech_bilibili/            # Bilibili 版（管线代码 + runs + 江左道卡卡-读书笔记）
+├── Ech_youtube/             # YouTube 版（管线代码 + runs + LexFridman-博客笔记）
+├── research/                # 开源项目调研
+└── 调研报告-*.md / 方案-*.html # 通用文档
+```
 
 | 平台 | 音频/视频获取 | 状态 |
 |------|--------------|------|
-| Bilibili（本仓库） | playurl API 音频直取（完整浏览器头防 412）+ wbi 签名列表拉取 | ✅ 已实现 |
-| YouTube（Ech_youtube） | yt-dlp（无 B 站式风控，反而简单） | ✅ 已实现并跑通，见 [Ech_youtube/](Ech_youtube/) |
+| Bilibili（[Ech_bilibili/](Ech_bilibili/)） | playurl API 音频直取（完整浏览器头防 412）+ wbi 签名列表拉取 | ✅ 已实现 |
+| YouTube（[Ech_youtube/](Ech_youtube/)） | yt-dlp（无 B 站式风控，反而简单） | ✅ 已实现并跑通 |
 
-> B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `work/pipeline1/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
+> B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `Ech_bilibili/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
 
 ## 三类内容管线（设计）
 
@@ -26,7 +34,7 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 ## 管线一：口播视频 → 读书笔记
 
 ```bash
-python pipeline1.py BV1GbNH6hE8f
+python Ech_bilibili/pipeline1.py BV1GbNH6hE8f
 ```
 
 一条命令全自动：**B站音频直取 → ffmpeg 转wav → faster-whisper 本地转写 → LLM 格式整理 → 读书笔记 HTML**（含信息卡、分节逐字稿、原始转写折叠查证）。
@@ -41,7 +49,7 @@ python pipeline1.py BV1GbNH6hE8f
 ### 目录
 
 ```
-work/pipeline1/
+Ech_bilibili/
 ├── pipeline1.py            # 总控：BV号 → 笔记.html（带缓存跳过 + 三道完整性校验）
 ├── batch_run.py            # 批量模式：UP主全部视频 → 笔记卡文件夹 + 卡片墙（断点续跑 + OOM冷却重试）
 ├── transcribe_local.py     # faster-whisper 本地转写（int8 + cpu_threads=4）

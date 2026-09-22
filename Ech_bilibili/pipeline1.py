@@ -11,7 +11,7 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-WORK = Path(r"D:\视频观看agent编写\work\pipeline1")
+WORK = Path(r"D:\视频观看agent编写\Ech_bilibili")
 VENV_PY = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 # 优先使用 fresh_buvid.json 现场申请的真指纹（假 buvid 连跑一批后会被 412 拉黑）

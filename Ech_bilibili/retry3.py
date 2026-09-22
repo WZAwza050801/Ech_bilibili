@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 VENV = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
-WORK = Path(r"D:\视频观看agent编写\work\pipeline1")
+WORK = Path(r"D:\视频观看agent编写\Ech_bilibili")
 FFMPEG = "ffmpeg"
 
 TARGETS = [

@@ -61,6 +61,6 @@ for bvid, name in TARGETS:
         print(f"[{name}] EXC: {e}", flush=True)
         out[name] = {"err": str(e)}
 
-with open(r"D:\视频观看agent编写\work\pipeline1\debug_patient_out.json", "w", encoding="utf-8") as f:
+with open(r"D:\视频观看agent编写\Ech_bilibili\debug_patient_out.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
 print("done -> debug_patient_out.json")

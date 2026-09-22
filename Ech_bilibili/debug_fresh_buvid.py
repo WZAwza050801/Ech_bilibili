@@ -63,6 +63,6 @@ for bvid, name in TARGETS:
     time.sleep(2)
 
 print(f"\n可用: {len(ok)}/4")
-with open(r"D:\视频观看agent编写\work\pipeline1\fresh_buvid.json", "w", encoding="utf-8") as f:
+with open(r"D:\视频观看agent编写\Ech_bilibili\fresh_buvid.json", "w", encoding="utf-8") as f:
     json.dump({"buvid3": b3, "buvid4": b4, "ts": int(time.time())}, f)
-print("新指纹已存 work/pipeline1/fresh_buvid.json")
+print("新指纹已存 Ech_bilibili/fresh_buvid.json")
