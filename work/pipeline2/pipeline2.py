@@ -152,7 +152,7 @@ def run(args, clients=None):
         names = ["lecture.tex", "lecture.json", "quality.json", "meta.json", "transcript.raw.json",
                  "transcript.json", "frames.json", "alignment.json", "blocks.json", "sampling.json"]
         if not args.no_compile:
-            names += ["lecture.pdf", "compile-1.txt", "compile-2.txt", "lecture.log"]
+            names += ["lecture.pdf", "compile-lecture-1.txt", "compile-lecture-2.txt", "lecture.log"]
         for name in names:
             shutil.copy2(run_dir / name, archive / name)
         (archive / "frames").mkdir(exist_ok=True)

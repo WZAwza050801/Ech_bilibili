@@ -1,4 +1,5 @@
 """Map structured lecture blocks, reduce their outline, recheck visual formulas."""
+import time
 from collections import defaultdict
 
 from .core import cached, correct_segments, normalize_map, validate_map, validate_outline
@@ -98,6 +99,22 @@ def polish(segments, fixes, client, run):
     return correct_segments(result, fixes), warnings
 
 
+def retry_model(call, attempts=3, backoff=5):
+    """Bounded retry for stochastic validation failures (e.g. a dropped field).
+
+    The model call is nondeterministic; a fresh attempt usually satisfies the
+    schema. Cache keeps every successful window, so retries never redo work.
+    """
+    last = None
+    for attempt in range(attempts):
+        try:
+            return call()
+        except ValueError as error:
+            last = error
+            time.sleep(backoff * (attempt + 1))
+    raise last
+
+
 def map_windows(windows, vision, text, run):
     blocks = []
     for window in windows:
@@ -111,8 +128,8 @@ def map_windows(windows, vision, text, run):
         image_keys = [(f["id"], f["sha256"]) for f in window["frames"]]
         output = cached(run / "cache" / f"map-{window['id']}.json",
                         [MAP_PROMPT, client.identity, payload, image_keys],
-                        lambda: validate_map(
-                            normalize_map(client.json(MAP_PROMPT, payload, images), window), window))
+                        lambda: retry_model(lambda: validate_map(
+                            normalize_map(client.json(MAP_PROMPT, payload, images), window), window)))
         validate_map(output, window)
         for index, block in enumerate(output["blocks"]):
             block_id = f"{window['id']}-b{index:03d}"

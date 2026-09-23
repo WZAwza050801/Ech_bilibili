@@ -27,19 +27,33 @@ def main():
     os.environ.setdefault("MKL_NUM_THREADS", str(args.cpu_threads))
     os.environ.setdefault("OPENBLAS_NUM_THREADS", str(args.cpu_threads))
     from faster_whisper import WhisperModel
+    from faster_whisper.audio import decode_audio
     model = WhisperModel(args.model, device="cpu", compute_type="int8",
                          cpu_threads=args.cpu_threads, num_workers=1)
-    iterator, info = model.transcribe(str(args.audio), language=args.language,
-                                     vad_filter=True, condition_on_previous_text=False)
+    # Long lectures blow up memory if transcribe() STFTs the whole file at once
+    # (~1 GiB complex64 for a 2 h audio). Decode once, then transcribe in
+    # fixed slices, shifting timestamps back onto the global timeline.
+    audio = decode_audio(str(args.audio), sampling_rate=16000)
+    sample_rate = 16000
+    chunk_samples = int(os.getenv("ECHONOTES_ASR_CHUNK_SECONDS", "600")) * sample_rate
     segments = []
-    for segment in iterator:
-        segments.append({"start": segment.start, "end": segment.end, "text": segment.text.strip()})
-        if len(segments) % 50 == 0:
-            save(args.output.with_suffix(".partial.json"), {
-                "language": info.language, "duration": info.duration,
-                "source": "local_whisper_partial", "segments": segments})
-            print(f"[asr] {segment.end:.0f}s / {len(segments)} segments", flush=True)
-    data = {"language": info.language, "duration": info.duration,
+    offset = 0.0
+    for start in range(0, audio.shape[0], chunk_samples):
+        piece = audio[start:start + chunk_samples]
+        if piece.shape[0] < sample_rate // 2:
+            break
+        iterator, info = model.transcribe(piece, language=args.language,
+                                         vad_filter=True, condition_on_previous_text=False)
+        for segment in iterator:
+            segments.append({"start": segment.start + offset, "end": segment.end + offset,
+                             "text": segment.text.strip()})
+            if len(segments) % 50 == 0:
+                save(args.output.with_suffix(".partial.json"), {
+                    "language": info.language, "duration": offset + piece.shape[0] / sample_rate,
+                    "source": "local_whisper_partial", "segments": segments})
+                print(f"[asr] {segment.end + offset:.0f}s / {len(segments)} segments", flush=True)
+        offset += piece.shape[0] / sample_rate
+    data = {"language": args.language, "duration": offset,
             "source": "local_whisper", "segments": segments}
     save(args.output, data)
     args.output.with_suffix(".partial.json").unlink(missing_ok=True)

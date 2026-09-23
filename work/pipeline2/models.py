@@ -37,12 +37,15 @@ class Chat:
                            "response_format": {"type": "json_object"}}).encode()
         opener = (urllib.request.build_opener(urllib.request.ProxyHandler({})) if self.direct
                   else urllib.request.build_opener())
-        for attempt in range(3):
+        retries = int(os.getenv("ECHONOTES_MODEL_RETRIES", "3"))
+        backoff = int(os.getenv("ECHONOTES_MODEL_BACKOFF", "10"))
+        timeout = int(os.getenv("ECHONOTES_MODEL_TIMEOUT", "180"))
+        for attempt in range(retries):
             try:
                 request = urllib.request.Request(
                     self.base_url.rstrip("/") + "/chat/completions", data=body,
                     headers={"Authorization": "Bearer " + self.api_key, "Content-Type": "application/json"})
-                with opener.open(request, timeout=180) as response:
+                with opener.open(request, timeout=timeout) as response:
                     result = json.loads(response.read())
                 choice = result["choices"][0]
                 if choice.get("finish_reason") != "stop":
@@ -63,12 +66,12 @@ class Chat:
                         "Return only the corrected JSON object.",
                         {"invalid_json": raw}, _repair=True)
             except urllib.error.HTTPError as error:
-                if error.code not in {429, 500, 502, 503, 504} or attempt == 2:
+                if error.code not in {429, 500, 502, 503, 504} or attempt == retries - 1:
                     raise RuntimeError(f"Model HTTP {error.code} ({self.model}); inspect provider/model configuration") from None
             except (OSError, TimeoutError):
-                if attempt == 2:
-                    raise RuntimeError("Model network request failed") from None
-            time.sleep(2 * (attempt + 1))
+                if attempt == retries - 1:
+                    raise RuntimeError(f"Model network request failed: {error}") from None
+            time.sleep(backoff * (attempt + 1))
 
 
 def load_chat(kind, secrets_path=None):
