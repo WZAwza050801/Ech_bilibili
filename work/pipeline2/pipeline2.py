@@ -18,6 +18,7 @@ if __package__ in (None, ""):
 
 from .core import (align_windows, cached, digest, normalize_segments, read_json,
                    write_json, correct_segments)
+from .distill import package, repackage
 from .media import Bilibili, extract_frames, make_wav, probe
 from .models import load_chat
 from .render import compile_pdf, render
@@ -145,24 +146,11 @@ def run(args, clients=None):
         report["compilation"] = {"status": "skipped"} if args.no_compile else compile_pdf(run_dir)
         write_json(run_dir / "quality.json", report)
         write_json(run_dir / "lecture.json", lecture)
-        # Different settings/content on one day do not overwrite an earlier archived lecture.
-        version = digest(lecture)[:8]
-        archive = args.output_root.resolve() / f"课程讲义-{safe_name(meta['title'])}-{meta['date']}-{source_id}-{version}"
-        archive.mkdir(parents=True, exist_ok=True)
-        names = ["lecture.tex", "lecture.json", "quality.json", "meta.json", "transcript.raw.json",
-                 "transcript.json", "frames.json", "alignment.json", "blocks.json", "sampling.json"]
-        if not args.no_compile:
-            names += ["lecture.pdf", "compile-lecture-1.txt", "compile-lecture-2.txt", "lecture.log"]
-        for name in names:
-            shutil.copy2(run_dir / name, archive / name)
-        (archive / "frames").mkdir(exist_ok=True)
-        for path in {f["path"] for f in frames}:
-            shutil.copy2(run_dir / path, archive / path)
-        write_json(archive / "manifest.json",
-                   {"source_sha256": source_key, "files": {str(p.relative_to(archive)): file_hash(p)
-                    for p in archive.rglob("*") if p.is_file() and p.name != "manifest.json"}})
-        print(f"[done] {archive}", flush=True)
-        return archive
+        # 成品夹：每门课一个文件夹（BV号-P页-课程名），只留 PDF/tex/lecture.json/
+        # 去重帧/README。编译中间产物不进成品夹；完整过程证据留在运行目录。
+        deliverable = package(lecture, run_dir, args.output_root)
+        print(f"[done] {deliverable}", flush=True)
+        return deliverable
     finally:
         lock.unlink(missing_ok=True)
 
@@ -192,6 +180,9 @@ def parser():
     p.add_argument("--no-polish", action="store_true")
     p.add_argument("--no-verify", action="store_true")
     p.add_argument("--no-compile", action="store_true")
+    d = commands.add_parser("distill", help="Repackage an existing run into the clean per-course folder")
+    d.add_argument("lecture", help="Path to lecture.json (run directory or old archive)")
+    d.add_argument("--output-root", type=Path, default=Path("output/课程讲义"))
     return root
 
 
@@ -202,6 +193,9 @@ def main():
                           "python_modules": {x: importlib.util.find_spec(x) is not None
                                              for x in ("PIL", "faster_whisper")},
                           "asr_python_override": bool(os.getenv("ECHONOTES_ASR_PYTHON"))}, indent=2))
+        return
+    if args.command == "distill":
+        print(f"[done] {repackage(args.lecture, args.output_root)}")
         return
     if (args.interval <= 0 or args.max_frames < 1 or args.window_seconds <= 0 or args.max_images < 1
             or not 0 <= args.scene_threshold <= 1):
