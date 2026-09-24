@@ -147,9 +147,16 @@ def run(args, clients=None):
         write_json(run_dir / "quality.json", report)
         write_json(run_dir / "lecture.json", lecture)
         # 成品夹：每门课一个文件夹（BV号-P页-课程名），只留 PDF/tex/lecture.json/
-        # 去重帧/README。编译中间产物不进成品夹；完整过程证据留在运行目录。
+        # 去重帧/README。默认自动清理运行目录（成品夹已含全部所需产物）；
+        # 失败重试时缓存始终保留，只有成功收尾才清。
         deliverable = package(lecture, run_dir, args.output_root)
-        print(f"[done] {deliverable}", flush=True)
+        if not (Path(deliverable) / "lecture.pdf").exists():
+            raise RuntimeError("Deliverable PDF missing; run directory kept for inspection")
+        if args.keep_cache:
+            print(f"[done] {deliverable} (run cache kept: {run_dir})", flush=True)
+        else:
+            shutil.rmtree(run_dir)
+            print(f"[done] {deliverable} (run cache cleaned)", flush=True)
         return deliverable
     finally:
         lock.unlink(missing_ok=True)
@@ -180,6 +187,8 @@ def parser():
     p.add_argument("--no-polish", action="store_true")
     p.add_argument("--no-verify", action="store_true")
     p.add_argument("--no-compile", action="store_true")
+    p.add_argument("--keep-cache", action="store_true",
+                   help="Keep the run directory after a successful finish (default: auto-clean)")
     d = commands.add_parser("distill", help="Repackage an existing run into the clean per-course folder")
     d.add_argument("lecture", help="Path to lecture.json (run directory or old archive)")
     d.add_argument("--output-root", type=Path, default=Path("output/课程讲义"))

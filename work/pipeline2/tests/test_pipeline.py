@@ -134,6 +134,7 @@ def integration_demo(root):
         "--title", "导数定义与平方函数示例（离线流程测试）",
         "--work-root", str(root / "runs"), "--output-root", str(root / "archive"),
         "--interval", "6", "--max-frames", "8", "--window-seconds", "12", "--max-images", "4",
+        "--keep-cache",
     ])
     fake = FixtureChat()
     archive = run(args, clients=(fake, fake))
