@@ -121,3 +121,7 @@ Ech_bilibili/
 - [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
 - [x] 三仓库拆分：Ech_bilibili（读书笔记）/ Ech_lecture（LaTeX 讲义）/ Ech_practice（复刻作品集）
 - [ ] CC 字幕优先策略（有官方字幕时免 ASR，零错字）
+
+## API 配置
+
+本仓库用到哪些 Key、为什么选这些模型、在哪申请、怎么自检——见 [docs/API_SETUP.md](docs/API_SETUP.md)。密钥永不入库。
