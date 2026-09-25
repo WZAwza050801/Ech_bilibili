@@ -89,3 +89,11 @@ research/repos/
 
 # --- 本机工作目录（项目记忆/临时态，不入库）---
 .workbuddy/
+
+# --- 调试 / 探测残留（用完即弃，不入库）---
+debug_*.py
+probe_*
+*_out.json
+batch_log.txt
+*.webm
+video_list_partial.json
