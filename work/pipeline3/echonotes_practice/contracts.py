@@ -62,7 +62,7 @@ def validate_argv(argv):
         raise ValueError("argv must be a nonempty string list (no shell expansion)")
     if len(argv) > 128 or any(len(x) > 8192 for x in argv):
         raise ValueError("Command exceeds execution limits")
-    if argv[0] not in {"python", "python3", "ffmpeg", "node"}:
+    if argv[0] not in {"python", "python3", "ffmpeg", "node", "godot"}:
         raise ValueError("Executable not in supported sandbox tool set")
 
 
@@ -70,7 +70,8 @@ def validate_plan(plan: dict, duration: float) -> None:
     steps = plan.get("steps", [])
     if not steps:
         raise ValueError("Plan has no evidence-backed steps")
-    if len(steps) > 200:
+    if len(steps) > 500:
+        # 82-minute pages split into ~17 chunks legitimately produce 300+ steps.
         raise ValueError("Plan has too many steps")
     ids = set()
     for step in steps:

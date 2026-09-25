@@ -89,18 +89,38 @@ class Bilibili:
         return meta
 
 
-def transcribe(root, model_path, cpu_threads=2):
+def transcribe(root, model_path, cpu_threads=8, chunk_seconds=600):
     from faster_whisper import WhisperModel
     model = WhisperModel(str(model_path), device="cpu", compute_type="int8", cpu_threads=cpu_threads)
-    segments, info = model.transcribe(str(root / "audio.wav"), language="zh", vad_filter=True,
-        vad_parameters={"min_silence_duration_ms": 500}, condition_on_previous_text=False, beam_size=5)
+    audio_path = root / "audio.wav"
+    duration = float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                          "-of", "default=nw=1:nk=1", audio_path]).stdout.decode().strip())
+    # The feature extractor allocates the full-audio STFT at once (~0.5 GiB per
+    # 30 min); long files are transcribed in chunks with time offsets instead.
+    chunks = [(0.0, duration, audio_path)]
+    if duration > chunk_seconds:
+        chunks_dir = root / "asr-chunks"
+        chunks_dir.mkdir(exist_ok=True)
+        chunks, start, index = [], 0.0, 1
+        while start < duration - 1:
+            end = min(duration, start + chunk_seconds)
+            target = chunks_dir / f"chunk-{index:02d}.wav"
+            if not target.exists():
+                run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start:.2f}",
+                     "-to", f"{end:.2f}", "-i", audio_path,
+                     "-ar", "16000", "-ac", "1", target])
+            chunks.append((start, end, target))
+            start, index = end, index + 1
     result = []
-    for segment in segments:
-        result.append({"start": round(segment.start, 2), "end": round(segment.end, 2),
-                       "text": segment.text.strip()})
-        if len(result) % 30 == 0:
-            print(f"ASR {segment.end:.0f}/{info.duration:.0f}s", flush=True)
-    save_json(root / "transcript.json", {"language": info.language, "duration": info.duration, "segments": result})
+    for start, end, path in chunks:
+        segments, info = model.transcribe(str(path), language="zh", vad_filter=True,
+            vad_parameters={"min_silence_duration_ms": 500}, condition_on_previous_text=False, beam_size=5)
+        for segment in segments:
+            result.append({"start": round(segment.start + start, 2),
+                           "end": round(segment.end + start, 2),
+                           "text": segment.text.strip()})
+        print(f"ASR {end:.0f}/{duration:.0f}s", flush=True)
+    save_json(root / "transcript.json", {"language": info.language, "duration": duration, "segments": result})
     (root / "transcript.txt").write_text("\n".join(x["text"] for x in result), encoding="utf-8")
 
 

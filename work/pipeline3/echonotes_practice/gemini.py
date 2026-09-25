@@ -10,6 +10,13 @@ from urllib.parse import urlsplit
 from pathlib import Path
 
 
+def message_part(raw):
+    try:
+        return json.loads(raw).get("error", {}).get("message", raw)
+    except json.JSONDecodeError:
+        return raw
+
+
 def extract_json(text):
     text = text.strip()
     if text.startswith("```"):
@@ -43,11 +50,15 @@ def api_key_from(secrets_path=None):
 
 
 class Gemini:
-    def __init__(self, key, model="gemini-3.8-flash"):
+    def __init__(self, key, model="gemini-3.8-flash", proxy=None):
         self.key, self.model = key, model
         self.base = "https://generativelanguage.googleapis.com"
+        # Explicit proxy beats environment/registry detection, which sandboxed
+        # Windows sessions may point at an unusable port.
+        self.opener = urllib.request.build_opener(urllib.request.ProxyHandler(
+            {"http": proxy, "https": proxy} if proxy else {}))
 
-    def _request(self, url, body=None, headers=None, timeout=180, retries=6):
+    def _request(self, url, body=None, headers=None, timeout=180, retries=10):
         headers = {"x-goog-api-key": self.key, **(headers or {})}
         data = body
         if isinstance(body, (dict, list)):
@@ -56,18 +67,21 @@ class Gemini:
         for attempt in range(retries):
             try:
                 request = urllib.request.Request(url, data=data, headers=headers)
-                with urllib.request.urlopen(request, timeout=timeout) as response:
+                with self.opener.open(request, timeout=timeout) as response:
                     raw = response.read()
                     parsed = json.loads(raw) if raw else {}
                     return parsed, dict(response.headers)
             except urllib.error.HTTPError as exc:
                 raw = exc.read().decode("utf-8", "replace")
+                if exc.code == 429 and "per day" in raw:
+                    # Daily quota cannot recover via retries; fail fast.
+                    raise RuntimeError(f"Gemini HTTP {exc.code}: {message_part(raw)}") from None
                 if exc.code in {429, 500, 502, 503, 504} and attempt + 1 < retries:
                     retry_after = exc.headers.get("Retry-After")
                     match = re.search(r"[Rr]etry in ([0-9.]+)s", raw)
                     suggested = float(retry_after) if retry_after else (
                         float(match.group(1)) if match else 0)
-                    time.sleep(max(suggested + 1, min(60, 3 * 2**attempt)))
+                    time.sleep(max(suggested + 1, min(120, 3 * 2**attempt)))
                     continue
                 try:
                     message = json.loads(raw).get("error", {}).get("message", raw)
@@ -89,24 +103,17 @@ class Gemini:
         upload_url = headers.get("X-Goog-Upload-URL") or headers.get("x-goog-upload-url")
         if not upload_url:
             raise RuntimeError("Gemini did not return a resumable upload URL")
-        parsed = urlsplit(upload_url)
-        connection = http.client.HTTPSConnection(parsed.hostname, parsed.port, timeout=600)
-        target = parsed.path + (f"?{parsed.query}" if parsed.query else "")
-        connection.putrequest("POST", target)
-        connection.putheader("Content-Length", str(path.stat().st_size))
-        connection.putheader("X-Goog-Upload-Offset", "0")
-        connection.putheader("X-Goog-Upload-Command", "upload, finalize")
-        connection.putheader("Content-Type", mime)
-        connection.endheaders()
+        size = path.stat().st_size
+        # Stream through urllib so the request honors proxy environment
+        # variables (the raw-socket variant below cannot tunnel).
         with path.open("rb") as source:
-            while chunk := source.read(1024 * 1024):
-                connection.send(chunk)
-        response = connection.getresponse()
-        raw = response.read()
-        connection.close()
-        if response.status >= 400:
-            raise RuntimeError(f"Gemini upload HTTP {response.status}: "
-                               + raw.decode("utf-8", "replace")[:1000])
+            request = urllib.request.Request(upload_url, data=source, method="POST", headers={
+                "Content-Length": str(size),
+                "X-Goog-Upload-Offset": "0",
+                "X-Goog-Upload-Command": "upload, finalize",
+                "Content-Type": mime})
+            with self.opener.open(request, timeout=3600) as response:
+                raw = response.read()
         uploaded = json.loads(raw)
         return uploaded["file"]
 
@@ -202,4 +209,5 @@ ASR（可能有错字）：
 4. run_command/verify.argv 必须是参数数组，不得使用 shell 字符串、重定向、管道或命令连接符。
 5. 若教程代码是交互式，verify 应用可重复的非交互测试替代，并在 details 中解释。
 6. 无法可靠自动执行的步骤仍要记录，但 action 用 ui_click/draw_stroke，并明确降级。
+7. steps 中每个元素都必须包含 id、title、action、evidence_t、expected 五个字段，expected 不可省略；ui_click/draw_stroke 的 expected 写"画面出现/变化成什么"。
 """

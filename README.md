@@ -1,18 +1,35 @@
 # 拾音笺 EchoNotes
 
-> 把 B 站口播视频"听"成一份可查证的读书笔记。
+> 把 B 站视频"看"成可查证的讲义，"做"成可运行的复刻作品。
 
-EchoNotes 是一个视频观看 agent 项目，目标是输入 B 站视频链接，输出结构化、可查证的完整内容整理（读书笔记 / 讲义 / 实验报告）。
+EchoNotes 是一个视频观看 agent 项目：输入 B 站视频/课程链接，按内容类型分流到三条管线，
+最终产出 **作品集（可运行工程）+ LaTeX 讲义（tex/pdf）**，统一归档、自动清扫。
 
-## 三类内容管线（设计）
+![架构总览](docs/architecture.svg)
+
+## 三类内容管线
 
 | 管线 | 输入形态 | 输出 | 状态 |
 |------|---------|------|------|
 | 一 · 口播/观点类 | 播客、观点、推荐视频（纯音频） | 读书笔记 + 整理版逐字稿 | ✅ 已落地 |
-| 二 · 课程类 | 数学/学术讲座 | LaTeX 可阅读讲义 | 设计完成，待启动 |
-| 三 · 实操教程类 | PS/绘画/剪辑/开发教程 | 讲义 + 实验报告 + 复刻作品 | ✅ A 级 MVP 已跑通 |
+| 二 · 课程类 | 数学/学术/技术课程 | LaTeX 讲义（tex + pdf + 引用截图） | ✅ 已落地（验证课：李群李代数 / 机器人学 / Godot VFX） |
+| 三 · 实操教程类 | PS/绘画/剪辑/游戏开发教程 | 作品集（可运行工程 + 效果 mp4）+ 实验报告 | ✅ 已落地（验证课：计算器开发 / Godot VFX 全 12 分P） |
 
-详细设计见 `方案-三类视频内容分管线设计.html`，开源项目源码级调研见 `调研报告-*.html/md`。
+> 管线二的最新实现位于姊妹仓库 [Ech_bilibili](https://github.com/WZAwza050801/Ech_bilibili)（`work/pipeline2/`）。
+
+## 合并-分叉架构（v2，2026-09）
+
+两条产物管线共享同一个前处理合并段，**合并段只跑一次**，杜绝重复下载/重复转写：
+
+1. **合并段**：音视频直取 → faster-whisper 本地 ASR → 场景+均匀抽帧（dHash 去重、保留 PTS）→
+   Qwen3-VL 逐帧视觉理解 → 术语纠正与音画对齐。产物 `transcript.json` 强制留档供下游复用。
+2. **分叉**：
+   - **管线三（作品集）**：步骤 A/B/C 分级 → 盲写场景（闭卷）→ 与讲师标准答案对账 →
+     只校准关键参数（代码不抄）→ headless 冒烟测试 → Movie Maker 离线渲染效果 mp4。
+   - **管线二（讲义）**：600s 窗口 reduce 编排 → 百炼 qwen3.8-max 规划 → Kimi kimi-k3 写作 →
+     公式原帧视觉复查 → XeLaTeX 两遍编译 → 质量报告。
+3. **统一归档**：`D:\B站课程Agent\BV<号>-<课名>\`，分P可并行跑但**按 P 序号归位**，
+   README 按 P01→P12 顺序索引；校验通过后自动清扫全部中间产物（保留 transcript 与管线代码）。
 
 ## 管线一：口播视频 → 读书笔记
 
@@ -20,52 +37,50 @@ EchoNotes 是一个视频观看 agent 项目，目标是输入 B 站视频链接
 python pipeline1.py BV1GbNH6hE8f
 ```
 
-一条命令全自动：**B站音频直取 → ffmpeg 转wav → faster-whisper 本地转写 → LLM 格式整理 → 读书笔记 HTML**（含信息卡、分节逐字稿、原始转写折叠查证）。
+一条命令全自动：**B站音频直取 → ffmpeg 转 wav → faster-whisper 本地转写 → LLM 格式整理 → 读书笔记 HTML**
+（含信息卡、分节逐字稿、原始转写折叠查证）。
 
-### 架构与关键实现
+关键实现：
 
-- **B站音频直取**（绕过 yt-dlp 412）：直接调 `api.bilibili.com/x/player/playurl?fnval=16`。关键点是**完整浏览器请求头 + 完整 cookie 组**（buvid3/buvid4/b_nut 等 8 项）——极简头（单个伪造 buvid3）会被风控 412 拦截；同时禁用系统代理直连。
-- **本地 ASR**：faster-whisper small/int8（CPU 约 2.3x 实时），`vad_filter=True` + `condition_on_previous_text=False` 防幻觉复读。
-- **格式整理（polish 模块）**：便宜的 LLM（deepseek-chat）只做加标点/繁转简/修有把握的同音错字，prompt 硬约束禁改写；`[n]` 序号一一对应 + 字数漂移校验；**hotfix.json 热修词典双端应用**（输入端预处理 + 输出端后处理）管已确认 ASR 错字，词典可持续积累。
-- **逐段查证**：笔记 HTML 底部折叠保留原始机器转写全文，整理稿与原始稿可逐句对照。
+- **B站音频直取**（绕过 yt-dlp 412）：`api.bilibili.com/x/player/playurl?fnval=16` + 完整浏览器请求头与 cookie 组。
+- **本地 ASR**：faster-whisper small/int8，`vad_filter=True` + `condition_on_previous_text=False` 防幻觉复读。
+- **格式整理**：便宜 LLM 只做加标点/繁转简/同音错字，`[n]` 序号一一对应 + 字数漂移校验；hotfix.json 热修词典双端应用。
 
-### 目录
+## 管线三：实操教程 → 复刻作品集
+
+实现位于 `work/pipeline3/`，已验证端到端案例：
+《自制简易计算器》（BV1fy4y1K7Mi）与《Godot 游戏特效｜入门至进阶实战课》全 12 分P
+（产出 10 个特效场景作业 + 10 段效果 mp4，讲义见管线二）。
+
+主要边界与设计：
+
+- Gemini/SiliconFlow 完整视频理解与本地 ASR 按时间戳融合；A/B/C 分级由本地规则复核。
+- **闭卷盲写 → 对账 → 校准**三段式：agent 先不看答案盲写场景，再与讲师工程量化 diff，
+  最后只校准关键参数（美术分层参数不可从视频恢复，代码则不抄）。
+- A 级代码在隔离环境无网络运行；B 级只执行可脚本化步骤；C 级不自动执行。
+- 密钥仅从外部密码书/环境变量读取，不进入仓库。
+
+## 统一归档与清扫标准
 
 ```
-work/pipeline1/
-├── pipeline1.py        # 总控：BV号 → 笔记.html（带缓存跳过）
-├── transcribe_local.py # faster-whisper 本地转写
-├── polish.py           # LLM 格式整理模块
-├── hotfix.json         # ASR 错字热修词典（双端应用）
-└── runs/<BV>/          # 每个视频的产物（meta/转写/整理稿/笔记）
+D:\B站课程Agent\
+└─ BV<号>-<课名>\
+   ├─ README.md              # P01→P12 顺序总览：讲义/作品状态
+   ├─ 作品集\
+   │  ├─ <作业工程>\          # 可运行工程（去缓存）
+   │  └─ 效果预览\            # mp4
+   └─ LaTeX讲义\
+      └─ P<编号>-<名称>\      # lecture.tex + lecture.pdf + figs\ (+ transcript.json)
 ```
 
-### 依赖
-
-- Python 3.10+，`faster-whisper`（模型自动从 `models/faster-whisper-small` 加载，首次需下载到该目录）
-- `ffmpeg`（PATH 中可用）
-- DeepSeek API Key：通过环境变量 `DEEPSEEK_API_KEY` 提供（`polish.py` 中按需改读取方式，仓库不含任何密钥）
+中间产物（下载视频/抽帧/ASR 缓存/LaTeX 编译副产物）在校验通过后自动清扫；
+transcript.json 永远保留——它是合并段最贵的产物，也是下游复用的接口。
 
 ## 路线图
 
 - [x] 管线一端到端全自动（一条命令出笔记）
-- [ ] 批量模式：UP 主全部视频 → 笔记卡文件夹 + 卡片墙索引
-- [ ] 管线二：课程视频 → LaTeX 讲义（Pix2Text 公式 OCR）
+- [x] 管线二：课程视频 → LaTeX 讲义（多模态 map + 公式原帧复查 + XeLaTeX）
 - [x] 管线三：A 级开发教程 → 隔离执行 + 讲义 + 实验报告 + 复刻作品
+- [x] 合并-分叉架构：共享前处理 + 统一归档 + 自动清扫（organize.py / course-output-organizer）
+- [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
 - [ ] 管线三：B/C 级精确操作手册与逐帧观察报告
-
-## 管线三：实操教程 → 复刻 + 实验报告
-
-实现位于 `work/pipeline3/`。首个端到端验证视频为
-《Python 基础实战100例·第4期：自制简易计算器》（BV1fy4y1K7Mi）。
-
-主要边界：
-
-- Gemini 完整视频理解与本地 ASR 按时间戳融合。
-- A/B/C 分级由本地规则复核；模型不能自行授予执行权限。
-- A 级代码在 WSL `bubblewrap` 内无网络运行，只挂载本次作品目录。
-- B 级只执行独立的可脚本化步骤；GUI 操作保留为人工步骤。
-- C 级不自动执行，避免把视觉近似错误声明为复刻成功。
-- 密钥仅从 `GEMINI_API_KEY` 或外部密码书读取，不进入仓库。
-
-具体命令、产物结构和限制见 `work/pipeline3/README.md`。

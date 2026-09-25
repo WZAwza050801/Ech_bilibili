@@ -35,3 +35,10 @@ work/pipeline1/test*.png
 work/pipeline1/ab*.txt
 work/pipeline1/ab.log
 work/pipeline1/browser_list_result.txt
+# 管线三运行诊断与临时文件（只提交代码，不提交日志/诊断）
+work/pipeline3/*.log
+work/pipeline3/*.txt
+work/pipeline3/_*.py
+work/pipeline3/demo_homework/
+work/pipeline3/runs/
+
