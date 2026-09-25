@@ -3,19 +3,24 @@
 输出: transcript.json（带时间戳段落）+ transcript.txt（纯文本）
 参数参考 let-ai-read-video: vad_filter, condition_on_previous_text=False 防幻觉
 """
-import json, sys, io, time
+import json, os, sys, io, time
 from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-work = Path(r"D:\视频观看agent编写\Ech_bilibili")
+# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR 覆盖
+work = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 
 from faster_whisper import WhisperModel
 
+# 模型：优先本地共享目录；换机器没带模型时退回 HF 模型名（首次运行自动下载）
+_local_model = work / "models" / "faster-whisper-small"
+MODEL = str(_local_model) if _local_model.exists() else os.environ.get("ECH_MODEL", "small")
+
 t0 = time.time()
-print("[asr] 加载模型 small / int8 (CPU)...")
-model = WhisperModel(str(work / "models" / "faster-whisper-small"), device="cpu", compute_type="int8", cpu_threads=4)
+print(f"[asr] 加载模型 {MODEL} / int8 (CPU)...")
+model = WhisperModel(MODEL, device="cpu", compute_type="int8", cpu_threads=4)
 print(f"[asr] 模型加载完成 {time.time()-t0:.1f}s，开始转写...")
 
 t1 = time.time()

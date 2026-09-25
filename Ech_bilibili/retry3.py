@@ -6,9 +6,10 @@ import json, subprocess, sys, io, os
 from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-VENV = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
-WORK = Path(r"D:\视频观看agent编写\Ech_bilibili")
-FFMPEG = "ffmpeg"
+_VENV = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
+VENV = os.environ.get("ECH_PY") or (_VENV if Path(_VENV).exists() else sys.executable)
+WORK = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
+FFMPEG = os.environ.get("FFMPEG") or "ffmpeg"
 
 TARGETS = [
     ("BV1bH4aeAE7E", 1168),  # 嬉皮夜话 19:28

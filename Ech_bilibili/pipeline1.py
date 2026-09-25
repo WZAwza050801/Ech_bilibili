@@ -11,8 +11,12 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-WORK = Path(r"D:\视频观看agent编写\Ech_bilibili")
-VENV_PY = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
+_HERE = Path(__file__).resolve().parent
+# 平台目录 = 脚本所在目录（自包含，换盘/换机器都不用改代码），可用 ECH_BILI_DIR 覆盖
+WORK = Path(os.environ.get("ECH_BILI_DIR") or _HERE)
+# 转写子进程解释器：优先本机已知 venv（装了 faster-whisper），否则用当前解释器
+_VENV_PY = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
+VENV_PY = os.environ.get("ECH_PY") or (_VENV_PY if Path(_VENV_PY).exists() else sys.executable)
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 # 优先使用 fresh_buvid.json 现场申请的真指纹（假 buvid 连跑一批后会被 412 拉黑）
 _b3, _b4 = "FD0E1A9D-8D6B-4E0C-9B7E-2C3D4E5F6A7Binfoc", "9A8B7C6D-5E4F-3A2B-1C0D-9E8F7A6B5C4D-1240000000"
@@ -131,11 +135,24 @@ def fetch_audio(bvid, cid, dst):
             time.sleep(5)
     raise RuntimeError("音频下载失败")
 
+def ffmpeg_bin():
+    """定位 ffmpeg：环境变量 FFMPEG > PATH。找不到时报可操作的中文错误（不再甩 NoneType）"""
+    ff = os.environ.get("FFMPEG") or shutil.which("ffmpeg")
+    if not ff:
+        raise RuntimeError(
+            "找不到 ffmpeg —— 本管线转码依赖它，但 PATH 里没有。\n"
+            "  Windows 安装: winget install Gyan.FFmpeg   (或 scoop install ffmpeg / choco install ffmpeg)\n"
+            "  装完重开终端让 PATH 生效, 用 `ffmpeg -version` 验证\n"
+            "  不想装或没权限: 下载 ffmpeg 解压后设环境变量 FFMPEG=<ffmpeg.exe 完整路径>, 例如\n"
+            "    set FFMPEG=E:\\tools\\ffmpeg\\bin\\ffmpeg.exe")
+    return ff
+
 def ffmpeg_wav(src, dst):
-    ff = shutil.which("ffmpeg")
-    r = subprocess.run([ff, "-y", "-i", src, "-ar", "16000", "-ac", "1", "-vn", dst],
+    ff = ffmpeg_bin()
+    r = subprocess.run([ff, "-y", "-i", str(src), "-ar", "16000", "-ac", "1", "-vn", str(dst)],
                        capture_output=True, text=True, timeout=300)
-    if r.returncode != 0: raise RuntimeError("ffmpeg wav 转换失败")
+    if r.returncode != 0:
+        raise RuntimeError(f"ffmpeg wav 转换失败: {(r.stderr or '')[-200:]}")
 
 def fmt_ts(t):
     t = int(t); h, r = divmod(t, 3600); m, s = divmod(r, 60)
@@ -209,6 +226,7 @@ def main():
 
     m4s = run_dir / "audio.m4s"; wav = run_dir / "audio.wav"
     if not wav.exists():
+        ffmpeg_bin()  # 预检：缺 ffmpeg 立刻报错，不必白下整个音频
         fetch_audio(bvid, meta["cid"], m4s)  # 总是重新下载, 防止复用上次截断的残留 m4s
         ffmpeg_wav(m4s, wav); log("wav 转换完成")
     else:

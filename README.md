@@ -88,9 +88,19 @@ Ech_bilibili/
 
 ### 依赖
 
-- Python 3.10+，`faster-whisper`（模型自动从 `models/faster-whisper-small` 加载，首次需下载到该目录）
-- `ffmpeg`（PATH 中可用）
-- DeepSeek API Key：通过环境变量 `DEEPSEEK_API_KEY` 提供（`polish.py` 中按需改读取方式，仓库不含任何密钥）
+- Python 3.10+，`faster-whisper`（优先加载 `models/faster-whisper-small`，目录不存在时自动退回 HF 模型名 `small` 下载）
+- `ffmpeg` 在 PATH 中（Windows：`winget install Gyan.FFmpeg`，装完重开终端）；没装到 PATH 可用 `FFMPEG` 环境变量指向 ffmpeg.exe
+- DeepSeek API Key：优先环境变量 `DEEPSEEK_API_KEY`，回退读本机密码书（仓库不含任何密钥）
+
+### 换机器运行（环境变量都可选，默认值自动适配本机）
+
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `ECH_BILI_DIR` | 脚本所在目录 | 平台目录，脚本自包含，换盘/换机器不用改代码 |
+| `FFMPEG` | PATH 中的 `ffmpeg` | 指向 `ffmpeg.exe` 完整路径 |
+| `ECH_PY` | 本机已知 venv，否则当前解释器 | 转写子进程用的 python |
+| `ECH_MODEL` | `models/faster-whisper-small` | whisper 模型目录或 HF 模型名 |
+| `DEEPSEEK_API_KEY` | 回退密码书 | polish 用的 LLM key |
 
 ## 管线二：课程视频 → LaTeX 讲义 ✅
 

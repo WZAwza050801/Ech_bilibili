@@ -9,18 +9,24 @@
 - Prompt 硬约束: 只加标点/繁转简/修同音错字, 禁止改写、增删、书面化
 - 带序号对应 + 字数校验, 漂移过大自动重试
 """
-import json, io, sys, time, re
+import json, io, os, sys, time, re
 from pathlib import Path
 import urllib.request
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-work = Path(r"D:\视频观看agent编写\Ech_bilibili")
+# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR 覆盖
+work = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 
-# ---- 从密码书读 deepseek key（不在日志中打印 key）----
-secrets = json.load(open(r"D:\密码书\private\private-ai-api-secrets.json", encoding="utf-8"))
-entry = next(e for e in secrets["entries"] if e.get("label") == "Environment DEEPSEEK_API_KEY")
-API_KEY = entry["apiKey"]
-BASE_URL = (entry.get("baseUrl") or "https://api.deepseek.com").rstrip("/")
+# ---- deepseek key：优先环境变量（换机器/服务器），回退本机密码书（不在日志中打印 key）----
+if os.environ.get("DEEPSEEK_API_KEY"):
+    API_KEY = os.environ["DEEPSEEK_API_KEY"]
+    BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
+else:
+    _secrets_path = Path(os.environ.get("ECH_SECRETS", r"D:\密码书\private\private-ai-api-secrets.json"))
+    secrets = json.load(open(str(_secrets_path), encoding="utf-8"))
+    entry = next(e for e in secrets["entries"] if e.get("label") == "Environment DEEPSEEK_API_KEY")
+    API_KEY = entry["apiKey"]
+    BASE_URL = (entry.get("baseUrl") or "https://api.deepseek.com").rstrip("/")
 MODEL = "deepseek-chat"
 
 SYS = (
