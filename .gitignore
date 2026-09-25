@@ -12,6 +12,8 @@ work/pipeline1/video_list.json
 *.m4s
 *.wav
 *.png
+# README 效果截图（合成样例，需要进仓库）
+!docs/screenshots/*.png
 __pycache__/
 *.pyc
 # 调试临时文件
