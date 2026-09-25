@@ -90,7 +90,44 @@ curl -sI --max-time 15 -x http://127.0.0.1:17890 https://www.youtube.com | head 
 产物 LexFridman 320MB / 阿卡迪萨 13MB。
 
 
-## 环境准备（3 步）
+## 环境准备（4 步）
+
+### 0. 获取代码
+
+**请用 HTTPS 地址，不要用 SSH 地址。** SSH 形态的 `git@github.com:...` 对**没配 SSH key** 的人会报
+
+```
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights and the repository exists.
+```
+
+——这句 **`correct access rights`** 看着非常像"仓库是私有的 / 你没权限"，其实只是**没配 key**，
+和仓库可见性无关（本仓库是 public）。
+
+```bash
+# 推荐：浅克隆，快，且不需要任何 key（注意是 https://，不是 git@github.com:）
+git clone --depth 1 https://github.com/WZAwza050801/Ech_bilibili.git
+```
+
+不想用 git 就直接下载压缩包：
+
+```
+https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip
+```
+
+国内网络访问 GitHub 不稳定时（`Failed to connect to github.com port 443` / `Recv failure` /
+`LibreSSL SSL_connect: ... unexpected eof`），套一层镜像加速前缀：
+
+```bash
+curl -L -o Ech_bilibili.zip \
+  https://ghfast.top/https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip
+# gh-proxy.com / ghproxy.net 是同形前缀，可轮换使用
+```
+
+> **下不动基本不是体积问题**：仓库已跟踪文件总计约 **7 MB**，最大单文件 675 KB，**未使用 Git LFS**
+> （所以不存在"克隆下来只有 LFS 指针、没有真文件"的情况）。`models/`、`runs/`、`audio.*` 等
+> 大文件与中间产物都不进仓库，克隆后按下面第 2 步装依赖即可。
 
 ### 1. 系统要求
 
@@ -166,6 +203,9 @@ Ech_bilibili 的必需 Key：**无（可不配 Key 跑通）**。
 | YouTube 报 n-challenge / 403 | 缺 JS runtime | 下载 deno 放 `Ech_youtube/bin/`（管线自动加 PATH），或配 `YT_PROXY` 代理 |
 | ASR 很慢 / 转写中断 | 本地 small/int8 模型在 CPU 上跑 | 复用已有 `transcript.json`（管线支持断点续跑），或改用独立 venv 装 ASR 依赖 |
 | 换了盘符 / 换了机器跑不动 | 以为路径写死了 | 其实全部走环境变量覆盖，见[环境变量参考](#环境变量参考)；先跑 `python scripts/check_env.py` |
+| **`git clone` 报 `Permission denied (publickey)`** | 用了 **SSH 地址**（`git@github.com:...`）但没配 SSH key；**不是仓库私有** | 换 HTTPS：`git clone https://github.com/WZAwza050801/Ech_bilibili.git`，或直接下 [main.zip](https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip) |
+| **连不上 GitHub / 下载超时**（`Failed to connect ... port 443`） | 本地网络到 GitHub 不通，与仓库无关（仓库仅约 7 MB，未用 LFS） | 套镜像前缀：`https://ghfast.top/https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip` |
+| **卡片墙里点某个笔记 404** | 旧版产物文件名含 `#`（URL 锚点分隔符会把路径截断） | 已于 `b50574f` 修复（`safe_name()` 连带清洗 `#`/`%`）；历史文件已重命名 |
 
 ### 跑起来
 

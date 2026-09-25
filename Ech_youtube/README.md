@@ -3,6 +3,14 @@
 > Ech_bilibili 的 YouTube 版本。**状态：✅ 已实现并全量跑通**——Lex Fridman **447/447** 期
 > （2026-09-24 收官，8 工人并行 + 断点续跑，其中 4 期因无英文字幕回退 ASR）。
 
+## 获取代码
+
+```bash
+git clone --depth 1 https://github.com/WZAwza050801/Ech_bilibili.git   # 用 https，别用 git@（没配 SSH key 会 Permission denied）
+```
+下不动（连不上 GitHub）就套镜像前缀下载 zip：`https://ghfast.top/https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip`
+详见[仓库根 README「获取代码」](../README.md#0-获取代码)。仓库仅约 7 MB、未用 LFS，下不动与体积无关。
+
 ## 安装与自检
 
 在仓库根目录：

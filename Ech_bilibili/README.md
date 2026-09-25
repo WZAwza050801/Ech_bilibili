@@ -2,6 +2,14 @@
 
 > 视频观看 agent · **Bilibili 版**（管线一：口播/观点类 → 读书笔记）。**状态：✅ 已实现并跑通**（114 个视频批量实测收官）。
 
+## 获取代码
+
+```bash
+git clone --depth 1 https://github.com/WZAwza050801/Ech_bilibili.git   # 用 https，别用 git@（没配 SSH key 会 Permission denied）
+```
+下不动（连不上 GitHub）就套镜像前缀下载 zip：`https://ghfast.top/https://github.com/WZAwza050801/Ech_bilibili/archive/refs/heads/main.zip`
+详见[仓库根 README「获取代码」](../README.md#0-获取代码)。仓库仅约 7 MB、未用 LFS，下不动与体积无关。
+
 ## 安装与自检
 
 在仓库根目录：
