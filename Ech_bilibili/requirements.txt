@@ -1,0 +1,2 @@
+# B 站版核心：零 pip 依赖，只用 Python 标准库（urllib/json/sqlite3...）
+# 语音转写需要 faster-whisper，见仓库根目录 requirements-asr.txt
