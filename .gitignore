@@ -1,58 +1,26 @@
-# 产物与大文件（不进仓库）
-.workbuddy/
-research/repos/
-Ech_bilibili/models/
-Ech_bilibili/runs/
-Ech_bilibili/audio.*
-Ech_bilibili/transcript.*
-Ech_bilibili/polished.*
-Ech_bilibili/paras.json
-Ech_bilibili/fulltext.txt
-Ech_bilibili/video_list.json
-*.m4s
-*.wav
-*.png
+# --- Python ---
 __pycache__/
-*.pyc
-# 调试临时文件
-Ech_bilibili/_*
-Ech_youtube/_*
-Ech_bilibili/probe*.py
-!Ech_bilibili/probe_ports.py
-Ech_bilibili/snap*.txt
-Ech_bilibili/eval_*.txt
-Ech_bilibili/diag*.txt
-Ech_bilibili/ab*.txt
-Ech_bilibili/browser_list*.js
-Ech_bilibili/eval_arg*.txt
-Ech_bilibili/list_result*.txt
-Ech_bilibili/cookies.json
-Ech_bilibili/tabs.txt
-Ech_bilibili/tabnew.txt
-Ech_bilibili/cur_url.txt
-Ech_bilibili/wbi_keys.txt
-Ech_bilibili/space*.png
-Ech_bilibili/test*.png
-Ech_bilibili/ab*.txt
-Ech_bilibili/ab.log
-Ech_bilibili/browser_list_result.txt
-# Ech_youtube 产物与大文件
-Ech_youtube/runs/
-Ech_youtube/bin/
-Ech_youtube/models/
-Ech_youtube/audio.*
-Ech_youtube/transcript.*
-Ech_youtube/polished.*
-Ech_youtube/videos.txt
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
 
-# 凭据类（包含登录凭据，不进仓库）, 2026-09-21
-Ech_bilibili/bili_cookies.txt
-Ech_bilibili/*.sqlite
-Ech_bilibili/chrome_cdp_profile/
-Ech_bilibili/debug_out.txt
-Ech_bilibili/probe_out.txt
-Ech_bilibili/qr_log.txt
-Ech_bilibili/qr_status.txt
-Ech_bilibili/bili_qr_login.py
-Ech_bilibili/chrome_cdp_cookies.py
-Ech_bilibili/ck_try.sqlite
+# --- 密钥（绝不入库）---
+.env
+*.env
+!.env.example
+.env.*
+secrets.json
+secrets*.json
+*密码书*
+
+# --- 运行产物 ---
+runs/
+output/
+out/
+*.log
+*.mp4
+*.whl
+.godot/
+.DS_Store
+Thumbs.db
