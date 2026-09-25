@@ -70,6 +70,10 @@ Ech_bilibili/
 └── 江左道卡卡-读书笔记/      # 产出：{NN}-<标题>.html + index.html + failed.json + batch_log.txt
 ```
 
+标题取名走 `batch_run.py::safe_name()`：除 Windows 非法字符 `\ / : * ? " < > |` 与空白外，
+**`#` 和 `%` 也会被替换成 `_`**（`#` 在 URL 里是锚点分隔符，会让卡片墙链接被截断成 404）。
+截断 60 字，序号从 01 起不回收。
+
 ## 环境变量
 
 全部可选，默认值自动适配脚本位置；同时接受 `ECHONOTES_*` 与 `ECH_*` 两种命名。

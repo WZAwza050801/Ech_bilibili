@@ -64,7 +64,6 @@ Ech_youtube/videos.txt
 Ech_bilibili/_*
 Ech_youtube/_*
 Ech_bilibili/probe*.py
-!Ech_bilibili/probe_ports.py
 Ech_bilibili/probe_out.txt
 Ech_bilibili/debug_out.txt
 Ech_bilibili/snap*.txt
@@ -94,6 +93,12 @@ research/repos/
 debug_*.py
 probe_*
 *_out.json
-batch_log.txt
 *.webm
 video_list_partial.json
+
+# --- 跑批日志的例外说明 ---
+# 产出文件夹（<创作者>-<笔记类型>/batch_log.txt）里的日志是【交付物】，随 index.html /
+# failed.json 一起入库，因此下面不能写全局 `batch_log.txt` 规则。
+# 只有「从平台根目录直接跑批」留下的一次性日志不入库：
+/Ech_bilibili/batch_log.txt
+/Ech_youtube/batch_log.txt

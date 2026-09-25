@@ -16,6 +16,10 @@
 | `debug_patient_out.json` / `fresh_buvid.json` / `video_list_partial.json` | 上述脚本的中间输出样本 |
 
 **现役产品代码都在上一层 `Ech_bilibili/`**：`pipeline1.py`、`batch_run.py`、`transcribe_local.py`、
-`polish.py`、`hotfix.json`、`fetch_list.py`、`fetch_list_retry2.cjs`、`cleanup_fake.py`、`retry3.py`、`probe_ports.py`。
+`polish.py`、`hotfix.json`、`fetch_list.py`、`fetch_list_retry2.cjs`、`cleanup_fake.py`（假产物清理工具）。
+
+> 两个脚本已于 2026-09-25 作为「调试/探测残留」退役删除：`probe_ports.py`（代理端口探测，一次性）
+> 与 `retry3.py`（补跑 3 期需登录态的老视频，任务已完成）。二者均未被管线代码调用。
+> 历史版本可从 git 里 `git log --diff-filter=D -- <路径>` 找回。
 
 > 想清理的话可以直接删掉整个 `dev/`，不影响管线；历史都在 git 里。

@@ -21,7 +21,11 @@ def log(m):
         f.write(line + "\n")
 
 def safe_name(s):
-    return re.sub(r'[\\/:*?"<>|\s]+', "_", s)[:60]
+    # 除 Windows 非法字符外，还要清掉 URL 里会截断路径的字符：
+    #   '#' → 浏览器当锚点分隔符，链接在 # 处断掉（例：样张-扎克伯格#267.html 会 404）
+    #   '%' → 被当成百分号转义序列
+    # 卡片墙 index.html 的 href 直接用这个结果，所以必须在这里堵住。
+    return re.sub(r'[\\/:*?"<>|#%\s]+', "_", s)[:60]
 
 def render_index(done, total, items):
     """卡片墙 index.html"""
