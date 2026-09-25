@@ -1,0 +1,3 @@
+# 语音转写（可选）——建议装在独立虚拟环境，避免与主编线的依赖互相污染
+# 装好后用 ECHONOTES_ASR_PYTHON 指向该环境的 python
+faster-whisper>=1.1,<2
