@@ -6,6 +6,15 @@
 ## 运行环境
 
 Python 3.11+；`ffmpeg`、`ffprobe`、`XeLaTeX` 在 PATH 中。
+仓库根目录的 `requirements.txt` 是权威依赖清单（含安装说明与外部可执行文件的
+各平台安装命令），推荐从根目录安装：
+
+```powershell
+python -m pip install -r requirements.txt          # 仓库根目录
+python -m work.pipeline2.pipeline2 doctor   # 自检 ffmpeg/ffprobe/xelatex/PIL/faster_whisper
+```
+
+> 本目录下的 `requirements.txt` 为历史兼容保留，内容与根目录一致。
 
 ```powershell
 python -m pip install -r work/pipeline2/requirements.txt

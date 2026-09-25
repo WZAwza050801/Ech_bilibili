@@ -1,0 +1,6 @@
+# EchoNotes — Python 依赖（pip install -r requirements.txt）
+# 核心图像处理：抽帧去重（dHash）、讲义插图检查
+Pillow>=10,<13
+# 本地语音识别（默认 ASR 路径，基于 CTranslate2）
+# 若你用云端 ASR、或在独立环境里单独跑 faster-whisper（ECHONOTES_ASR_PYTHON），可注释掉下一行
+faster-whisper>=1.1,<2

@@ -96,9 +96,33 @@ of automatic cleanup.
 
 ## Quick start
 
-Requirements: Python 3.11+, `ffmpeg` / `ffprobe` / `XeLaTeX` on PATH, plus
-`faster-whisper` and `Pillow` (details in the
-[operation manual](work/pipeline2/README.md), currently in Chinese).
+You need three things: **Python 3.11+**, **ffmpeg / ffprobe**, and **XeLaTeX**.
+The Python side has only two third-party packages (`Pillow` and `faster-whisper`) —
+one command installs them, and the `doctor` subcommand verifies everything at any
+time so you never have to guess your environment.
+
+**Step 1 · Install Python dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+**Step 2 · Install the three external executables** (pick your platform)
+
+| Platform | ffmpeg / ffprobe | XeLaTeX |
+|----------|------------------|---------|
+| Windows | `winget install Gyan.FFmpeg` | `winget install MiKTeX.MiKTeX` (or TeX Live) |
+| macOS | `brew install ffmpeg` | `brew install --cask mactex` |
+| Linux (Debian/Ubuntu) | `sudo apt install ffmpeg` | `sudo apt install texlive-xetex` |
+
+**Step 3 · One-command check** — all three executables and both Python packages
+should report `true`:
+
+```bash
+python -m work.pipeline2.pipeline2 doctor
+# {"executables": {"ffmpeg": true, "ffprobe": true, "xelatex": true},
+#  "python_modules": {"PIL": true, "faster_whisper": true}, ...}
+```
 
 API keys live in an external JSON file (format in the manual; the repo never
 contains keys):
@@ -108,9 +132,6 @@ contains keys):
 ```
 
 ```powershell
-# 0. Dependency check
-python -m work.pipeline2.pipeline2 doctor
-
 # 1. Course video to evidence handout (run cache auto-cleaned on success)
 python -m work.pipeline2.pipeline2 run 'https://www.bilibili.com/video/BV.../?p=2' `
   --secrets 'path/to/secrets.json'

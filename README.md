@@ -83,8 +83,30 @@ flowchart LR
 
 ## 快速开始
 
-依赖：Python 3.11+，`ffmpeg` / `ffprobe` / `XeLaTeX` 在 PATH 中，`faster-whisper` 与 `Pillow`
-（详见 [管线二使用手册](work/pipeline2/README.md)）。
+依赖三件套：**Python 3.11+**、**ffmpeg / ffprobe**、**XeLaTeX**。除此之外 Python 侧只有两个
+第三方包（`Pillow` 与 `faster-whisper`），一条命令装完；`doctor` 子命令可以随时自检，不需要你猜环境。
+
+**第 1 步 · 安装 Python 依赖**
+
+```bash
+pip install -r requirements.txt
+```
+
+**第 2 步 · 安装三个外部可执行文件**（任选你系统的命令）
+
+| 系统 | ffmpeg / ffprobe | XeLaTeX |
+|------|------------------|---------|
+| Windows | `winget install Gyan.FFmpeg` | `winget install MiKTeX.MiKTeX`（或 TeX Live） |
+| macOS | `brew install ffmpeg` | `brew install --cask mactex` |
+| Linux (Debian/Ubuntu) | `sudo apt install ffmpeg` | `sudo apt install texlive-xetex` |
+
+**第 3 步 · 一条命令自检**——三个可执行文件和两个 Python 包全部为 `true` 即就绪：
+
+```bash
+python -m work.pipeline2.pipeline2 doctor
+# {"executables": {"ffmpeg": true, "ffprobe": true, "xelatex": true},
+#  "python_modules": {"PIL": true, "faster_whisper": true}, ...}
+```
 
 密钥通过外部 JSON 文件提供（格式见手册，仓库不含任何密钥）：
 
@@ -93,9 +115,6 @@ flowchart LR
 ```
 
 ```powershell
-# 0. 自检依赖
-python -m work.pipeline2.pipeline2 doctor
-
 # 1. 课程视频 → 证据讲义（成功后运行缓存自动清理）
 python -m work.pipeline2.pipeline2 run 'https://www.bilibili.com/video/BV.../?p=2' `
   --secrets '你的密钥文件路径'
