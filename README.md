@@ -1,6 +1,6 @@
 # Ech_bilibili（拾音笺）
 
-> 把口播视频"听"成一份可查证的读书笔记。
+> 把 B 站视频**"听"成读书笔记、"学"成 LaTeX 讲义、"做"成可运行的复刻作品。
 
 Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版），目标是输入视频链接，输出结构化、可查证的完整内容整理（读书笔记 / 讲义 / 实验报告）。
 
@@ -92,12 +92,32 @@ Ech_bilibili/
 - `ffmpeg`（PATH 中可用）
 - DeepSeek API Key：通过环境变量 `DEEPSEEK_API_KEY` 提供（`polish.py` 中按需改读取方式，仓库不含任何密钥）
 
+## 管线二：课程视频 → LaTeX 讲义 ✅
+
+> 代码在分支 [`feature/course-latex-pipeline`](https://github.com/WZAwza050801/Ech_bilibili/tree/feature/course-latex-pipeline)（迁移至平台目录布局进行中）。
+
+一条命令一个分P：`pipeline2.py run <B站链接> --page N` → **音视频直取 → Whisper ASR → 抽帧 → Qwen3-VL 视觉 map → 规划/写作（token plan 配额）→ 公式原帧复查 → XeLaTeX 两遍编译 → lecture.pdf**。
+
+已验收课程：李群李代数（P1）、机器人学（P2）、Godot 游戏特效 8 个实操P（P02/P04/P05/P07-P11，单P 15~120 分钟，产物 1.5~8.9MB PDF）。内部细节见 [管线二流程图](docs/flow-pipeline2.svg)。
+
+## 管线三：实操教程 → 复刻作品集 ✅
+
+> 代码在分支 [`feature/pipeline3-practice`](https://github.com/WZAwza050801/Ech_bilibili/tree/feature/pipeline3-practice)（`work/pipeline3/`，迁移进行中）。
+
+**闭卷盲写 → 与讲师标准答案对账 → 只校准关键参数（代码不抄）** 三段式：
+产出可运行工程 + 效果预览 mp4。已验收：《自制简易计算器》（A级复刻）与
+《Godot 游戏特效》全 12 分P（10 个特效场景 + 10 段 mp4，冒烟测试 10/10）。
+内部细节见 [管线三流程图](docs/flow-pipeline3.svg)。
+
 ## 路线图
 
 - [x] 管线一端到端全自动（一条命令出笔记）
 - [x] 批量模式：UP 主全部视频 → 笔记卡文件夹 + 卡片墙索引
 - [x] 114 个视频批量实测（含风控对抗、假产物防御、OOM 修复全流程）
-- [ ] YouTube 平台适配
-- [ ] 管线二：课程视频 → LaTeX 讲义（Pix2Text 公式 OCR）
-- [ ] 管线三：实操教程 → 复刻 + 实验报告（A/B/C 可执行性分级）
+- [x] YouTube 平台适配（Ech_youtube/，Lex Fridman 111/114 实测收官）
+- [x] 管线二：课程视频 → LaTeX 讲义（多模态 map + 公式原帧复查 + XeLaTeX）
+- [x] 管线三：实操教程 → 作品集（盲写/对账/校准三段式 + Movie Maker 渲染）
+- [x] 合并-分叉架构：共享前处理 + 统一归档 + 自动清扫
+- [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
+- [ ] 管线二/三代码迁移至 `Ech_bilibili/` 平台目录布局
 - [ ] CC 字幕优先策略（有官方字幕时免 ASR，零错字）
