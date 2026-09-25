@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700" font-family="system-ui,'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="700" fill="#ffffff"/>
+  <text x="24" y="40" font-size="22" font-weight="bold" fill="#0f172a">详图 5 · 学习讲义区块内部（对应总览 ⑫：规划 → 概念地图 → 四道工序 → 双版式渲染）</text>
+  <text x="24" y="64" font-size="13" fill="#64748b">脚本：study.py · concept_map.py · study_render.py · study_render_book.py　外部 API：规划/写作文本 /chat/completions · 视觉 /chat/completions</text>
+
+  <!-- row 1 -->
+  <g>
+    <rect x="24" y="92" width="210" height="140" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="40" y="118" font-size="13" font-weight="bold" fill="#065f46">区块输入</text>
+    <text x="40" y="144" font-size="12" fill="#334155" font-family="Consolas,monospace">成品夹/lecture.json</text>
+    <text x="40" y="164" font-size="12" fill="#334155" font-family="Consolas,monospace">frames/ 证据截图</text>
+    <text x="40" y="192" font-size="11.5" fill="#64748b">命令：pipeline2 study lecture.json</text>
+  </g>
+  <line x1="234" y1="162" x2="264" y2="162" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="268" y="92" width="450" height="140" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="284" y="118" font-size="15" font-weight="bold" fill="#4338ca">课程规划（planner）</text>
+    <rect x="284" y="130" width="190" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="294" y="145" font-size="11" fill="#334155" font-family="Consolas,monospace">study.py · prompts/learning-plan.md</text>
+    <rect x="484" y="130" width="130" height="22" rx="5" fill="#fffbeb" stroke="#f59e0b"/><text x="494" y="145" font-size="11" fill="#b45309" font-family="Consolas,monospace">文本 /chat/completions</text>
+    <text x="284" y="176" font-size="12" fill="#334155">learning-plan.md 切分学习单元 + 写作简报</text>
+    <text x="284" y="196" font-size="12" fill="#334155">learning-review.md 复审单元划分与证据覆盖</text>
+    <text x="284" y="218" font-size="11.5" fill="#64748b">缓存：cache/plan.json · plan-review.json</text>
+  </g>
+  <line x1="718" y1="162" x2="748" y2="162" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="752" y="92" width="504" height="140" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="768" y="118" font-size="15" font-weight="bold" fill="#6d28d9">内置概念地图（concept_map）</text>
+    <rect x="768" y="130" width="200" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="778" y="145" font-size="11" fill="#334155" font-family="Consolas,monospace">prompts/concept-map.md · validate_concept_map</text>
+    <text x="768" y="176" font-size="12" fill="#334155">从全部知识块抽取概念节点与依赖边</text>
+    <text x="768" y="196" font-size="12" fill="#334155">节点/边必须引用真实 block_id，杜绝凭空造点</text>
+    <text x="768" y="218" font-size="11.5" fill="#64748b">缓存：cache/concept-map.json；随学习讲义 PDF 一并渲染</text>
+  </g>
+
+  <!-- row 2: four passes -->
+  <g>
+    <rect x="24" y="262" width="1232" height="190" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-width="2"/>
+    <text x="40" y="288" font-size="15" font-weight="bold" fill="#0369a1">逐单元四道工序（writer 文本模型 + 视觉模型帧观察）</text>
+    <rect x="40" y="300" width="150" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="50" y="315" font-size="11" fill="#334155" font-family="Consolas,monospace">study.py · PROMPTS/*</text>
+    <rect x="200" y="300" width="130" height="22" rx="5" fill="#fffbeb" stroke="#f59e0b"/><text x="210" y="315" font-size="11" fill="#b45309" font-family="Consolas,monospace">文本 /chat/completions</text>
+
+    <g>
+      <rect x="40" y="338" width="270" height="96" rx="8" fill="#ffffff" stroke="#6366f1"/>
+      <text x="56" y="362" font-size="13" font-weight="bold" fill="#4338ca">① 初稿 study-unit.md</text>
+      <text x="56" y="384" font-size="11.5" fill="#334155">单元上下文 + 帧观察（视觉模型</text>
+      <text x="56" y="402" font-size="11.5" fill="#334155">逐帧 cache/image-NNN.json）</text>
+      <text x="56" y="422" font-size="11.5" fill="#b91c1c">validate_unit：证据 ID 必须存在</text>
+    </g>
+    <line x1="310" y1="386" x2="336" y2="386" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+    <g>
+      <rect x="340" y="338" width="270" height="96" rx="8" fill="#ffffff" stroke="#6366f1"/>
+      <text x="356" y="362" font-size="13" font-weight="bold" fill="#4338ca">② 深化 study-deepen.md</text>
+      <text x="356" y="384" font-size="11.5" fill="#334155">补充推导衔接与直觉解释</text>
+      <text x="356" y="402" font-size="11.5" fill="#334155">保留 draft 全部证据引用</text>
+      <text x="356" y="422" font-size="11.5" fill="#64748b">cache/unit-NNN-deep.json</text>
+    </g>
+    <line x1="610" y1="386" x2="636" y2="386" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+    <g>
+      <rect x="640" y="338" width="270" height="96" rx="8" fill="#ffffff" stroke="#6366f1"/>
+      <text x="656" y="362" font-size="13" font-weight="bold" fill="#4338ca">③ 数学审校 study-review.md</text>
+      <text x="656" y="384" font-size="11.5" fill="#334155">require_source_evidence_kept：</text>
+      <text x="656" y="402" font-size="11.5" fill="#334155">修订版不得弄丢任何源证据</text>
+      <text x="656" y="422" font-size="11.5" fill="#64748b">cache/audit-NNN.json</text>
+    </g>
+    <line x1="910" y1="386" x2="936" y2="386" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+    <g>
+      <rect x="940" y="338" width="270" height="96" rx="8" fill="#ffffff" stroke="#6366f1"/>
+      <text x="956" y="362" font-size="13" font-weight="bold" fill="#4338ca">④ 文风统一 study-style.md</text>
+      <text x="956" y="384" font-size="11.5" fill="#334155">全篇一次性统一术语与口吻</text>
+      <text x="956" y="402" font-size="11.5" fill="#334155">validate_style：单元数不变</text>
+      <text x="956" y="422" font-size="11.5" fill="#64748b">cache/style-pass.json → study.json</text>
+    </g>
+  </g>
+
+  <!-- row 3 render -->
+  <g>
+    <rect x="24" y="482" width="600" height="140" rx="10" fill="#fdf4ff" stroke="#c026d3" stroke-width="2"/>
+    <text x="40" y="508" font-size="15" font-weight="bold" fill="#a21caf">双版式渲染</text>
+    <rect x="40" y="520" width="210" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="50" y="535" font-size="11" fill="#334155" font-family="Consolas,monospace">study_render_book.py · study_render.py</text>
+    <text x="40" y="566" font-size="12" fill="#334155">render_book → book.tex（出版版：章节 + 概念地图）</text>
+    <text x="40" y="586" font-size="12" fill="#334155">render_study → lecture.tex（卡片版：知识点卡片）</text>
+    <text x="40" y="606" font-size="12" fill="#334155">各两遍 XeLaTeX；同款白名单 + 证据标签纪律</text>
+  </g>
+  <line x1="624" y1="552" x2="654" y2="552" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="658" y="482" width="598" height="140" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="674" y="508" font-size="13" font-weight="bold" fill="#065f46">区块产物</text>
+    <text x="674" y="534" font-size="12" fill="#334155" font-family="Consolas,monospace">学习讲义.pdf（出版版） · 学习讲义-卡片版.pdf</text>
+    <text x="674" y="554" font-size="12" fill="#334155" font-family="Consolas,monospace">study.json · learning-plan.json · writing-brief.md</text>
+    <text x="674" y="574" font-size="12" fill="#334155" font-family="Consolas,monospace">manifest.json · quality.json · 概念地图</text>
+    <text x="674" y="602" font-size="11.5" fill="#64748b">证据 ID 与原讲义共用同一命名空间，可交叉回溯</text>
+  </g>
+</svg>

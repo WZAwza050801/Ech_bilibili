@@ -53,6 +53,20 @@ flowchart LR
     I --> J[study: four writing passes<br>publication + card editions + concept map]
 ```
 
+**Full-pipeline overview** (each block annotated with the scripts, external APIs and artifacts involved):
+
+![Full-pipeline overview: 12 blocks with scripts, APIs and artifacts](docs/figures/pipeline-overview.svg)
+
+**Inside each block** (scripts, APIs, inputs and outputs per stage):
+
+| Detail figure | Blocks covered |
+|------|----------|
+| ![Detail 1: fetch and chunked ASR](docs/figures/detail-1-fetch-asr.svg) | ①-④: Bilibili metadata / playurl direct fetch / chunked ASR / cleaning & alignment |
+| ![Detail 2: frame sampling and audio-visual alignment](docs/figures/detail-2-frames-align.svg) | ⑤-⑥: scene detection / sample-time selection / dHash dedup / window alignment |
+| ![Detail 3: evidence writing](docs/figures/detail-3-map-reduce-verify.svg) | ⑦-⑨: per-window map / bounded reduce / formula re-verification against frames |
+| ![Detail 4: rendering and packaging](docs/figures/detail-4-render-distill.svg) | ⑩-⑪: LaTeX whitelist gate / two-pass compile / distill packaging and auto-cleanup |
+| ![Detail 5: study handout](docs/figures/detail-5-study-handout.svg) | ⑫: course planning / concept map / four writing passes / dual-edition rendering |
+
 ### Automatic run-cache cleanup
 
 On success the pipeline packages everything into **one folder per course** and

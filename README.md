@@ -42,6 +42,20 @@ flowchart LR
     I --> J[study 四道工序<br>出版版+卡片版+概念地图]
 ```
 
+**全流程总览**（每个区块标注所用脚本、外部 API 与产物）：
+
+![全流程总览：12 个区块的脚本、API 与产物](docs/figures/pipeline-overview.svg)
+
+**区块内部详图**（每个区块内部的脚本、API、输入输出）：
+
+| 详图 | 覆盖区块 |
+|------|----------|
+| ![详图1：获取与分块转写](docs/figures/detail-1-fetch-asr.svg) | ①-④：B 站元数据 / playurl 直取 / 分块 ASR / 清洗对齐 |
+| ![详图2：抽帧与音画对齐](docs/figures/detail-2-frames-align.svg) | ⑤-⑥：场景检测 / 采样点选择 / dHash 去重 / 窗口对齐 |
+| ![详图3：证据写作](docs/figures/detail-3-map-reduce-verify.svg) | ⑦-⑨：逐窗口地图 / 有界 reduce / 公式回看复查 |
+| ![详图4：渲染与打包](docs/figures/detail-4-render-distill.svg) | ⑩-⑪：LaTeX 白名单闸门 / 两遍编译 / distill 打包与自动清理 |
+| ![详图5：学习讲义](docs/figures/detail-5-study-handout.svg) | ⑫：课程规划 / 概念地图 / 四道工序 / 双版式渲染 |
+
 ### 运行缓存自动收尾
 
 成功收尾后，管线自动把运行目录打包成**每课一个成品夹**并删除全部中间产物：

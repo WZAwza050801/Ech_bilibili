@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" font-family="system-ui,'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="600" fill="#ffffff"/>
+  <text x="24" y="40" font-size="22" font-weight="bold" fill="#0f172a">详图 4 · 渲染与成品打包区块内部（对应总览 ⑩-⑪：XeLaTeX 渲染 → distill 打包 → 自动清理）</text>
+  <text x="24" y="64" font-size="13" fill="#64748b">脚本：render.py · distill.py · pipeline2.py　外部 API：无（纯本地：Python + XeLaTeX + shutil）</text>
+
+  <!-- row 1 -->
+  <g>
+    <rect x="24" y="92" width="200" height="150" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="40" y="118" font-size="13" font-weight="bold" fill="#065f46">区块输入</text>
+    <text x="40" y="144" font-size="12" fill="#334155" font-family="Consolas,monospace">blocks.json</text>
+    <text x="40" y="164" font-size="12" fill="#334155" font-family="Consolas,monospace">quality.json</text>
+    <text x="40" y="184" font-size="12" fill="#334155" font-family="Consolas,monospace">frames/（297 张）</text>
+    <text x="40" y="212" font-size="11.5" fill="#64748b">transcript.json（附录来源）</text>
+  </g>
+  <line x1="224" y1="167" x2="254" y2="167" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="258" y="92" width="470" height="150" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="274" y="118" font-size="15" font-weight="bold" fill="#4338ca">⑩ LaTeX 生成与白名单闸门</text>
+    <rect x="274" y="130" width="130" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="284" y="145" font-size="11" fill="#334155" font-family="Consolas,monospace">render.py</text>
+    <text x="274" y="176" font-size="12" fill="#334155">MATH_COMMANDS 白名单：有限的数学命令词表</text>
+    <text x="274" y="196" font-size="12" fill="#b91c1c">出现未知命令 → 直接 raise，绝不静默改写</text>
+    <text x="274" y="216" font-size="12" fill="#334155">模型零排版自由：证据标签 [seg]/[frame] 随公式进正文</text>
+    <text x="274" y="236" font-size="11.5" fill="#64748b">不支持的写法 → 转为可见的"待复核"批注而非猜测渲染</text>
+  </g>
+  <line x1="728" y1="167" x2="758" y2="167" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="762" y="92" width="494" height="150" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-width="2"/>
+    <text x="778" y="118" font-size="15" font-weight="bold" fill="#0369a1">XeLaTeX 两遍编译</text>
+    <text x="778" y="144" font-size="12" fill="#334155" font-family="Consolas,monospace">xelatex -no-shell-escape</text>
+    <text x="778" y="164" font-size="12" fill="#334155" font-family="Consolas,monospace">　　-interaction=nonstopmode -halt-on-error</text>
+    <text x="778" y="188" font-size="12" fill="#334155">第一遍写辅助文件，第二遍解析目录/交叉引用</text>
+    <text x="778" y="208" font-size="12" fill="#334155">编译日志归档为 compile-lecture-N.txt（N=尝试次数）</text>
+    <text x="778" y="228" font-size="11.5" fill="#64748b">排版警告逐条扫描；实跑 44 页 / 15.8MB / 零警告</text>
+  </g>
+
+  <!-- row 2 -->
+  <g>
+    <rect x="24" y="272" width="620" height="180" rx="10" fill="#fdf4ff" stroke="#c026d3" stroke-width="2"/>
+    <text x="40" y="298" font-size="15" font-weight="bold" fill="#a21caf">⑪ 成品打包 distill.package()</text>
+    <rect x="40" y="310" width="150" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="50" y="325" font-size="11" fill="#334155" font-family="Consolas,monospace">distill.py · package</text>
+    <text x="40" y="356" font-size="12" fill="#334155">文件夹名 = BV号-P页-safe_name(课程标题)，如 BV1Xo3X6PErD-P2-机器人学…</text>
+    <text x="40" y="376" font-size="12" fill="#334155">复制 lecture.pdf / lecture.tex / lecture.json + 去重后的 frames/</text>
+    <text x="40" y="396" font-size="12" fill="#334155">write_readme：来源 URL · 统计数字 · 模型配置 · 窗口边界 · -Study 命令</text>
+    <text x="40" y="416" font-size="12" fill="#334155">repackage() 可对旧 run 目录重新打包；resolve() 比较防自拷贝</text>
+    <text x="40" y="438" font-size="11.5" fill="#64748b">编译中间产物（.aux/.log/.fls…）一律不进成品夹</text>
+  </g>
+
+  <g>
+    <rect x="676" y="272" width="580" height="180" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+    <text x="692" y="298" font-size="15" font-weight="bold" fill="#b91c1c">成功后自动清理 run 目录</text>
+    <rect x="692" y="310" width="170" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="702" y="325" font-size="11" fill="#334155" font-family="Consolas,monospace">pipeline2.py（run 收尾）</text>
+    <text x="692" y="356" font-size="12" fill="#334155">顺序：package() → 校验成品 PDF 确实存在 → 才允许删除</text>
+    <text x="692" y="376" font-size="12" fill="#334155" font-family="Consolas,monospace">shutil.rmtree(run_dir)</text>
+    <text x="692" y="396" font-size="12" fill="#334155">--keep-cache 可保留（调试/测试用）</text>
+    <text x="692" y="416" font-size="12" fill="#b91c1c">任一步失败 → 不删，run 目录完整保留待排查</text>
+    <text x="692" y="438" font-size="11.5" fill="#64748b">删除是不可逆终点：PDF 不在手绝不删缓存</text>
+  </g>
+
+  <!-- row 3 output -->
+  <line x1="874" y1="452" x2="874" y2="472" stroke="#475569" stroke-width="2"/>
+  <g>
+    <rect x="24" y="476" width="1232" height="100" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="40" y="502" font-size="13" font-weight="bold" fill="#065f46">最终成品夹（每个课程一份，全部可交付）</text>
+    <text x="40" y="528" font-size="12" fill="#334155" font-family="Consolas,monospace">BV1Xo3X6PErD-P2-机器人学…/</text>
+    <text x="330" y="528" font-size="12" fill="#334155">lecture.pdf（44 页）</text>
+    <text x="490" y="528" font-size="12" fill="#334155">lecture.tex（重编译需同目录 frames/）</text>
+    <text x="740" y="528" font-size="12" fill="#334155">lecture.json（机器可读全量证据）</text>
+    <text x="40" y="554" font-size="12" fill="#334155" font-family="Consolas,monospace">frames/ 297 张证据截图</text>
+    <text x="250" y="554" font-size="12" fill="#334155">README.md（来源 · 统计 · 模型配置 · 学习讲义入口）</text>
+  </g>
+</svg>

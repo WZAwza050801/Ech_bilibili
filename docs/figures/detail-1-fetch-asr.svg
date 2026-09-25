@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" font-family="system-ui,'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="800" fill="#ffffff"/>
+  <text x="24" y="40" font-size="22" font-weight="bold" fill="#0f172a">详图 1 · 获取与转写区块内部（对应总览 ①-④）</text>
+  <text x="24" y="64" font-size="13" fill="#64748b">脚本：media.py · asr.py · writing.py(polish)　外部 API：B 站 playurl/metadata、文本 /chat/completions</text>
+
+  <!-- metadata -->
+  <g>
+    <rect x="24" y="92" width="260" height="150" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="40" y="118" font-size="15" font-weight="bold" fill="#1d4ed8">解析链接与元信息</text>
+    <text x="40" y="142" font-size="12" fill="#334155">BV 号 / 完整链接 / ?p=N → 选分 P</text>
+    <rect x="40" y="154" width="200" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="50" y="169" font-size="11" fill="#334155" font-family="Consolas,monospace">media.py · Bilibili.metadata</text>
+    <rect x="40" y="182" width="210" height="22" rx="5" fill="#fef3c7" stroke="#f59e0b"/><text x="50" y="197" font-size="11" fill="#92400e" font-family="Consolas,monospace">GET x/web-interface/view</text>
+    <text x="40" y="228" font-size="11" fill="#64748b">校验：所选分 P 必须存在于合集内</text>
+  </g>
+  <line x1="284" y1="167" x2="314" y2="167" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- download -->
+  <g>
+    <rect x="318" y="92" width="300" height="150" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="334" y="118" font-size="15" font-weight="bold" fill="#1d4ed8">DASH 音视频直取</text>
+    <rect x="334" y="130" width="240" height="22" rx="5" fill="#fef3c7" stroke="#f59e0b"/><text x="344" y="145" font-size="11" fill="#92400e" font-family="Consolas,monospace">GET x/player/playurl?fnval=16</text>
+    <text x="334" y="172" font-size="12" fill="#334155">视频选 AVC ≤1080p；音视频分离下载后合并</text>
+    <text x="334" y="190" font-size="12" fill="#334155">完整浏览器头 + 8 项 cookie（极简头触发 412）</text>
+    <text x="334" y="208" font-size="12" fill="#334155">禁用系统代理直连；.part 临时文件防半包</text>
+    <rect x="334" y="216" width="150" height="20" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="344" y="230" font-size="11" fill="#334155" font-family="Consolas,monospace">media.py · download</text>
+  </g>
+  <line x1="618" y1="167" x2="648" y2="167" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- audio -->
+  <g>
+    <rect x="652" y="92" width="280" height="150" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+    <text x="668" y="118" font-size="15" font-weight="bold" fill="#0f766e">音频重采样</text>
+    <text x="668" y="142" font-size="12" fill="#334155">ffmpeg -ar 16000 -ac 1（whisper 要求）</text>
+    <text x="668" y="160" font-size="12" fill="#334155">时长异常时 atrim/asetpts 修正偏移</text>
+    <rect x="668" y="172" width="170" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="678" y="187" font-size="11" fill="#334155" font-family="Consolas,monospace">media.py · make_wav</text>
+    <rect x="668" y="200" width="150" height="20" rx="5" fill="#f1f5f9" stroke="#94a3b8"/><text x="678" y="214" font-size="11" fill="#334155" font-family="Consolas,monospace">probe: duration/PTS</text>
+    <text x="668" y="234" font-size="11" fill="#64748b">产物：audio.wav（16k 单声道）</text>
+  </g>
+  <line x1="932" y1="167" x2="962" y2="167" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- outputs doc -->
+  <g>
+    <rect x="966" y="112" width="290" height="110" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="982" y="138" font-size="13" font-weight="bold" fill="#065f46">本区块产物</text>
+    <text x="982" y="160" font-size="12" fill="#334155" font-family="Consolas,monospace">meta.json（标题/分P/时长/URL）</text>
+    <text x="982" y="180" font-size="12" fill="#334155" font-family="Consolas,monospace">source.mp4（约 234MB）</text>
+    <text x="982" y="200" font-size="12" fill="#334155" font-family="Consolas,monospace">audio.wav（16kHz 单声道）</text>
+  </g>
+
+  <!-- ASR row -->
+  <g>
+    <rect x="24" y="290" width="380" height="230" rx="10" fill="#ecfeff" stroke="#06b6d4" stroke-width="2"/>
+    <text x="40" y="318" font-size="15" font-weight="bold" fill="#0e7490">分块本地转写（防内存溢出）</text>
+    <rect x="40" y="332" width="110" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="50" y="347" font-size="11" fill="#334155" font-family="Consolas,monospace">asr.py</text>
+    <text x="40" y="378" font-size="12.5" fill="#334155">decode_audio 一次解码全片 → 按</text>
+    <text x="40" y="396" font-size="12.5" fill="#334155">ECHONOTES_ASR_CHUNK_SECONDS（默认600s）切片</text>
+    <text x="40" y="422" font-size="12.5" fill="#334155">每块独立 transcribe：vad_filter=True、</text>
+    <text x="40" y="440" font-size="12.5" fill="#334155">condition_on_previous_text=False（防复读）</text>
+    <text x="40" y="466" font-size="12.5" fill="#334155">时间戳 += 块偏移，合并回全局时间轴</text>
+    <text x="40" y="492" font-size="12" fill="#64748b">int8 量化 · cpu_threads=2 · 每 50 段写 .partial 检查点</text>
+  </g>
+  <line x1="404" y1="405" x2="434" y2="405" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="438" y="290" width="360" height="230" rx="10" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+    <text x="454" y="318" font-size="15" font-weight="bold" fill="#0e7490">格式整理（禁改写约束）</text>
+    <rect x="454" y="332" width="170" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="464" y="347" font-size="11" fill="#334155" font-family="Consolas,monospace">writing.py · polish</text>
+    <text x="454" y="378" font-size="12.5" fill="#334155">LLM 只允许：加标点 / 繁转简 / 修有把握同音错字</text>
+    <text x="454" y="400" font-size="12.5" fill="#334155">[n] 序号与输入一一对应 + 字数漂移 ±40% 校验，</text>
+    <text x="454" y="418" font-size="12.5" fill="#334155">超限整段回退原文</text>
+    <text x="454" y="444" font-size="12.5" fill="#334155">hotfix.json 热修词典双端应用（预处理+后处理）</text>
+    <rect x="454" y="458" width="260" height="22" rx="5" fill="#fef3c7" stroke="#f59e0b"/><text x="464" y="473" font-size="11" fill="#92400e" font-family="Consolas,monospace">API text /chat/completions (deepseek)</text>
+    <text x="454" y="502" font-size="12" fill="#64748b">批处理 + 空段跳过；课程热词表默认空</text>
+  </g>
+  <line x1="798" y1="405" x2="828" y2="405" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="832" y="290" width="424" height="230" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="848" y="318" font-size="13" font-weight="bold" fill="#065f46">本区块产物（进入下一区块的输入）</text>
+    <text x="848" y="344" font-size="12" fill="#334155" font-family="Consolas,monospace">asr-output.json  {"language","duration","segments":[{start,end,text}]}</text>
+    <text x="848" y="366" font-size="12" fill="#334155" font-family="Consolas,monospace">transcript.raw.json（原始机器转写，单独留档）</text>
+    <text x="848" y="388" font-size="12" fill="#334155" font-family="Consolas,monospace">transcript.json（整理后，供 map 阶段引用）</text>
+    <rect x="848" y="412" width="392" height="94" rx="6" fill="#fffbeb" stroke="#f59e0b"/>
+    <text x="862" y="436" font-size="12" font-weight="bold" fill="#92400e">关键参数（环境变量）</text>
+    <text x="862" y="456" font-size="11.5" fill="#334155" font-family="Consolas,monospace">ECHONOTES_ASR_CHUNK_SECONDS=600</text>
+    <text x="862" y="474" font-size="11.5" fill="#334155" font-family="Consolas,monospace">ECHONOTES_ASR_CPU_THREADS / BEAM_SIZE</text>
+    <text x="862" y="492" font-size="11.5" fill="#334155" font-family="Consolas,monospace">ECHONOTES_ASR_MODEL（本地模型目录）</text>
+  </g>
+
+  <!-- failure paths -->
+  <g>
+    <rect x="24" y="556" width="1232" height="216" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+    <text x="40" y="584" font-size="14" font-weight="bold" fill="#b91c1c">本区块已知故障与防线（实跑验证）</text>
+    <g font-size="12.5" fill="#334155">
+      <text x="40" y="612">① 整段 STFT 内存溢出（2h 音频需 1GB+ 连续内存）→ 分块转写根治（commit ebc388a）</text>
+      <text x="40" y="640">② B 站 412 风控 → 完整浏览器头 + 8 项 cookie + 禁代理直连；极简伪造头必挂</text>
+      <text x="40" y="668">③ 空间投稿列表 API -352 风控（即使带 cookie+wbi+bili_ticket）→ 找视频改走</text>
+      <text x="66" y="686" font-family="Consolas,monospace" font-size="11.5">wbi 签名的 /x/web-interface/wbi/search/type 按 pubdate 翻页枚举 UP 主投稿</text>
+      <text x="40" y="714">④ 云端 ASR 兜底：SiliconFlow TeleSpeechASR，时间戳仅 30 秒粒度，产物诚实标注</text>
+      <text x="40" y="742">⑤ 沙箱/系统代理会掐长连接 → 启动时清空 HTTP(S)_PROXY（国内 API 全部直连）</text>
+    </g>
+  </g>
+</svg>

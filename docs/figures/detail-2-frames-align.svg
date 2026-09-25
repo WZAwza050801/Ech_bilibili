@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700" font-family="system-ui,'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="700" fill="#ffffff"/>
+  <text x="24" y="40" font-size="22" font-weight="bold" fill="#0f172a">详图 2 · 抽帧与音画对齐区块内部（对应总览 ⑤-⑥）</text>
+  <text x="24" y="64" font-size="13" fill="#64748b">脚本：media.py(extract_frames/scene_times/choose_times) · core.py(align_windows)　外部 API：无（ffmpeg 本地）</text>
+
+  <!-- input -->
+  <g>
+    <rect x="24" y="92" width="200" height="120" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="40" y="118" font-size="13" font-weight="bold" fill="#065f46">区块输入</text>
+    <text x="40" y="142" font-size="12" fill="#334155" font-family="Consolas,monospace">source.mp4</text>
+    <text x="40" y="162" font-size="12" fill="#334155" font-family="Consolas,monospace">probe: duration/start_time</text>
+    <text x="40" y="186" font-size="11.5" fill="#64748b">--interval 30 · --max-frames 300</text>
+  </g>
+  <line x1="224" y1="152" x2="254" y2="152" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- scene detect -->
+  <g>
+    <rect x="258" y="92" width="300" height="120" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="274" y="118" font-size="15" font-weight="bold" fill="#6d28d9">场景检测</text>
+    <rect x="274" y="130" width="170" height="22" rx="5" fill="#ffffff" stroke="#94a3b8"/><text x="284" y="145" font-size="11" fill="#334155" font-family="Consolas,monospace">media.py · scene_times</text>
+    <text x="274" y="172" font-size="12" fill="#334155">ffmpeg select=gt(scene,threshold)</text>
+    <text x="274" y="190" font-size="12" fill="#334155">阈值 0.12；输出候选时刻集合</text>
+  </g>
+  <line x1="558" y1="152" x2="588" y2="152" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- choose times -->
+  <g>
+    <rect x="592" y="92" width="330" height="120" rx="10" fill="#faf5ff" stroke="#a78bfa" stroke-width="2"/>
+    <text x="608" y="118" font-size="15" font-weight="bold" fill="#6d28d9">采样点选择 choose_times</text>
+    <text x="608" y="142" font-size="12" fill="#334155">均匀骨架：每 interval 一帧（保底覆盖）</text>
+    <text x="608" y="160" font-size="12" fill="#334155">场景点按 max-min 距离补入，不超预算</text>
+    <text x="608" y="182" font-size="12" fill="#b91c1c" font-weight="bold">骨架帧数 &gt; 预算 → 显式报错（不静默降密度）</text>
+    <text x="608" y="200" font-size="11.5" fill="#64748b">137 分钟 × 30s = 276 帧 → 需 --max-frames 300</text>
+  </g>
+  <line x1="922" y1="152" x2="952" y2="152" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- decode -->
+  <g>
+    <rect x="956" y="92" width="300" height="120" rx="10" fill="#faf5ff" stroke="#c084fc" stroke-width="2"/>
+    <text x="972" y="118" font-size="15" font-weight="bold" fill="#6d28d9">逐帧解码与校验</text>
+    <text x="972" y="142" font-size="12" fill="#334155">ffmpeg -ss 精确解码；回读实际 PTS</text>
+    <text x="972" y="160" font-size="12" fill="#334155">|实际-请求| &gt; 2 秒 → 报错拒绝</text>
+    <text x="972" y="182" font-size="12" fill="#334155">记录 requested_t / 原始 pts / 归一化 actual_t</text>
+  </g>
+
+  <!-- dedup -->
+  <g>
+    <rect x="24" y="248" width="560" height="180" rx="10" fill="#fdf4ff" stroke="#c026d3" stroke-width="2"/>
+    <text x="40" y="276" font-size="15" font-weight="bold" fill="#a21caf">保守去重（dHash + 像素差）</text>
+    <text x="40" y="300" font-size="12.5" fill="#334155">8×9 差分哈希汉明距 ≤ 2 且均值像素差 &lt; 0.3% → 判重</text>
+    <text x="40" y="322" font-size="12.5" fill="#334155">重复帧不落盘（立即 unlink），记录 duplicate_of=规范帧 ID</text>
+    <text x="40" y="344" font-size="12.5" fill="#334155">每次出现仍保留自己的证据 ID 与 PTS（板书短暂变化可回查）</text>
+    <text x="40" y="366" font-size="12.5" fill="#334155">不用文字密度规则删人像 —— 宁可多留，不误删板书</text>
+    <text x="40" y="396" font-size="12" fill="#64748b">实跑：300 帧采样 → 297 张唯一画面；2 张未被任何知识块引用（清单在 quality.json）</text>
+  </g>
+  <line x1="584" y1="338" x2="614" y2="338" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- frames cache -->
+  <g>
+    <rect x="618" y="248" width="638" height="180" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="634" y="276" font-size="13" font-weight="bold" fill="#065f46">区块产物</text>
+    <text x="634" y="300" font-size="12" fill="#334155" font-family="Consolas,monospace">frames/f00000.jpg ... （唯一帧，文件名即采样序号）</text>
+    <text x="634" y="322" font-size="12" fill="#334155" font-family="Consolas,monospace">frames.json（每帧 sha256 + 缓存键，参数变化自动重抽）</text>
+    <text x="634" y="344" font-size="12" fill="#334155" font-family="Consolas,monospace">sampling.json（场景候选数/选中数/唯一数/参数记录）</text>
+    <rect x="634" y="362" width="606" height="52" rx="6" fill="#fffbeb" stroke="#f59e0b"/>
+    <text x="648" y="384" font-size="12" font-weight="bold" fill="#92400e">已知坑</text>
+    <text x="648" y="404" font-size="11.5" fill="#334155">`*.png` 全局 gitignore 会挡 README 截图 → 需 `!docs/` 白名单；帧图片属产物，不进仓库</text>
+  </g>
+
+  <!-- alignment -->
+  <g>
+    <rect x="24" y="456" width="1232" height="200" rx="10" fill="#fdf4ff" stroke="#a855f7" stroke-width="2"/>
+    <text x="40" y="484" font-size="15" font-weight="bold" fill="#a21caf">音画对齐 align_windows → map 的输入组织</text>
+    <text x="40" y="512" font-size="12.5" fill="#334155">core.py · align_windows(segments, frames, duration, window_seconds=600, max_images=8)</text>
+    <text x="40" y="540" font-size="12.5" fill="#334155">· 转写段按时间切进窗口；跨窗口的讲解段会同时出现在相邻窗口（上下文不丢）</text>
+    <text x="40" y="568" font-size="12.5" fill="#334155">· 候选帧按窗口归属切分；窗口内超过 max_images 时按时间再细分，保证每个候选帧都进入一个窗口</text>
+    <text x="40" y="596" font-size="12.5" fill="#334155">· 产物 alignment.json：[{id, start, end, segments[], frames[{id, actual_t}]}]——实跑 44 窗 / 138 分钟</text>
+    <rect x="40" y="612" width="1200" height="32" rx="6" fill="#fffbeb" stroke="#f59e0b"/>
+    <text x="54" y="633" font-size="12" fill="#92400e">设计取舍：宁可窗口多、图片密，也不做"文字密度删人像"的自动裁剪 —— 误删板书的代价远高于多调几次模型</text>
+  </g>
+</svg>
