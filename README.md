@@ -21,13 +21,13 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 
 > B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `Ech_bilibili/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
 
-## 三类内容管线（设计）
+## 三类内容管线（三仓库）
 
-| 管线 | 输入形态 | 输出 | 状态 |
+| 管线 | 输入形态 | 输出 | 仓库 |
 |------|---------|------|------|
-| 一 · 口播/观点类 | 播客、观点、推荐视频（纯音频） | 读书笔记 + 整理版逐字稿 | ✅ 已落地 |
-| 二 · 课程类 | 数学/学术/技术课程 | LaTeX 可阅读讲义（tex + pdf） | ✅ 已落地（分支 `feature/course-latex-pipeline`，验证课：李群李代数 / 机器人学 / Godot VFX） |
-| 三 · 实操教程类 | PS/绘画/剪辑/开发教程 | 作品集（可运行工程 + mp4）+ 实验报告 | ✅ 已落地（分支 `feature/pipeline3-practice`，验证课：计算器开发 / Godot VFX 全 12 分P） |
+| 一 · 口播/观点类 | 播客、观点、推荐视频（纯音频） | 读书笔记 + 整理版逐字稿 | ✅ 本仓库（B站 + YouTube 双平台） |
+| 二 · 课程类 | 数学/学术/技术课程 | LaTeX 可阅读讲义（tex + pdf） | ✅ [Ech_lecture](https://github.com/WZAwza050801/Ech_lecture) |
+| 三 · 实操教程类 | PS/绘画/剪辑/开发教程 | 作品集（可运行工程 + mp4）+ 实验报告 | ✅ [Ech_practice](https://github.com/WZAwza050801/Ech_practice) |
 
 ## 全套流程图（合并-分叉架构 v2）
 
@@ -36,16 +36,16 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 
 ![架构总览](docs/architecture.svg)
 
-| 图 | 内容 |
-|---|---|
-| [架构总览](docs/architecture.svg) | 合并段 → 分叉双管线 → 统一归档 → 自动清扫 |
-| [合并段内部](docs/flow-merged.svg) | 音视频直取 → ASR → 抽帧 → 视觉理解：每步的脚本/API/输入输出 |
-| [管线三内部](docs/flow-pipeline3.svg) | 答案包 Quark 获取链 + 盲写→对账→校准→验证→渲染，全部脚本清单 |
-| [管线二内部](docs/flow-pipeline2.svg) | 窗口 map → 写作 → 公式复查 → XeLaTeX：模型端点与配额、退出码语义 |
-| [归档清扫内部](docs/flow-archive.svg) | organize.py 五步 + 校验规则 + 删除安全机制（三坑）+ GitHub 推送 |
+| 图 | 位置 | 内容 |
+|---|---|---|
+| 架构总览 | 本仓库 [docs/architecture.svg](docs/architecture.svg) | 合并段 → 分叉双管线 → 统一归档 → 自动清扫 |
+| 合并段内部 | 本仓库 [docs/flow-merged.svg](docs/flow-merged.svg) | 音视频直取 → ASR → 抽帧 → 视觉理解：每步的脚本/API/输入输出 |
+| 管线三内部 | [Ech_practice/docs](https://github.com/WZAwza050801/Ech_practice/tree/main/docs) | 答案包 Quark 获取链 + 盲写→对账→校准→验证→渲染，全部脚本清单 |
+| 管线二内部 | [Ech_lecture/docs](https://github.com/WZAwza050801/Ech_lecture/tree/main/docs) | 窗口 map → 写作 → 公式复查 → XeLaTeX：模型端点与配额、退出码语义 |
+| 归档清扫内部 | 本仓库 [docs/flow-archive.svg](docs/flow-archive.svg) | organize.py 五步 + 校验规则 + 删除安全机制（三坑）+ GitHub 推送 |
 
-> 管线二/三的代码目前位于旧布局分支（`feature/course-latex-pipeline` / `feature/pipeline3-practice`），
-> 迁移进 `Ech_bilibili/` 平台目录布局的工作进行中。
+> 历史分支（`feat/course-latex-pipeline` / `feature/pipeline3-practice`）保留作迁移前存档，
+> 后续开发请到对应独立仓库。
 
 详细设计见 `方案-三类视频内容分管线设计.html`，开源项目源码级调研见 `调研报告-*.html/md`。
 
@@ -94,20 +94,20 @@ Ech_bilibili/
 
 ## 管线二：课程视频 → LaTeX 讲义 ✅
 
-> 代码在分支 [`feature/course-latex-pipeline`](https://github.com/WZAwza050801/Ech_bilibili/tree/feature/course-latex-pipeline)（迁移至平台目录布局进行中）。
+> 独立仓库：[Ech_lecture](https://github.com/WZAwza050801/Ech_lecture)（本节为摘要）。
 
 一条命令一个分P：`pipeline2.py run <B站链接> --page N` → **音视频直取 → Whisper ASR → 抽帧 → Qwen3-VL 视觉 map → 规划/写作（token plan 配额）→ 公式原帧复查 → XeLaTeX 两遍编译 → lecture.pdf**。
 
-已验收课程：李群李代数（P1）、机器人学（P2）、Godot 游戏特效 8 个实操P（P02/P04/P05/P07-P11，单P 15~120 分钟，产物 1.5~8.9MB PDF）。内部细节见 [管线二流程图](docs/flow-pipeline2.svg)。
+已验收课程：李群李代数（P1）、机器人学（P2）、Godot 游戏特效 8 个实操P（P02/P04/P05/P07-P11，单P 15~120 分钟，产物 1.5~8.9MB PDF）。内部细节见 [Ech_lecture 管线二流程图](https://github.com/WZAwza050801/Ech_lecture/blob/main/docs/flow-pipeline2.svg)。
 
 ## 管线三：实操教程 → 复刻作品集 ✅
 
-> 代码在分支 [`feature/pipeline3-practice`](https://github.com/WZAwza050801/Ech_bilibili/tree/feature/pipeline3-practice)（`work/pipeline3/`，迁移进行中）。
+> 独立仓库：[Ech_practice](https://github.com/WZAwza050801/Ech_practice)（本节为摘要）。
 
 **闭卷盲写 → 与讲师标准答案对账 → 只校准关键参数（代码不抄）** 三段式：
 产出可运行工程 + 效果预览 mp4。已验收：《自制简易计算器》（A级复刻）与
 《Godot 游戏特效》全 12 分P（10 个特效场景 + 10 段 mp4，冒烟测试 10/10）。
-内部细节见 [管线三流程图](docs/flow-pipeline3.svg)。
+内部细节见 [Ech_practice 管线三流程图](https://github.com/WZAwza050801/Ech_practice/blob/main/docs/flow-pipeline3.svg)。
 
 ## 路线图
 
@@ -119,5 +119,5 @@ Ech_bilibili/
 - [x] 管线三：实操教程 → 作品集（盲写/对账/校准三段式 + Movie Maker 渲染）
 - [x] 合并-分叉架构：共享前处理 + 统一归档 + 自动清扫
 - [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
-- [ ] 管线二/三代码迁移至 `Ech_bilibili/` 平台目录布局
+- [x] 三仓库拆分：Ech_bilibili（读书笔记）/ Ech_lecture（LaTeX 讲义）/ Ech_practice（复刻作品集）
 - [ ] CC 字幕优先策略（有官方字幕时免 ASR，零错字）
