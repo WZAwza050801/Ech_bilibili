@@ -21,6 +21,59 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 
 > B 站适配是本项目最难啃的部分（匿名音频直取、风控对抗、wbi 签名），这些经验沉淀在 `Ech_bilibili/` 中；YouTube 版只需替换获取层，ASR/polish/笔记层全部复用。
 
+## 环境准备（3 步）
+
+### 1. 系统要求
+
+| 项目 | 版本要求 | 用途 | 缺失后果 |
+|---|---|---|---|
+| Python | >= 3.10 | 全部脚本 | 无法运行 |
+| ffmpeg | 任意近期版本 | 音频直取后的转码与切片 | ASR 与抽帧直接失败 |
+
+### 2. 安装依赖
+
+```bash
+python -m venv .venv
+# Linux/macOS: source .venv/bin/activate
+# Windows:     .venv\Scripts\activate
+
+pip install -r requirements.txt          # 核心依赖
+pip install -r requirements-asr.txt      # 可选：本地语音转写（建议独立虚拟环境）
+```
+
+> 依赖刻意做薄：管线主体只用标准库 + 一两个轻量包；`faster-whisper` 会拖入
+> ctranslate2 等重依赖，因此单独放 `requirements-asr.txt`，装到独立 venv 后用
+> `ECHONOTES_ASR_PYTHON` 指过去，避免与主线环境互相污染。
+
+### 3. 自检（**跑管线前先跑它**）
+
+```bash
+python scripts/check_env.py
+```
+
+逐项打印 `[ OK ] / [WARN] / [FAIL]`，缺什么、去哪装、装完怎么验证一次说清；
+有必需项缺失时退出码为 1。`--ci` 只校验 Python 与 pip 依赖（给 CI 用）。
+
+### 密钥
+
+复制 `.env.example` 为 `.env` 后填写（`.env` 已被 `.gitignore` 拦截，永不入库）。
+每个 Key 用在哪、为什么选这个模型、去哪申请，见 [docs/API_SETUP.md](docs/API_SETUP.md)。
+Ech_bilibili 的必需 Key：**无（可不配 Key 跑通）**。
+
+### 常见故障速查
+
+| 症状 | 原因 | 解决 |
+|---|---|---|
+| B 站返回 412 / -352 风控 | 缺少完整浏览器请求头或 wbi 签名 | 用 Ech_bilibili/ 内的防风控实现，勿自行简化请求头 |
+| ffmpeg 找不到 | 未加入 PATH | `ffmpeg -version` 验证；Windows 用 winget 装完重开终端 |
+| ASR 很慢 | 本地 small/int8 模型在 CPU 上跑 | 复用已有 transcript.json，或改用 cloud_asr |
+
+### 跑起来
+
+```bash
+python Ech_bilibili/pipeline1.py <B站视频链接>
+```
+
 ## 三类内容管线（三仓库）
 
 | 管线 | 输入形态 | 输出 | 仓库 |
