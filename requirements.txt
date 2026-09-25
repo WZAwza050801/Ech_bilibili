@@ -1,10 +1,12 @@
-# Ech_bilibili 根：按子项目分别安装（一次装全就 -r 根文件）
+# Ech 系列管线 · 根聚合依赖（一次装全就 -r 本文件）
 #
-#   B 站版（默认，零 pip 依赖，只用标准库）：
-#       pip install -r Ech_bilibili/requirements.txt
-#   YouTube 版（yt-dlp 抓取）：
-#       pip install -r Ech_youtube/requirements.txt
-#   语音转写 ASR（可选，建议独立虚拟环境）：
-#       pip install -r requirements-asr.txt
+#   只想跑 B 站：      pip install -r Ech_bilibili/requirements.txt
+#   只想跑 YouTube：   pip install -r Ech_youtube/requirements.txt
+#   只想要轻量核心：   pip install yt-dlp            （B站取流/请求走标准库，不需要额外包）
+#   语音转写单独隔离： pip install -r requirements-asr.txt  （建议独立 venv，见 ECHONOTES_ASR_PYTHON）
+#   一次装齐 + 自检：  python scripts/install.py
+#
+# 说明：B 站侧的取流与请求层刻意只用 Python 标准库（urllib/json/sqlite3）；
+#       唯一较重的依赖是本地语音转写 faster-whisper，想与主线隔离就用 requirements-asr.txt。
 -r Ech_bilibili/requirements.txt
 -r Ech_youtube/requirements.txt

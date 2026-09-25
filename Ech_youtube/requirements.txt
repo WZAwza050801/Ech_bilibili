@@ -1,7 +1,9 @@
-# Ech 管线依赖 (Linux 服务器 / Windows 本机通用)
-# 安装: pip install -r requirements.txt
-faster-whisper>=1.0.0
-yt-dlp>=2026.8.19
+# Ech 系列管线 · YouTube 版依赖 (Linux 服务器 / Windows 本机通用)
+# 安装: pip install -r Ech_youtube/requirements.txt
+faster-whisper>=1.0.0,<2.0   # 本地 ASR（与 B 站版共用同一份模型目录，不重复下载）
+yt-dlp>=2026.8.19            # YouTube 元数据 + 最佳音轨
+
 # 系统依赖(非 pip):
-#   ffmpeg   — apt install ffmpeg / winget install ffmpeg
-#   deno     — yt-dlp 解 YouTube n-challenge 必需 (https://deno.com, 放进 PATH)
+#   ffmpeg   — apt install ffmpeg / winget install Gyan.FFmpeg / brew install ffmpeg
+#   deno     — yt-dlp 解 YouTube n-challenge 用 (https://deno.com)，放 PATH 或 Ech_youtube/bin/
+# 一键装齐（ffmpeg + 依赖 + 自检）: python scripts/install.py

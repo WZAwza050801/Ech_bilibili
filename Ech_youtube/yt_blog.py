@@ -22,7 +22,7 @@ if not getattr(sys.stderr, "_ech_wrapped", False):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ech_config import ECH_YT_DIR as WORK, ECH_MODEL_DIR, llm_credentials
-from yt_pipeline import fetch_audio, fmt_ts, rm, log, TRASH  # 复用平台感知层工具
+from yt_pipeline import fetch_audio, fmt_ts, rm, log, TRASH, ffmpeg_bin, preflight, ensure_deno_path, PY  # 复用平台感知层工具
 
 # ---- LLM (ech_config: 环境变量优先, 回退密码书) ----
 API_KEY, BASE_URL, MODEL = llm_credentials()
@@ -75,7 +75,7 @@ def read_wav_slice(path, t0, t1):
 def find_splits(path, duration, target=900.0, tol=150.0):
     """目标每 target 秒一段; 优先切在静音中点(±tol 内找最近), 找不到才硬切"""
     import subprocess
-    ff = shutil.which("ffmpeg")
+    ff = ffmpeg_bin()
     r = subprocess.run([ff, "-i", str(path), "-af", "silencedetect=noise=-35dB:d=0.3",
                         "-f", "null", "-"], capture_output=True, text=True, errors="replace")
     starts = [float(m.group(1)) for m in re.finditer(r"silence_start:\s*([\d.]+)", r.stderr)]
@@ -92,7 +92,8 @@ def find_splits(path, duration, target=900.0, tol=150.0):
 # ---- 单段转写 worker(子进程模式, 可被看门狗击杀) ----
 def worker_chunk(run_dir, i, a, b, lang, threads=4, beam=5):
     from faster_whisper import WhisperModel
-    model_dir = ECH_MODEL_DIR
+    model_dir = (ECH_MODEL_DIR if Path(ECH_MODEL_DIR).exists()
+                 else os.environ.get("ECHONOTES_ASR_MODEL") or os.environ.get("ECH_MODEL", "small"))
     model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=threads)
     audio = read_wav_slice(run_dir / "audio.wav", a, b)
     segments, info = model.transcribe(audio, language=lang,
@@ -140,7 +141,7 @@ def transcribe_chunked(run_dir, lang, duration):
             threads, beam = [(4, 5), (3, 1), (2, 1)][attempt]
             log(f"[asr] chunk {i+1}/{n} 启动 worker (threads={threads}, beam={beam}, 超时 {CHUNK_TIMEOUT//60}min)")
             try:
-                r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--worker",
+                r = subprocess.run([PY, str(Path(__file__).resolve()), "--worker",
                                     str(run_dir), str(i), str(a), str(b), lang, str(threads), str(beam)],
                                    timeout=CHUNK_TIMEOUT)
                 if ck.exists():
@@ -353,9 +354,7 @@ def main():
         worker_chunk(Path(w[0]), int(w[1]), float(w[2]), float(w[3]), w[4], int(w[5]), int(w[6]))
         return
     # deno (JS runtime) 供 yt-dlp 解 n-challenge, 必须在 PATH 里
-    deno_bin = WORK / "bin"
-    if (deno_bin / "deno.exe").exists():
-        os.environ["PATH"] = str(deno_bin) + os.pathsep + os.environ["PATH"]
+    ensure_deno_path()
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     vid = re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", args[0]).group(1) if args and "http" in args[0] else (args[0] if args else "HUkBz-cdB-k")
     host = "Lex Fridman"; guest = "Terence Tao"
@@ -363,6 +362,8 @@ def main():
     if "--guest" in sys.argv: guest = sys.argv[sys.argv.index("--guest") + 1]
     run_dir = WORK / "runs" / vid
     run_dir.mkdir(parents=True, exist_ok=True)
+    preflight(need_ffmpeg=not (run_dir / "audio.wav").exists(),
+              need_asr=not (run_dir / "transcript.json").exists())
     t0 = time.time()
     log(f"=== Ech_youtube 访谈管线开始: {vid} (host={host}, guest={guest}) ===")
 

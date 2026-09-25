@@ -7,8 +7,9 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 _VENV = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
-VENV = os.environ.get("ECH_PY") or (_VENV if Path(_VENV).exists() else sys.executable)
-WORK = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
+VENV = (os.environ.get("ECHONOTES_ASR_PYTHON") or os.environ.get("ECH_PY")
+        or (_VENV if Path(_VENV).exists() else sys.executable))
+WORK = Path(os.environ.get("ECHONOTES_BILI_DIR") or os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 FFMPEG = os.environ.get("FFMPEG") or "ffmpeg"
 
 TARGETS = [

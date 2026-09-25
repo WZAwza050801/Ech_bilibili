@@ -8,15 +8,18 @@ import json, os, io, sys, re, subprocess, shutil, time
 import urllib.request
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+if not getattr(sys.stdout, "_ech_wrapped", False):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace"); sys.stdout._ech_wrapped = True
+if not getattr(sys.stderr, "_ech_wrapped", False):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
 _HERE = Path(__file__).resolve().parent
-# 平台目录 = 脚本所在目录（自包含，换盘/换机器都不用改代码），可用 ECH_BILI_DIR 覆盖
-WORK = Path(os.environ.get("ECH_BILI_DIR") or _HERE)
-# 转写子进程解释器：优先本机已知 venv（装了 faster-whisper），否则用当前解释器
+# 平台目录 = 脚本所在目录（自包含，换盘/换机器都不用改代码），可用 ECH_BILI_DIR / ECHONOTES_BILI_DIR 覆盖
+WORK = Path(os.environ.get("ECHONOTES_BILI_DIR") or os.environ.get("ECH_BILI_DIR") or _HERE)
+# 转写子进程解释器：ECHONOTES_ASR_PYTHON / ECH_PY > 本机已知 venv > 当前解释器
 _VENV_PY = r"C:\Users\31168\.workbuddy\binaries\python\envs\default\Scripts\python.exe"
-VENV_PY = os.environ.get("ECH_PY") or (_VENV_PY if Path(_VENV_PY).exists() else sys.executable)
+VENV_PY = (os.environ.get("ECHONOTES_ASR_PYTHON") or os.environ.get("ECH_PY")
+           or (_VENV_PY if Path(_VENV_PY).exists() else sys.executable))
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 # 优先使用 fresh_buvid.json 现场申请的真指纹（假 buvid 连跑一批后会被 412 拉黑）
 _b3, _b4 = "FD0E1A9D-8D6B-4E0C-9B7E-2C3D4E5F6A7Binfoc", "9A8B7C6D-5E4F-3A2B-1C0D-9E8F7A6B5C4D-1240000000"
@@ -137,7 +140,13 @@ def fetch_audio(bvid, cid, dst):
 
 def ffmpeg_bin():
     """定位 ffmpeg：环境变量 FFMPEG > PATH。找不到时报可操作的中文错误（不再甩 NoneType）"""
-    ff = os.environ.get("FFMPEG") or shutil.which("ffmpeg")
+    env = os.environ.get("FFMPEG")
+    if env:
+        if Path(env).exists():
+            return env
+        raise RuntimeError(f"环境变量 FFMPEG 指向的文件不存在: {env}\n"
+                           "  请改正或删掉该变量，让它回到 PATH 查找")
+    ff = shutil.which("ffmpeg")
     if not ff:
         raise RuntimeError(
             "找不到 ffmpeg —— 本管线转码依赖它，但 PATH 里没有。\n"
@@ -213,10 +222,45 @@ details{{margin-top:24px}} summary{{cursor:pointer;font-family:"Segoe UI",sans-s
     out.write_text(page, encoding="utf-8")
     log(f"笔记已生成: {out}")
 
+def preflight(need_ffmpeg=True, need_asr=True):
+    """启动前环境预检：缺什么直接说人话 + 指向 scripts/check_env.py。
+    产品原则：使用者不该靠读 traceback 才知道自己缺 ffmpeg。"""
+    import importlib.util
+    problems = []
+    if sys.version_info < (3, 10):
+        problems.append(f"Python 版本过低（当前 {sys.version.split()[0]}，需要 3.10+）")
+    if need_ffmpeg:
+        try:
+            ffmpeg_bin()
+        except RuntimeError as e:
+            problems.append(str(e))
+    if need_asr and importlib.util.find_spec("faster_whisper") is None:
+        problems.append("缺 faster-whisper（本地语音转写）: "
+                        f'"{sys.executable}" -m pip install -r requirements-asr.txt\n'
+                        "  或装到独立 venv 后用 ECHONOTES_ASR_PYTHON 指向该解释器")
+    _secrets = Path(os.environ.get("ECHONOTES_SECRETS_FILE",
+                                   os.environ.get("ECH_SECRETS",
+                                                  r"D:\密码书\private\private-ai-api-secrets.json")))
+    if not os.environ.get("DEEPSEEK_API_KEY") and not _secrets.exists():
+        problems.append("缺 DeepSeek API Key（polish 整理用；不配会跳过润色）："
+                        "设环境变量 DEEPSEEK_API_KEY（申请与配额见 docs/API_SETUP.md）")
+    if problems:
+        _root = WORK.parent
+        log("环境检查未通过，先把下面几项补齐：")
+        for p in problems:
+            for i, line in enumerate(str(p).splitlines()):
+                print(("    ✗ " if i == 0 else "      ") + line)
+        print(f"\n  逐项自检与修复指引: python \"{_root / 'scripts' / 'check_env.py'}\"")
+        print(f"  一次装齐（ffmpeg + 依赖 + 自检）: python \"{_root / 'scripts' / 'install.py'}\"")
+        sys.exit(2)
+
 def main():
     bvid = sys.argv[1] if len(sys.argv) > 1 else "BV1GbNH6hE8f"
     run_dir = WORK / "runs" / bvid
     run_dir.mkdir(parents=True, exist_ok=True)
+    m4s = run_dir / "audio.m4s"; wav = run_dir / "audio.wav"
+    # 缺依赖/缺 key 早失败，别跑完 ASR 才炸；已有完整转写时不必强求 faster-whisper
+    preflight(need_ffmpeg=not wav.exists(), need_asr=not (run_dir / "transcript.json").exists())
     t0 = time.time()
     log(f"=== 管线一开始: {bvid} ===")
 
@@ -224,7 +268,6 @@ def main():
     log(f"视频: {meta['title']} | {meta['owner']} | {fmt_ts(meta['duration'])}")
     (run_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    m4s = run_dir / "audio.m4s"; wav = run_dir / "audio.wav"
     if not wav.exists():
         ffmpeg_bin()  # 预检：缺 ffmpeg 立刻报错，不必白下整个音频
         fetch_audio(bvid, meta["cid"], m4s)  # 总是重新下载, 防止复用上次截断的残留 m4s

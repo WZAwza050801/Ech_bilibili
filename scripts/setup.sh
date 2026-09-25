@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
-# 一键上手：建虚拟环境 -> 装依赖 -> 自检
-# 用法: bash scripts/setup.sh      （加 --asr 额外装本地语音转写）
+# 一键上手（Linux / macOS）：装 ffmpeg -> 建虚拟环境 -> 装依赖 -> 自检
+# 真正逻辑在 scripts/install.py，跨平台同一份。
+# 用法:
+#   bash scripts/setup.sh                # 全自动
+#   bash scripts/setup.sh --asr          # 额外装本地语音转写
+#   bash scripts/setup.sh --no-venv      # 装到当前解释器（已在 venv 里时用）
+#   bash scripts/setup.sh --skip-ffmpeg  # 不动系统包管理器
 set -euo pipefail
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-PY=${PYTHON:-python3}
-$PY -m venv .venv
-# shellcheck disable=SC1091
-. .venv/bin/activate
-
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-
-if [[ "${1:-}" == "--asr" ]]; then
-  pip install -r requirements-asr.txt
+py=""
+for cand in "${PYTHON:-}" python3 python; do
+    [ -n "$cand" ] || continue
+    if command -v "$cand" >/dev/null 2>&1; then py="$cand"; break; fi
+done
+if [ -z "$py" ]; then
+    echo "[x] 没找到 Python。请先安装 3.10+（Debian/Ubuntu: sudo apt install python3 python3-venv）" >&2
+    exit 1
 fi
 
-echo
-echo "依赖装好了，开始自检（缺什么会直接告诉你怎么补）："
-python scripts/check_env.py
+exec "$py" "$here/install.py" "$@"

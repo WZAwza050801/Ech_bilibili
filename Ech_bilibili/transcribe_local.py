@@ -6,17 +6,19 @@
 import json, os, sys, io, time
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+if not getattr(sys.stdout, "_ech_wrapped", False):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace"); sys.stdout._ech_wrapped = True
+if not getattr(sys.stderr, "_ech_wrapped", False):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
-# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR 覆盖
-work = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
+# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR / ECHONOTES_BILI_DIR 覆盖
+work = Path(os.environ.get("ECHONOTES_BILI_DIR") or os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 
 from faster_whisper import WhisperModel
 
 # 模型：优先本地共享目录；换机器没带模型时退回 HF 模型名（首次运行自动下载）
 _local_model = work / "models" / "faster-whisper-small"
-MODEL = str(_local_model) if _local_model.exists() else os.environ.get("ECH_MODEL", "small")
+MODEL = str(_local_model) if _local_model.exists() else os.environ.get("ECHONOTES_ASR_MODEL") or os.environ.get("ECH_MODEL", "small")
 
 t0 = time.time()
 print(f"[asr] 加载模型 {MODEL} / int8 (CPU)...")

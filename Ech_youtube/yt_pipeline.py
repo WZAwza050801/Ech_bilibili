@@ -17,7 +17,9 @@ if not getattr(sys.stderr, "_ech_wrapped", False):
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ech_config import ECH_YT_DIR as WORK, ECH_MODEL_DIR as SHARED_MODEL, ECH_PROXY as PROXY
+from ech_config import ECH_YT_DIR as WORK, ECH_MODEL_DIR as SHARED_MODEL, ECH_PROXY as PROXY, ASR_PYTHON
+# 转写/polish 子进程解释器：装了 whisper 的独立 venv 优先（ECHONOTES_ASR_PYTHON / ECH_PY）
+PY = ASR_PYTHON or sys.executable
 
 def log(m): print(f"[yt_pipeline] {m}", flush=True)
 
@@ -64,11 +66,77 @@ def fetch_audio(vid, run_dir):
     ffmpeg_wav(src, run_dir / "audio.wav")
     log(f"音频就绪: {src.name} → audio.wav ({src.stat().st_size/1048576:.1f}MB)")
 
-def ffmpeg_wav(src, dst):
+def ensure_deno_path():
+    """yt-dlp 解 n-challenge 需要 JS runtime；把平台自带的 bin/ 加进 PATH 最省事"""
+    deno_bin = WORK / "bin"
+    if (deno_bin / "deno.exe").exists() or (deno_bin / "deno").exists():
+        os.environ["PATH"] = str(deno_bin) + os.pathsep + os.environ.get("PATH", "")
+        return True
+    return shutil.which("deno") is not None
+
+def ffmpeg_bin():
+    """定位 ffmpeg: 环境变量 FFMPEG > PATH。找不到时报可操作的中文错误(不再把 None 传给 subprocess)"""
+    env = os.environ.get("FFMPEG")
+    if env:
+        if Path(env).exists():
+            return env
+        raise RuntimeError(f"环境变量 FFMPEG 指向的文件不存在: {env}\n"
+                           "  请改正或删掉该变量，让它回到 PATH 查找")
     ff = shutil.which("ffmpeg")
+    if not ff:
+        raise RuntimeError(
+            "找不到 ffmpeg —— 本管线转码依赖它，但 PATH 里没有。\n"
+            "  Windows 安装: winget install Gyan.FFmpeg   (或 scoop install ffmpeg / choco install ffmpeg)\n"
+            "  装完重开终端让 PATH 生效, 用 `ffmpeg -version` 验证\n"
+            "  不想装或没权限: 下载 ffmpeg 解压后设环境变量 FFMPEG=<ffmpeg.exe 完整路径>, 例如\n"
+            "    set FFMPEG=E:\\tools\\ffmpeg\\bin\\ffmpeg.exe")
+    return ff
+
+def ffmpeg_wav(src, dst):
+    ff = ffmpeg_bin()
     r = subprocess.run([ff, "-y", "-i", str(src), "-ar", "16000", "-ac", "1", "-vn", str(dst)],
                        capture_output=True, text=True, timeout=300)
     if r.returncode != 0: raise RuntimeError(f"ffmpeg wav 转换失败: {r.stderr[-200:]}")
+
+def preflight(need_ffmpeg=True, need_asr=True):
+    """启动前环境预检: 缺什么直接说人话 + 指向 scripts/check_env.py。
+    产品原则: 使用者不该靠读 traceback 才知道自己缺 ffmpeg。"""
+    import importlib.util
+    problems, warnings = [], []
+    if sys.version_info < (3, 10):
+        problems.append(f"Python 版本过低（当前 {sys.version.split()[0]}，需要 3.10+）")
+    if need_ffmpeg:
+        try:
+            ffmpeg_bin()
+        except RuntimeError as e:
+            problems.append(str(e))
+    if importlib.util.find_spec("yt_dlp") is None:
+        problems.append('缺 yt-dlp（YouTube 下载）: '
+                        f'"{sys.executable}" -m pip install -r Ech_youtube/requirements.txt')
+    if need_asr and importlib.util.find_spec("faster_whisper") is None:
+        problems.append("缺 faster-whisper（本地语音转写）: "
+                        f'"{sys.executable}" -m pip install -r requirements-asr.txt\n'
+                        "  或装到独立 venv 后用 ECHONOTES_ASR_PYTHON 指向该解释器")
+    from ech_config import ECH_SECRETS
+    if not os.environ.get("DEEPSEEK_API_KEY") and not ECH_SECRETS.exists():
+        problems.append("缺 DeepSeek API Key：设环境变量 DEEPSEEK_API_KEY（申请与配额见 docs/API_SETUP.md）")
+    # deno: yt-dlp 解 YouTube n-challenge 用; 缺了不一定失败, 降级为警告
+    if not (WORK / "bin" / "deno.exe").exists() and not (WORK / "bin" / "deno").exists() \
+            and not shutil.which("deno"):
+        warnings.append("未找到 deno（yt-dlp 解 YouTube n-challenge 用）: "
+                        "https://deno.com 下载后放 Ech_youtube/bin/ 或加进 PATH")
+    if problems:
+        log("环境检查未通过，先把下面几项补齐：")
+        for p in problems:
+            for i, line in enumerate(str(p).splitlines()):
+                print(("    ✗ " if i == 0 else "      ") + line)
+        for w in warnings:
+            print("    ! " + w)
+        print(f"\n  逐项自检与修复指引: python \"{WORK.parent / 'scripts' / 'check_env.py'}\"")
+        print(f"  一次装齐（ffmpeg + 依赖 + 自检）: python \"{WORK.parent / 'scripts' / 'install.py'}\"")
+        sys.exit(2)
+    for w in warnings:
+        log("提示: " + w)
 
 def fmt_ts(t):
     t = int(t); h, r = divmod(t, 3600); m, s = divmod(r, 60)
@@ -135,6 +203,9 @@ def main():
     lang = args[1] if len(args) > 1 else "auto"
     run_dir = WORK / "runs" / vid
     run_dir.mkdir(parents=True, exist_ok=True)
+    wav = run_dir / "audio.wav"
+    ensure_deno_path()
+    preflight(need_ffmpeg=not wav.exists(), need_asr=not (run_dir / "transcript.json").exists())
     t0 = time.time()
     log(f"=== Ech_youtube 管线一开始: {vid} (lang={lang}) ===")
 
@@ -142,7 +213,6 @@ def main():
     log(f"视频: {meta['title']} | {meta['owner']} | {fmt_ts(meta['duration'])}")
     (run_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    wav = run_dir / "audio.wav"
     if not wav.exists():
         fetch_audio(vid, run_dir)  # 总是重新下载, 防止复用截断残留
     else:
@@ -168,7 +238,7 @@ def main():
         ok, r = False, None
         for attempt in range(2):
             shutil.copy(wav, WORK / "audio.wav")
-            r = subprocess.run([sys.executable, str(WORK / "transcribe_local.py"), lang],
+            r = subprocess.run([PY, str(WORK / "transcribe_local.py"), lang],
                                capture_output=True, text=True, encoding="utf-8", errors="replace")
             tr_path = run_dir / "transcript.json"; rm(tr_path)
             tr_txt = run_dir / "transcript.txt"; rm(tr_txt)
@@ -191,7 +261,7 @@ def main():
         shutil.copy(run_dir / "transcript.json", WORK / "transcript.json")
         for f in ["polished.json", "polished.txt"]:
             rm(WORK / f)
-        r = subprocess.run([sys.executable, str(WORK / "polish.py")], capture_output=True,
+        r = subprocess.run([PY, str(WORK / "polish.py")], capture_output=True,
                            text=True, encoding="utf-8", errors="replace")
         print(r.stdout[-400:])
         if not (WORK / "polished.json").exists():

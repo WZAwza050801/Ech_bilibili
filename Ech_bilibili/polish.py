@@ -14,15 +14,16 @@ from pathlib import Path
 import urllib.request
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR 覆盖
-work = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
+# 平台目录 = 脚本所在目录（自包含），可用 ECH_BILI_DIR / ECHONOTES_BILI_DIR 覆盖
+work = Path(os.environ.get("ECHONOTES_BILI_DIR") or os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 
 # ---- deepseek key：优先环境变量（换机器/服务器），回退本机密码书（不在日志中打印 key）----
 if os.environ.get("DEEPSEEK_API_KEY"):
     API_KEY = os.environ["DEEPSEEK_API_KEY"]
     BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 else:
-    _secrets_path = Path(os.environ.get("ECH_SECRETS", r"D:\密码书\private\private-ai-api-secrets.json"))
+    _secrets_path = Path(os.environ.get("ECHONOTES_SECRETS_FILE")
+                         or os.environ.get("ECH_SECRETS", r"D:\密码书\private\private-ai-api-secrets.json"))
     secrets = json.load(open(str(_secrets_path), encoding="utf-8"))
     entry = next(e for e in secrets["entries"] if e.get("label") == "Environment DEEPSEEK_API_KEY")
     API_KEY = entry["apiKey"]

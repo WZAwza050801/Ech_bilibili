@@ -5,11 +5,13 @@
 与 Ech_bilibili 同款参数: vad_filter, condition_on_previous_text=False 防幻觉, cpu_threads=4 防 OOM
 模型与 Ech_bilibili 共享(不重复下载)。
 """
-import json, sys, io, time
+import json, os, sys, io, time
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+if not getattr(sys.stdout, "_ech_wrapped", False):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace"); sys.stdout._ech_wrapped = True
+if not getattr(sys.stderr, "_ech_wrapped", False):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ech_config import ECH_YT_DIR as work, ECH_MODEL_DIR
@@ -17,13 +19,19 @@ lang = sys.argv[1] if len(sys.argv) > 1 else "auto"
 
 from faster_whisper import WhisperModel
 
-model_dir = work / "models" / "faster-whisper-small"
-if not model_dir.exists():
-    model_dir = ECH_MODEL_DIR
+# 模型定位: 平台本地 models/ > 共享目录 ECH_MODEL_DIR > 环境变量 > 触发下载的 "small"
+_local_model = work / "models" / "faster-whisper-small"
+if _local_model.exists():
+    MODEL = str(_local_model)
+elif Path(ECH_MODEL_DIR).exists():
+    MODEL = str(ECH_MODEL_DIR)
+else:
+    MODEL = os.environ.get("ECHONOTES_ASR_MODEL") or os.environ.get("ECH_MODEL", "small")
+    print(f"[asr] 未找到本地模型，将使用 {MODEL!r}（首次会联网下载，离线环境请先放好模型）")
 
 t0 = time.time()
-print(f"[asr] 加载模型 small / int8 (CPU, {model_dir}) ...")
-model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=4)
+print(f"[asr] 加载模型 small / int8 (CPU, {MODEL}) ...")
+model = WhisperModel(MODEL, device="cpu", compute_type="int8", cpu_threads=4)
 print(f"[asr] 模型加载完成 {time.time()-t0:.1f}s，开始转写 (lang={lang})...")
 
 t1 = time.time()

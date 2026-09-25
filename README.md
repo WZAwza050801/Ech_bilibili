@@ -7,9 +7,12 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 **多平台设计**：感知层按平台适配，笔记层平台无关；每个平台一个自包含目录，各归各家。GitHub 仓库：`WZAwza050801/Ech_bilibili`（原名 EchoNotes）。
 
 ```
-视频观看agent编写/            # 仓库根：只放通用文档与各平台目录
+视频观看agent编写/            # 仓库根：只放通用文档、脚本与各平台目录
 ├── Ech_bilibili/            # Bilibili 版（管线代码 + runs + 江左道卡卡-读书笔记）
 ├── Ech_youtube/             # YouTube 版（管线代码 + runs + LexFridman-博客笔记）
+├── scripts/                 # 通用工具：check_env.py（自检）+ install.py/setup.*（一键装）
+├── docs/                    # API_SETUP.md + 架构流程图 svg
+├── .github/workflows/       # CI 冒烟（装依赖 + 自检）
 ├── research/                # 开源项目调研
 └── 调研报告-*.md / 方案-*.html # 通用文档
 ```
@@ -32,35 +35,48 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 
 ### 2. 安装依赖
 
+懒得手动敲？一条命令把「装 ffmpeg + 建环境 + 装依赖 + 自检」一次做完：
+
+```bash
+python scripts/install.py                    # 全平台通用
+python scripts/install.py --asr              # 额外装本地语音转写
+python scripts/install.py --skip-ffmpeg      # 没权限动系统包管理器时
+
+bash scripts/setup.sh                        # Linux / macOS（等价封装）
+.\scripts\setup.ps1                          # Windows PowerShell（等价封装）
+```
+
+想手动来：
+
 ```bash
 python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
 # Windows:     .venv\Scripts\activate
 
-pip install -r requirements.txt          # 核心依赖
+pip install -r requirements.txt          # 核心依赖（= 两个平台各自 requirements 之和）
 pip install -r requirements-asr.txt      # 可选：本地语音转写（建议独立虚拟环境）
 ```
 
-懒得手动敲？一键脚本把「建环境 + 装依赖 + 自检」一次做完：
-
-```bash
-bash scripts/setup.sh          # Linux / macOS
-.\scripts\setup.ps1           # Windows PowerShell
-# 需要本地语音转写就加参数：--asr / -Asr
-```
-
-> 依赖刻意做薄：管线主体只用标准库 + 一两个轻量包；`faster-whisper` 会拖入
-> ctranslate2 等重依赖，因此单独放 `requirements-asr.txt`，装到独立 venv 后用
-> `ECHONOTES_ASR_PYTHON` 指过去，避免与主线环境互相污染。
+> 依赖刻意做薄：取流/请求主体只用标准库；`faster-whisper` 会拖入 ctranslate2 等重依赖，
+> 因此单独放 `requirements-asr.txt`，装到独立 venv 后用 `ECHONOTES_ASR_PYTHON` 指过去，
+> 避免与主线环境互相污染。`Ech_bilibili/requirements.txt` 与 `Ech_youtube/requirements.txt`
+> 也各自列全了本平台依赖，想一个环境装齐直接用它们即可。
 
 ### 3. 自检（**跑管线前先跑它**）
 
 ```bash
-python scripts/check_env.py
+python scripts/check_env.py                  # 全量检查
+python scripts/check_env.py -p youtube       # 只查某个平台
+python scripts/check_env.py --ci             # 只校验 Python 与 pip 依赖（CI 用）
+python scripts/check_env.py -q               # 只打印结论
 ```
 
 逐项打印 `[ OK ] / [WARN] / [FAIL]`，缺什么、去哪装、装完怎么验证一次说清；
-有必需项缺失时退出码为 1。`--ci` 只校验 Python 与 pip 依赖（给 CI 用）。
+有必需项缺失时退出码为 1。检查覆盖：Python 版本、pip 依赖、ffmpeg（含 `FFMPEG` 变量指向是否有效）、
+磁盘剩余空间、平台目录可写性、whisper 模型、API 密钥、B 站接口连通、deno、YouTube 代理连通性。
+
+**管线自己也会预检**：`pipeline1.py` / `yt_pipeline.py` / `yt_blog.py` 启动前会先检查缺什么，
+缺依赖直接给出人话提示并以 **退出码 2** 结束——不会跑到一半才甩一条 traceback。
 
 ### 密钥
 
@@ -72,9 +88,14 @@ Ech_bilibili 的必需 Key：**无（可不配 Key 跑通）**。
 
 | 症状 | 原因 | 解决 |
 |---|---|---|
+| `TypeError: expected str, bytes or os.PathLike object, not NoneType`（在 `ffmpeg_wav` 里） | `shutil.which("ffmpeg")` 返回 `None` 被直接传给 `subprocess` | 没装 ffmpeg 或没进 PATH。`python scripts/install.py` 或 `winget install Gyan.FFmpeg` 后重开终端；也可设 `FFMPEG=<完整路径>`。**现已根治：启动预检会提前给出人话提示** |
+| `ModuleNotFoundError: No module named 'faster_whisper' / 'yt_dlp'` | 依赖没装，或装到了别的解释器 | `python scripts/install.py`；注意「用哪个解释器跑管线就往哪个装」，`check_env.py` 会打印当前解释器路径 |
 | B 站返回 412 / -352 风控 | 缺少完整浏览器请求头或 wbi 签名 | 用 Ech_bilibili/ 内的防风控实现，勿自行简化请求头 |
 | ffmpeg 找不到 | 未加入 PATH | `ffmpeg -version` 验证；Windows 用 winget 装完重开终端 |
-| ASR 很慢 | 本地 small/int8 模型在 CPU 上跑 | 复用已有 transcript.json，或改用 cloud_asr |
+| LLM 调用失败 / 401 / 超时 | Key 不对，或网络要走代理 | 检查 `DEEPSEEK_API_KEY`；国内默认代理 `127.0.0.1:12000`，海外服务器设 `YT_PROXY=direct` |
+| YouTube 报 n-challenge / 403 | 缺 JS runtime | 下载 deno 放 `Ech_youtube/bin/`（管线自动加 PATH），或配 `YT_PROXY` 代理 |
+| ASR 很慢 / 转写中断 | 本地 small/int8 模型在 CPU 上跑 | 复用已有 `transcript.json`（管线支持断点续跑），或改用独立 venv 装 ASR 依赖 |
+| 换了盘符 / 换了机器跑不动 | 以为路径写死了 | 其实全部走环境变量覆盖，见[环境变量参考](#环境变量参考)；先跑 `python scripts/check_env.py` |
 
 ### 跑起来
 
@@ -153,15 +174,58 @@ Ech_bilibili/
 - `ffmpeg` 在 PATH 中（Windows：`winget install Gyan.FFmpeg`，装完重开终端）；没装到 PATH 可用 `FFMPEG` 环境变量指向 ffmpeg.exe
 - DeepSeek API Key：优先环境变量 `DEEPSEEK_API_KEY`，回退读本机密码书（仓库不含任何密钥）
 
-### 换机器运行（环境变量都可选，默认值自动适配本机）
+### 产物归档命名规范
+
+新增博主 / 新增视频一律照此落盘，不散落堆放：
+
+```
+Ech_bilibili/
+├── 江左道卡卡-读书笔记/          # 外层：<创作者>-<笔记类型>
+│   ├── 01-<标题>.html           # 内层：{NN}-{标题}.html（两位序号，从 01 起，不回收）
+│   ├── index.html               # 卡片墙
+│   ├── failed.json              # 失败清单
+│   └── batch_log.txt            # 日志
+└── runs/<视频ID>/               # 中间产物（B站用 BV 号，YouTube 用 11 位 vid）
+    ├── audio.wav / transcript.json / polished.json
+    └── 笔记.html                # 转写产物固定名（访谈类为 博客笔记.html）
+```
+
+标题中 `\ / : * ? " < > |` 与空白替换为 `_`，截断 60 字。命名逻辑固化在 `batch_run.py`（B站）与 `yt_blog_batch.py`（YouTube）。
+
+## 工程化设计（产品视角）
+
+这一节回答一个面试官会问的问题：**"这东西交到别人手里能不能跑起来？"**
+
+| 关注点 | 做法 |
+|---|---|
+| **不把环境问题甩给用户** | 三层防线：`scripts/install.py`（代装 ffmpeg/依赖）→ `scripts/check_env.py`（体检 + 修复命令）→ 管线内 `preflight()`（启动即拦截，exit 2，不甩 traceback） |
+| **依赖声明明确** | 每平台独立 `requirements.txt` + 根 `requirements.txt` 聚合；重型 ASR 依赖独立 `requirements-asr.txt`；系统级二进制（ffmpeg/deno）注明安装命令并由安装脚本代装 |
+| **失败信息可行动** | 所有报错都带「为什么 + 怎么修 + 可复制命令」，而不是裸异常栈 |
+| **返回码语义化** | 环境问题 exit 2（管线）/ exit 1（自检），业务失败非 0，成功 0——便于 CI 与批量脚本判断 |
+| **CI 冒烟** | `.github/workflows/ci.yml` 装依赖 → `check_env.py --ci` → `compileall` 导入冒烟 |
+| **可复现** | 断点续跑 + 产物完整性校验 + 回收站机制，重跑一条命令即可 |
+| **可移植** | 零硬编码语义：路径全部走环境变量覆盖，默认值按脚本位置推导 |
+| **密钥安全** | 只从环境变量 / 本机密码书读，永不入库；`.gitignore` 显式排除 `.env`、密码书、cookie、sqlite |
+| **幂等** | 缓存命中即跳过，且缓存也要过完整性校验（防假产物） |
+
+## 环境变量参考
+
+**所有变量都是可选的**，默认值自动适配脚本所在位置；换盘 / 换机器 / 上服务器都不用改代码。
+命名上**同时接受 `ECHONOTES_*`（文档主推，与仓库名一致）与 `ECH_*`（历史别名）**，前者优先。
 
 | 变量 | 默认 | 说明 |
 |------|------|------|
-| `ECH_BILI_DIR` | 脚本所在目录 | 平台目录，脚本自包含，换盘/换机器不用改代码 |
-| `FFMPEG` | PATH 中的 `ffmpeg` | 指向 `ffmpeg.exe` 完整路径 |
-| `ECH_PY` | 本机已知 venv，否则当前解释器 | 转写子进程用的 python |
-| `ECH_MODEL` | `models/faster-whisper-small` | whisper 模型目录或 HF 模型名 |
-| `DEEPSEEK_API_KEY` | 回退密码书 | polish 用的 LLM key |
+| `ECHONOTES_ROOT` / `ECH_ROOT` | 仓库根 | 多平台根目录 |
+| `ECHONOTES_BILI_DIR` / `ECH_BILI_DIR` | `$ROOT/Ech_bilibili` | B 站平台目录（脚本自包含） |
+| `ECHONOTES_YT_DIR` / `ECH_YT_DIR` | `$ROOT/Ech_youtube` | YouTube 平台目录 |
+| `ECHONOTES_ASR_MODEL` / `ECH_MODEL_DIR` | `Ech_bilibili/models/faster-whisper-small` | whisper 模型目录（两平台共享，不重复下载） |
+| `ECH_MODEL` | 上述目录，否则 HF 模型名 `small` | 模型目录或 HF 模型名（缺目录时触发下载） |
+| `ECHONOTES_ASR_PYTHON` / `ECH_PY` | 已知 venv，否则当前解释器 | 转写/polish 子进程使用的 python（独立 venv 场景） |
+| `FFMPEG` | PATH 中的 `ffmpeg` | 指向 `ffmpeg` 可执行文件完整路径 |
+| `DEEPSEEK_API_KEY` | 回退本机密码书 | LLM key（申请与配额见 `docs/API_SETUP.md`） |
+| `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | LLM 端点 |
+| `ECHONOTES_SECRETS_FILE` / `ECH_SECRETS` | 本机密码书路径 | 密钥回退文件 |
+| `ECHONOTES_YT_PROXY` / `YT_PROXY` | `http://127.0.0.1:12000` | YouTube 代理；海外服务器设 `direct` 直连 |
 
 ## 管线二：课程视频 → LaTeX 讲义 ✅
 
@@ -189,9 +253,11 @@ Ech_bilibili/
 - [x] 管线二：课程视频 → LaTeX 讲义（多模态 map + 公式原帧复查 + XeLaTeX）
 - [x] 管线三：实操教程 → 作品集（盲写/对账/校准三段式 + Movie Maker 渲染）
 - [x] 合并-分叉架构：共享前处理 + 统一归档 + 自动清扫
-- [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
 - [x] 三仓库拆分：Ech_bilibili（读书笔记）/ Ech_lecture（LaTeX 讲义）/ Ech_practice（复刻作品集）
+- [x] **工程化：一键安装（scripts/install.py）+ 环境自检（check_env.py）+ 管线启动预检 + 依赖声明 + 零硬编码路径 + CI 冒烟**
+- [ ] 统一入口：一条命令跑完整门课（合并段 → 双分叉 → 归档清扫全自动串联）
 - [ ] CC 字幕优先策略（有官方字幕时免 ASR，零错字）
+- [ ] 环境变量命名归一（`ECHONOTES_*` 为唯一主推，下线 `ECH_*` 别名）
 
 ## API 配置
 

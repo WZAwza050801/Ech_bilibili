@@ -4,6 +4,9 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+build/
+dist/
+.pytest_cache/
 
 # --- 密钥（绝不入库）---
 .env
@@ -13,6 +16,13 @@ venv/
 secrets.json
 secrets*.json
 *密码书*
+Ech_bilibili/bili_cookies.txt
+Ech_bilibili/cookies.json
+Ech_bilibili/*.sqlite
+Ech_bilibili/ck_try.sqlite
+Ech_bilibili/chrome_cdp_profile/
+Ech_bilibili/bili_qr_login.py
+Ech_bilibili/chrome_cdp_cookies.py
 
 # --- 运行产物 ---
 runs/
@@ -24,3 +34,58 @@ out/
 .godot/
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
+
+# --- 大文件 / 模型 / 二进制 ---
+Ech_bilibili/models/
+Ech_youtube/models/
+Ech_youtube/bin/
+*.m4s
+*.wav
+*.webm
+*.png
+
+# --- 平台根中转文件（每次转写前清残留）---
+Ech_bilibili/audio.*
+Ech_bilibili/transcript.*
+Ech_bilibili/polished.*
+Ech_bilibili/paras.json
+Ech_bilibili/fulltext.txt
+Ech_bilibili/video_list.json
+Ech_bilibili/video_list_partial.json
+Ech_bilibili/fresh_buvid.json
+Ech_youtube/audio.*
+Ech_youtube/transcript.*
+Ech_youtube/polished.*
+Ech_youtube/videos.txt
+
+# --- 一次性调试/探针临时文件 ---
+Ech_bilibili/_*
+Ech_youtube/_*
+Ech_bilibili/probe*.py
+!Ech_bilibili/probe_ports.py
+Ech_bilibili/probe_out.txt
+Ech_bilibili/debug_out.txt
+Ech_bilibili/snap*.txt
+Ech_bilibili/eval_*.txt
+Ech_bilibili/diag*.txt
+Ech_bilibili/ab*.txt
+Ech_bilibili/ab.log
+Ech_bilibili/browser_list*.js
+Ech_bilibili/list_result*.txt
+Ech_bilibili/tabs.txt
+Ech_bilibili/tabnew.txt
+Ech_bilibili/cur_url.txt
+Ech_bilibili/wbi_keys.txt
+Ech_bilibili/qr_log.txt
+Ech_bilibili/qr_status.txt
+Ech_bilibili/space*.png
+Ech_bilibili/test*.png
+Ech_youtube/probe_*.txt
+
+# --- 调研克隆（体积大，本地保留即可）---
+research/repos/
+
+# --- 本机工作目录（项目记忆/临时态，不入库）---
+.workbuddy/

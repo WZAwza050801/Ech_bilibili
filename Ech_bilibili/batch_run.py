@@ -5,10 +5,12 @@
 import json, io, sys, os, re, time, shutil, subprocess, traceback
 from pathlib import Path
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+if not getattr(sys.stdout, "_ech_wrapped", False):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace"); sys.stdout._ech_wrapped = True
+if not getattr(sys.stderr, "_ech_wrapped", False):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace"); sys.stderr._ech_wrapped = True
 
-WORK = Path(os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
+WORK = Path(os.environ.get("ECHONOTES_BILI_DIR") or os.environ.get("ECH_BILI_DIR") or Path(__file__).resolve().parent)
 NOTES = WORK / "江左道卡卡-读书笔记"
 LOG = NOTES / "batch_log.txt"
 

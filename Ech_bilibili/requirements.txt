@@ -1,2 +1,13 @@
-# B 站版核心：零 pip 依赖，只用 Python 标准库（urllib/json/sqlite3...）
-# 语音转写需要 faster-whisper，见仓库根目录 requirements-asr.txt
+# B 站版（管线一 · 读书笔记）
+#
+# 取流/请求部分只用 Python 标准库（urllib / json / sqlite3 ...），不带重型依赖。
+# 唯一较重的是本地语音转写 faster-whisper —— 两种装法二选一：
+#   A. 装到一起（最省事）：pip install -r Ech_bilibili/requirements.txt
+#   B. 与主线隔离（推荐给服务器）：独立 venv 装 requirements-asr.txt，
+#      再用 ECHONOTES_ASR_PYTHON 指向该环境的 python
+faster-whisper>=1.0.0,<2.0
+
+# 系统依赖（非 pip）:
+#   ffmpeg — apt install ffmpeg / winget install Gyan.FFmpeg / brew install ffmpeg，
+#            或下载解压后设 FFMPEG=<ffmpeg 完整路径>
+# 一键装齐（ffmpeg + 依赖 + 自检）: python scripts/install.py
