@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1160 900" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed"/></marker>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+  </defs>
+  <rect width="1160" height="900" fill="#f8fafc"/>
+  <text x="580" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">管线二内部 · LaTeX 讲义生成</text>
+  <text x="580" y="60" text-anchor="middle" font-size="12.5" fill="#64748b">代码位于姊妹仓库 Ech_bilibili work/pipeline2/（与管线三同仓库两条分支）</text>
+
+  <rect x="360" y="76" width="440" height="40" rx="20" fill="#0f172a"/>
+  <text x="580" y="101" text-anchor="middle" font-size="13" fill="#f8fafc" font-weight="600">输入：合并段产物（transcript.json + frames + map）</text>
+  <line x1="580" y1="116" x2="580" y2="138" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 1 总控 -->
+  <rect x="170" y="142" width="820" height="70" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="168" font-size="14" font-weight="700" fill="#6d28d9">① 总控调度</text>
+  <text x="190" y="188" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 pipeline2.py run &lt;source&gt; --page N --work-root 运行缓存 --output-root 归档</text>
+  <text x="190" y="204" font-size="10.5" fill="#94a3b8">支持 --transcript 喂现成转写（合并段复用接口）· --prepare-only / --no-compile 等分段开关</text>
+  <line x1="580" y1="212" x2="580" y2="234" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 2 map -->
+  <rect x="170" y="238" width="820" height="86" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="264" font-size="14" font-weight="700" fill="#6d28d9">② 窗口 map（600s/窗，逐窗知识块）</text>
+  <text x="190" y="284" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 concept_map.py · 每窗最多 8 张代表帧 + 窗内转写</text>
+  <rect x="700" y="252" width="270" height="58" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="715" y="272" font-size="11" fill="#6d28d9" font-weight="700">API 规划 百炼 token-plan（国内直连）</text>
+  <text x="715" y="288" font-family="Consolas,monospace" font-size="10.5" fill="#5b21b6">POST token-plan.cn-beijing.maas.aliyuncs.com</text>
+  <text x="715" y="303" font-family="Consolas,monospace" font-size="10.5" fill="#5b21b6">model qwen3.8-max · JSON 模式 · 走 Plan 配额</text>
+  <text x="600" y="342" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 map-*.json（定义/定理/步骤/参数 候选块）</text>
+  <line x1="580" y1="324" x2="580" y2="346" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 3 reduce -->
+  <rect x="170" y="350" width="820" height="86" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="376" font-size="14" font-weight="700" fill="#6d28d9">③ reduce 编排 + 写作 + 审校</text>
+  <text x="190" y="396" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 writing.py（编排/深化/文风） · models.py（provider 路由）</text>
+  <rect x="700" y="364" width="270" height="58" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="715" y="384" font-size="11" fill="#6d28d9" font-weight="700">API 写作 Kimi Code Plan</text>
+  <text x="715" y="400" font-family="Consolas,monospace" font-size="10.5" fill="#5b21b6">POST api.kimi.com/coding/v1 · model kimi-k3</text>
+  <text x="715" y="415" font-family="Consolas,monospace" font-size="10.5" fill="#5b21b6">temperature=1（端点强制）· max_tokens 8192</text>
+  <text x="600" y="454" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 lecture.json（讲义结构化全文，113~139KB/P）</text>
+  <line x1="580" y1="436" x2="580" y2="458" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 4 公式复查 -->
+  <rect x="170" y="462" width="820" height="86" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="488" font-size="14" font-weight="700" fill="#6d28d9">④ 公式/参数 原帧视觉复查</text>
+  <text x="190" y="508" font-size="11" fill="#475569" font-family="Consolas,monospace">回到原 PTS 帧二次问视觉模型 → match / mismatch + note</text>
+  <rect x="700" y="476" width="270" height="58" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="715" y="496" font-size="11" fill="#6d28d9" font-weight="700">API SiliconFlow Qwen3-VL-32B（同合并段）</text>
+  <text x="715" y="512" font-size="10.5" fill="#5b21b6">复查不证明数学正确，只证与画面一致</text>
+  <text x="600" y="566" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 quality.json（覆盖缺口/符号冲突/复查结论 → needs_human_review）</text>
+  <line x1="580" y1="548" x2="580" y2="570" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 5 XeLaTeX -->
+  <rect x="170" y="574" width="820" height="86" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="600" font-size="14" font-weight="700" fill="#6d28d9">⑤ LaTeX 渲染</text>
+  <text x="190" y="620" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 render.py · 模板 lecture.tex（FandolSong 中文 + 代码块 + 截图全宽排版）</text>
+  <rect x="700" y="588" width="270" height="58" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="715" y="608" font-size="11" fill="#6d28d9" font-weight="700">外部工具 XeLaTeX（TeX Live）两遍编译</text>
+  <text x="715" y="624" font-family="Consolas,monospace" font-size="10.5" fill="#5b21b6">第二遍解析交叉引用/目录 · layout_warnings 上报</text>
+  <text x="600" y="678" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 lecture.pdf（71~120 页）+ compile 日志</text>
+  <line x1="580" y1="660" x2="580" y2="682" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#p)"/>
+
+  <!-- 6 产物语义 -->
+  <rect x="170" y="686" width="820" height="92" rx="12" fill="#fefce8" stroke="#eab308"/>
+  <text x="190" y="712" font-size="14" font-weight="700" fill="#a16207">⚠ 退出码语义（批量脚本必读）</text>
+  <text x="190" y="732" font-size="11" fill="#713f12" font-family="Consolas,monospace">exit=0 → 完美收尾；exit=1 + 已打印 [done] → needs_human_review（PDF 已产出，属设计行为非失败）</text>
+  <text x="190" y="752" font-size="11" fill="#713f12">归档目录命名有两种变体：常规「标题-日期-BV-P号-hash」/ 续跑「BV-P号-标题」→ 匹配须宽松</text>
+  <text x="190" y="770" font-size="10.5" fill="#a16207">实测：Godot VFX 课 8 个实操P，单P 15~120 分钟，产物 1.5~8.9MB PDF / 36~240 图</text>
+
+  <!-- 输出 -->
+  <line x1="580" y1="778" x2="580" y2="798" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#p)"/>
+  <rect x="170" y="802" width="820" height="64" rx="14" fill="#7c3aed" filter="url(#s)"/>
+  <text x="580" y="828" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="700">📖 讲义输出 → 交统一归档（organize.py）</text>
+  <text x="580" y="850" text-anchor="middle" font-size="11" fill="#ddd6fe" font-family="Consolas,monospace">归档\课程讲义-*\{ lecture.tex · lecture.pdf · transcript.json · quality.json · frames\ }</text>
+</svg>

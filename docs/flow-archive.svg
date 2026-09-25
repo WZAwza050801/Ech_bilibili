@@ -1,0 +1,76 @@
+<svg viewBox="0 0 1160 880" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/></marker>
+    <marker id="gr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/></marker>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+  </defs>
+  <rect width="1160" height="880" fill="#f8fafc"/>
+  <text x="580" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">统一归档与自动清扫 · organize.py</text>
+  <text x="580" y="60" text-anchor="middle" font-size="12.5" fill="#64748b">skill: course-output-organizer（~/.workbuddy/skills/）· 复制 → 校验 → 清扫 → 汇报</text>
+
+  <rect x="330" y="76" width="500" height="40" rx="20" fill="#0f172a"/>
+  <text x="580" y="101" text-anchor="middle" font-size="13" fill="#f8fafc" font-weight="600">输入：管线2 run 目录 · 管线3 作品目录 · 效果 mp4</text>
+  <line x1="580" y1="116" x2="580" y2="138" stroke="#059669" stroke-width="1.6" marker-end="url(#g)"/>
+
+  <rect x="170" y="142" width="820" height="248" rx="14" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="190" y="168" font-size="14" font-weight="700" fill="#047857">organize.py 归档五步</text>
+  <g font-size="11.5">
+    <rect x="190" y="182" width="380" height="44" rx="10" fill="#ffffff" stroke="#059669" filter="url(#s)"/>
+    <text x="202" y="200" fill="#0f172a" font-weight="600">① 建目录标准树</text>
+    <text x="202" y="217" fill="#64748b" font-family="Consolas,monospace" font-size="10.5">B站课程Agent\BV&lt;号&gt;-&lt;课名&gt;\{作品集, LaTeX讲义\P..}</text>
+    <rect x="590" y="182" width="380" height="44" rx="10" fill="#ffffff" stroke="#059669" filter="url(#s)"/>
+    <text x="602" y="200" fill="#0f172a" font-weight="600">② copy_tree（排除 .godot/__pycache__）</text>
+    <text x="602" y="217" fill="#64748b" font-family="Consolas,monospace" font-size="10.5">作品工程 + 效果 mp4 原样复制</text>
+    <rect x="190" y="238" width="380" height="56" rx="10" fill="#ffffff" stroke="#059669" filter="url(#s)"/>
+    <text x="202" y="258" fill="#0f172a" font-weight="600">③ 讲义拷贝 + 截图路径改写</text>
+    <text x="202" y="274" fill="#64748b" font-family="Consolas,monospace" font-size="10.5">includegraphics{frames/} → {figs/}，只拷被引用截图</text>
+    <text x="202" y="289" fill="#64748b" font-size="10.5">P04 实测 240/240，无缺图</text>
+    <rect x="590" y="238" width="380" height="56" rx="10" fill="#ffffff" stroke="#059669" filter="url(#s)"/>
+    <text x="602" y="258" fill="#0f172a" font-weight="600">④ transcript.json / blocks.json 留档</text>
+    <text x="602" y="274" fill="#64748b" font-size="10.5">文字稿入讲义文件夹 —— 合并段最贵产物，供下游复用</text>
+    <text x="602" y="289" fill="#64748b" font-size="10.5">（2026-09-24 起强制，杜绝二次 ASR）</text>
+    <rect x="190" y="306" width="780" height="44" rx="10" fill="#ffffff" stroke="#059669" filter="url(#s)"/>
+    <text x="202" y="324" fill="#0f172a" font-weight="600">⑤ README 生成/更新</text>
+    <text x="202" y="341" fill="#64748b" font-size="10.5">P01→P12 顺序总览表 · 与完成顺序无关（并行跑、按序归位）</text>
+  </g>
+  <line x1="580" y1="390" x2="580" y2="412" stroke="#059669" stroke-width="1.6" marker-end="url(#g)"/>
+
+  <!-- 校验 -->
+  <rect x="170" y="416" width="500" height="130" rx="14" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="442" font-size="14" font-weight="700" fill="#047857">校验（不过不放行）</text>
+  <g font-size="11.5" fill="#334155">
+    <text x="190" y="466">✓ lecture.pdf 存在且 &gt; 100KB</text>
+    <text x="190" y="488">✓ figs 图片数 == tex 引用数（无缺图）</text>
+    <text x="190" y="510">✓ 作品工程含入口（project.godot / *.py）</text>
+    <text x="190" y="536" fill="#94a3b8">失败 → 保留现场，打印缺口，等待人工处理</text>
+  </g>
+  <!-- 清扫 -->
+  <rect x="700" y="416" width="290" height="130" rx="14" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" filter="url(#s)"/>
+  <text x="720" y="442" font-size="14" font-weight="700" fill="#b91c1c">自动清扫（校验过后）</text>
+  <text x="720" y="466" font-size="11" fill="#7f1d1d" font-family="Consolas,monospace">win_rmtree：PowerShell EncodedCommand</text>
+  <text x="720" y="482" font-size="11" fill="#7f1d1d" font-family="Consolas,monospace">→ [System.IO.Directory]::Delete</text>
+  <text x="720" y="502" font-size="10.5" fill="#7f1d1d">对象：run 目录 / 运行缓存 / 帧 / 编译副产物</text>
+  <text x="720" y="522" font-size="10.5" fill="#7f1d1d">保留：transcript + 管线代码（复用资产）</text>
+  <line x1="670" y1="481" x2="698" y2="481" stroke="#dc2626" stroke-width="1.5" marker-end="url(#gr)"/>
+
+  <!-- 为什么 .NET -->
+  <rect x="170" y="566" width="820" height="120" rx="14" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="190" y="592" font-size="13" font-weight="700" fill="#b91c1c">为什么要绕路删除（三个实战坑，均已写进 skill）</text>
+  <g font-size="11.5" fill="#7f1d1d">
+    <text x="190" y="616">① Remove-Item → safe-delete 钩子先移回收站，中文长路径 trash 失败 → fail-closed 静默退出 1</text>
+    <text x="190" y="638">② shutil.rmtree → 同钩子接管，单次 &gt;50 文件触发 bulk 确认 → 线程被静默杀死（批量脚本断头根因）</text>
+    <text x="190" y="660">③ .ps1 中文脚本须 UTF-8 带 BOM，否则 PS5.1 按 ANSI 解析直接语法错误</text>
+  </g>
+
+  <!-- 发布与汇报 -->
+  <line x1="580" y1="686" x2="580" y2="708" stroke="#059669" stroke-width="1.8" marker-end="url(#g)"/>
+  <rect x="170" y="712" width="500" height="110" rx="14" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="190" y="738" font-size="13" font-weight="700" fill="#047857">成品只进一个家</text>
+  <text x="190" y="762" font-size="11.5" fill="#334155" font-family="Consolas,monospace">D:\B站课程Agent\BV&lt;号&gt;-&lt;课名&gt;\</text>
+  <text x="190" y="786" font-size="11" fill="#64748b">实测 Godot 课归档后：总仓库 68.3MB，中间产物 4.5GB 已清</text>
+  <rect x="700" y="712" width="290" height="110" rx="14" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="720" y="738" font-size="13" font-weight="700" fill="#334155">代码与文档 → GitHub</text>
+  <text x="720" y="762" font-size="11" fill="#64748b" font-family="Consolas,monospace">git push（代理 127.0.0.1:12000）</text>
+  <text x="720" y="782" font-size="11" fill="#64748b">github.com/WZAwza050801/Ech_bilibili</text>
+  <text x="720" y="802" font-size="10.5" fill="#94a3b8">管线2/3 = 同仓库两条分支</text>
+</svg>

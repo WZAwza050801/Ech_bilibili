@@ -26,8 +26,26 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 | 管线 | 输入形态 | 输出 | 状态 |
 |------|---------|------|------|
 | 一 · 口播/观点类 | 播客、观点、推荐视频（纯音频） | 读书笔记 + 整理版逐字稿 | ✅ 已落地 |
-| 二 · 课程类 | 数学/学术讲座 | LaTeX 可阅读讲义 | 设计完成，待启动 |
-| 三 · 实操教程类 | PS/绘画/剪辑/开发教程 | 讲义 + 实验报告 + 复刻作品 | 设计完成，待启动 |
+| 二 · 课程类 | 数学/学术/技术课程 | LaTeX 可阅读讲义（tex + pdf） | ✅ 已落地（分支 `feature/course-latex-pipeline`，验证课：李群李代数 / 机器人学 / Godot VFX） |
+| 三 · 实操教程类 | PS/绘画/剪辑/开发教程 | 作品集（可运行工程 + mp4）+ 实验报告 | ✅ 已落地（分支 `feature/pipeline3-practice`，验证课：计算器开发 / Godot VFX 全 12 分P） |
+
+## 全套流程图（合并-分叉架构 v2）
+
+两条产物管线共享同一个前处理合并段（只跑一次），分叉产出**作品集**与 **LaTeX 讲义**，
+统一归档到 `D:\B站课程Agent\BV<号>-<课名>\` 并自动清扫中间产物。
+
+![架构总览](docs/architecture.svg)
+
+| 图 | 内容 |
+|---|---|
+| [架构总览](docs/architecture.svg) | 合并段 → 分叉双管线 → 统一归档 → 自动清扫 |
+| [合并段内部](docs/flow-merged.svg) | 音视频直取 → ASR → 抽帧 → 视觉理解：每步的脚本/API/输入输出 |
+| [管线三内部](docs/flow-pipeline3.svg) | 答案包 Quark 获取链 + 盲写→对账→校准→验证→渲染，全部脚本清单 |
+| [管线二内部](docs/flow-pipeline2.svg) | 窗口 map → 写作 → 公式复查 → XeLaTeX：模型端点与配额、退出码语义 |
+| [归档清扫内部](docs/flow-archive.svg) | organize.py 五步 + 校验规则 + 删除安全机制（三坑）+ GitHub 推送 |
+
+> 管线二/三的代码目前位于旧布局分支（`feature/course-latex-pipeline` / `feature/pipeline3-practice`），
+> 迁移进 `Ech_bilibili/` 平台目录布局的工作进行中。
 
 详细设计见 `方案-三类视频内容分管线设计.html`，开源项目源码级调研见 `调研报告-*.html/md`。
 
