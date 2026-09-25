@@ -1,5 +1,7 @@
 # B 站版（管线一 · 读书笔记）
 #
+# 一键装齐（ffmpeg + 依赖 + 自检）: python scripts/install.py
+#
 # 取流/请求部分只用 Python 标准库（urllib / json / sqlite3 ...），不带重型依赖。
 # 唯一较重的是本地语音转写 faster-whisper —— 两种装法二选一：
 #   A. 装到一起（最省事）：pip install -r Ech_bilibili/requirements.txt
@@ -7,7 +9,19 @@
 #      再用 ECHONOTES_ASR_PYTHON 指向该环境的 python
 faster-whisper>=1.0.0,<2.0
 
-# 系统依赖（非 pip）:
+# ── 系统依赖（pip 装不了，必须自己装）────────────────────────────────────────
 #   ffmpeg — apt install ffmpeg / winget install Gyan.FFmpeg / brew install ffmpeg，
 #            或下载解压后设 FFMPEG=<ffmpeg 完整路径>
-# 一键装齐（ffmpeg + 依赖 + 自检）: python scripts/install.py
+#            （缺了会在转 wav 阶段崩：TypeError: expected str, bytes or os.PathLike object, not NoneType
+#              —— 那是 shutil.which 返回 None；现在启动预检会提前拦下来）
+
+# ── ⚠️ 本平台使用前必须知道的几件事 ─────────────────────────────────────────
+#   1. 【LLM Key】polish（格式整理）需要 DeepSeek API Key：设 DEEPSEEK_API_KEY，
+#      或放本机密钥文件（ECHONOTES_SECRETS_FILE）。仓库里永远没有真实密钥。
+#   2. 【B 站风控】取音频走 playurl API + 完整浏览器请求头/cookie，别自行"简化"请求头，
+#      否则会被 412 / -352 拦（幂等签名缺失同理）。
+#   3. 【批量必须串行】批量任务共享中 transfer 中转文件，并发会互踩——批跑器已内置串行铁律。
+#   4. 【配额】LLM 是最先崩的一环：订阅制看调用次数、token 包看 token 总量、按量付费看钱。
+#      多工人务必配密钥轮换；配额类错误应快速失败而非空烧重试。详见 docs/DEPLOY.md
+#   5. 【whisper 模型】与 YouTube 版共享同一份（Ech_bilibili/models/faster-whisper-small），
+#      换机器时 scp 拷一次即可，不必两边各下一份；缺目录时会退回 HF 模型名 small 自动下载。

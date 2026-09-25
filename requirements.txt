@@ -1,5 +1,30 @@
 # Ech 系列管线 · 根聚合依赖（一次装全就 -r 本文件）
 #
+# ┌──────────────────────────────────────────────────────────────────────────┐
+# │ 拿到本项目 / 换机器 / 上服务器：先跑                                    │
+# │     python scripts/install.py        （装 ffmpeg + 建 venv + 装依赖 + 自检）│
+# │     python scripts/check_env.py      （逐项体检，缺什么给什么修法）      │
+# │ 部署与网络（反向隧道 / 配额 / 网盘坑）必读：docs/DEPLOY.md              │
+# └──────────────────────────────────────────────────────────────────────────┘
+#
+# 【pip 装不了、但跑管线必须有的两样】
+#   ffmpeg — 转 wav / 切片，缺了 ASR 直接失败
+#            winget install Gyan.FFmpeg | brew install ffmpeg | apt install ffmpeg
+#            或下好后设 FFMPEG=<ffmpeg 可执行文件完整路径>
+#   deno   — yt-dlp 解 YouTube n-challenge，缺了报 403；放 PATH 或 Ech_youtube/bin/
+#
+# 【YouTube 的网络前提（最容易踩）】
+#   国内服务器 curl youtube.com 会直接超时（国际出口受限，pypi 通也没用）。
+#   → 走 SSH 反向隧道借本机梯子：本机 `ssh -N -R 17890:127.0.0.1:12000 <user>@<server>`
+#     服务器侧 `export ECHONOTES_YT_PROXY=http://127.0.0.1:17890`
+#   → 海外服务器直连：`export YT_PROXY=direct`
+#   本机不在线 / 梯子关掉 = 服务器立刻失去外网，批量会成片失败。
+#
+# 【密钥永不入库】只从环境变量或本机密钥文件读；cp .env.example .env 后填即可。
+#
+# 【LLM 额度：批量前先算清】订阅制看调用次数、token 包看 token 总量、按量付费看钱。
+#   本项目负载"双高"（单期 ≈ 95 次调用 + 14 万 token），多工人务必配密钥轮换。
+#
 #   只想跑 B 站：      pip install -r Ech_bilibili/requirements.txt
 #   只想跑 YouTube：   pip install -r Ech_youtube/requirements.txt
 #   只想要轻量核心：   pip install yt-dlp            （B站取流/请求走标准库，不需要额外包）

@@ -1,3 +1,12 @@
 # 语音转写（可选）——建议装在独立虚拟环境，避免与主编线的依赖互相污染
 # 装好后用 ECHONOTES_ASR_PYTHON 指向该环境的 python
+#
+# 为什么要单独一个文件：faster-whisper 会拖入 ctranslate2 等重依赖（含平台相关的二进制 wheel），
+# 与主线"只用标准库"的薄依赖策略冲突。隔离装法的典型用法：
+#
+#   python -m venv .venv-asr && .venv-asr/Scripts/pip install -r requirements-asr.txt
+#   export ECHONOTES_ASR_PYTHON=<仓库根>/.venv-asr/Scripts/python.exe
+#
+# 注意：pip 装的是推理库，ffmpeg 是系统级二进制（pip 装不了），剪音频仍需要它。
+# whisper 模型目录两平台共享（Ech_bilibili/models/faster-whisper-small），换机拷一次即可。
 faster-whisper>=1.1,<2

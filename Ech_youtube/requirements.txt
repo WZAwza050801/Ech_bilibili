@@ -1,9 +1,31 @@
 # Ech 系列管线 · YouTube 版依赖 (Linux 服务器 / Windows 本机通用)
 # 安装: pip install -r Ech_youtube/requirements.txt
-faster-whisper>=1.0.0,<2.0   # 本地 ASR（与 B 站版共用同一份模型目录，不重复下载）
-yt-dlp>=2026.8.19            # YouTube 元数据 + 最佳音轨
-
-# 系统依赖(非 pip):
-#   ffmpeg   — apt install ffmpeg / winget install Gyan.FFmpeg / brew install ffmpeg
-#   deno     — yt-dlp 解 YouTube n-challenge 用 (https://deno.com)，放 PATH 或 Ech_youtube/bin/
 # 一键装齐（ffmpeg + 依赖 + 自检）: python scripts/install.py
+faster-whisper>=1.0.0,<2.0   # 本地 ASR（与 B 站版共用同一份模型目录，不重复下载）
+yt-dlp>=2026.8.19            # YouTube 元数据 + 最佳音轨 + 官方字幕
+
+# ── 系统依赖（pip 装不了，必须自己装）────────────────────────────────────────
+#   ffmpeg   — apt install ffmpeg / winget install Gyan.FFmpeg / brew install ffmpeg
+#              或设 FFMPEG=<ffmpeg 可执行文件完整路径>
+#   deno     — yt-dlp 解 YouTube n-challenge 用 (https://deno.com)，放 PATH 或 Ech_youtube/bin/
+#              缺了会报 403 / n-challenge 失败
+
+# ── ⚠️ 网络前提（本平台最大的坑，必读）───────────────────────────────────────
+#   国内服务器上 curl https://www.youtube.com 会【直接超时】（国际出口受限）。
+#   "服务器能 pip install" ≠ "服务器能上 YouTube"，这是两件事。
+#
+#   路线 A · 国内服务器 + SSH 反向隧道（本项目实测路线）
+#     本机执行（跑批期间保持开着，别关本机、别关梯子）:
+#       ssh -N -R 17890:127.0.0.1:12000 <user>@<server>
+#     服务器侧:
+#       export ECHONOTES_YT_PROXY=http://127.0.0.1:17890
+#     验证（服务器上，期望 HTTP/2 200）:
+#       curl -sI --max-time 15 -x http://127.0.0.1:17890 https://www.youtube.com | head -1
+#     注意：返回 501 Unsupported method ('CONNECT') 说明请求打到了哑服务、端口被占，不是隧道通了；
+#           Windows 下结束作业杀不掉 ssh 子进程，旧隧道会占住端口，要按 PID 清。
+#
+#   路线 B · 海外 VPS 直连
+#       export YT_PROXY=direct
+#
+#   隧道断 = 批量成片失败（实测断一次产生 99 条"字幕不可得"）。
+#   完整说明（含配额模型、归档、网盘坑、换机检查清单）见 docs/DEPLOY.md
