@@ -41,6 +41,14 @@ pip install -r requirements.txt          # 核心依赖
 pip install -r requirements-asr.txt      # 可选：本地语音转写（建议独立虚拟环境）
 ```
 
+懒得手动敲？一键脚本把「建环境 + 装依赖 + 自检」一次做完：
+
+```bash
+bash scripts/setup.sh          # Linux / macOS
+.\scripts\setup.ps1           # Windows PowerShell
+# 需要本地语音转写就加参数：--asr / -Asr
+```
+
 > 依赖刻意做薄：管线主体只用标准库 + 一两个轻量包；`faster-whisper` 会拖入
 > ctranslate2 等重依赖，因此单独放 `requirements-asr.txt`，装到独立 venv 后用
 > `ECHONOTES_ASR_PYTHON` 指过去，避免与主线环境互相污染。
