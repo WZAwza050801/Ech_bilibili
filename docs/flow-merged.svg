@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1160 900" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/></marker>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+  </defs>
+  <rect width="1160" height="900" fill="#f8fafc"/>
+  <text x="580" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">合并段内部 · 共享前处理（两管线只跑一次）</text>
+  <text x="580" y="60" text-anchor="middle" font-size="12.5" fill="#64748b">每个阶段标注：脚本 · API · 输入 → 输出</text>
+
+  <rect x="440" y="76" width="280" height="40" rx="20" fill="#0f172a"/>
+  <text x="580" y="101" text-anchor="middle" font-size="13" fill="#f8fafc" font-weight="600">输入：B站课程 URL（BV号 + 分P）</text>
+  <line x1="580" y1="116" x2="580" y2="138" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 1 音视频直取 -->
+  <rect x="170" y="142" width="820" height="86" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="168" font-size="14" font-weight="700" fill="#b45309">① 音视频直取</text>
+  <text x="190" y="188" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 source.py (管线3) · media.py (管线2)</text>
+  <rect x="700" y="156" width="270" height="58" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="715" y="176" font-size="11" fill="#c2410c" font-weight="700">API GET api.bilibili.com/x/player/playurl</text>
+  <text x="715" y="192" font-size="10.5" fill="#9a3412" font-family="Consolas,monospace">?fnval=16 · 完整 cookie 组(buvid3/4…) · 禁代理</text>
+  <text x="715" y="207" font-size="10.5" fill="#9a3412">极简请求头会被风控 412 拦截</text>
+  <text x="600" y="246" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 video.m4s + audio.m4s</text>
+  <line x1="580" y1="228" x2="580" y2="252" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 2 ffmpeg -->
+  <rect x="170" y="256" width="820" height="70" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="282" font-size="14" font-weight="700" fill="#b45309">② ffmpeg 转码混流</text>
+  <text x="190" y="302" font-size="11" fill="#475569" font-family="Consolas,monospace">工具 ffmpeg（PATH） · media.py</text>
+  <text x="620" y="296" font-size="11" fill="#94a3b8" font-style="italic">audio.wav 16kHz 单声道 · mp4 对齐（非零起始 PTS 归零校验）</text>
+  <line x1="580" y1="326" x2="580" y2="350" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 3 ASR -->
+  <rect x="170" y="354" width="820" height="86" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="380" font-size="14" font-weight="700" fill="#b45309">③ 本地 ASR 转写</text>
+  <text x="190" y="400" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 transcribe_local.py (管线1) · asr.py (管线2，经 ECHONOTES_ASR_PYTHON 子进程)</text>
+  <rect x="700" y="368" width="270" height="58" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="715" y="388" font-size="11" fill="#c2410c" font-weight="700">本地模型 faster-whisper small/int8（CPU ≈2.3x 实时）</text>
+  <text x="715" y="404" font-size="10.5" fill="#9a3412" font-family="Consolas,monospace">vad_filter=True · condition_on_previous_text=False</text>
+  <text x="715" y="419" font-size="10.5" fill="#9a3412">模型路径 env ECHONOTES_ASR_MODEL，零 API 成本</text>
+  <text x="600" y="458" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 transcript.raw.json（逐段时间戳）</text>
+  <line x1="580" y1="440" x2="580" y2="464" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 4 polish -->
+  <rect x="170" y="468" width="820" height="70" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="494" font-size="14" font-weight="700" fill="#b45309">④ LLM 术语纠正（管线1 用）</text>
+  <text x="190" y="514" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 polish.py · hotfix.json 双端热修词典</text>
+  <rect x="700" y="476" width="270" height="54" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="715" y="496" font-size="11" fill="#c2410c" font-weight="700">API deepseek-chat（仅加标点/繁转简/同音字）</text>
+  <text x="715" y="512" font-size="10.5" fill="#9a3412">[n] 序号一一对应 + 字数漂移校验</text>
+  <text x="600" y="556" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">输出 transcript.json（整理稿+原始稿对照）</text>
+  <line x1="580" y1="538" x2="580" y2="562" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 5 抽帧 -->
+  <rect x="170" y="566" width="820" height="70" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="592" font-size="14" font-weight="700" fill="#b45309">⑤ 场景 + 均匀抽帧</text>
+  <text x="190" y="612" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 media.py · 参数 scene-threshold=0.12 interval=30s max-frames=240</text>
+  <text x="620" y="606" font-size="11" fill="#94a3b8" font-style="italic">ffmpeg 场景检测 → dHash 保守去重（保留实际 PTS）→ frames/*.jpg + frames.json</text>
+  <line x1="580" y1="636" x2="580" y2="660" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- 6 视觉 -->
+  <rect x="170" y="664" width="820" height="86" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" filter="url(#s)"/>
+  <text x="190" y="690" font-size="14" font-weight="700" fill="#b45309">⑥ 多模态视觉理解</text>
+  <text x="190" y="710" font-size="11" fill="#475569" font-family="Consolas,monospace">脚本 siliconflow.py (管线3) · concept_map.py map 阶段 (管线2)</text>
+  <rect x="700" y="678" width="270" height="58" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="715" y="698" font-size="11" fill="#c2410c" font-weight="700">API POST api.siliconflow.cn/v1/chat/completions</text>
+  <text x="715" y="714" font-size="10.5" fill="#9a3412" font-family="Consolas,monospace">model Qwen/Qwen3-VL-32B-Instruct · 900s 超时 × 8 重试</text>
+  <text x="715" y="729" font-size="10.5" fill="#9a3412">按 framelist 传图（帧列表模式优先于 video_url）</text>
+
+  <!-- 密钥说明 -->
+  <rect x="170" y="774" width="820" height="56" rx="10" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="190" y="798" font-size="12" font-weight="700" fill="#b91c1c">🔑 密钥来源（不进仓库）</text>
+  <text x="190" y="818" font-size="11" fill="#7f1d1d" font-family="Consolas,monospace">env ECHONOTES_SECRETS_FILE = D:\密码书\private\private-ai-api-secrets.json —— 管线统一从外部密码书读 key</text>
+
+  <text x="580" y="868" text-anchor="middle" font-size="12.5" fill="#475569" font-weight="600">合并段产物 → transcript.json（强制留档）+ frames.json + analysis/map 结果 → 分叉给管线二/三</text>
+</svg>

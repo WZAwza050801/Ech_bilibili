@@ -1,0 +1,96 @@
+<svg viewBox="0 0 1160 920" xmlns="http://www.w3.org/2000/svg" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/></marker>
+    <marker id="bo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ea580c"/></marker>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+  </defs>
+  <rect width="1160" height="920" fill="#f8fafc"/>
+  <text x="580" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">管线三内部 · 实操复刻 → 作品集</text>
+  <text x="580" y="60" text-anchor="middle" font-size="12.5" fill="#64748b">左：讲师答案包获取链（支撑） · 中右：闭卷盲写 → 对账 → 校准 → 验证 → 渲染</text>
+
+  <!-- GT 获取链 -->
+  <rect x="30" y="80" width="330" height="480" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="50" y="106" font-size="14" font-weight="700" fill="#c2410c">支撑：讲师答案包获取（Quark 链）</text>
+  <g font-size="11">
+    <rect x="50" y="122" width="290" height="72" rx="10" fill="#ffffff" stroke="#ea580c" filter="url(#s)"/>
+    <text x="62" y="142" font-weight="700" fill="#0f172a" font-size="12">OpenList 管理端</text>
+    <text x="62" y="158" fill="#475569" font-family="Consolas,monospace">脚本 openlist_client.py · probe_openlist.py</text>
+    <text x="62" y="174" fill="#c2410c" font-family="Consolas,monospace">API http://localhost:5244 /api/fs/list</text>
+    <text x="62" y="188" fill="#9a3412" font-size="10">读夸克存储 cookie（admin token）</text>
+    <line x1="195" y1="194" x2="195" y2="210" stroke="#ea580c" stroke-width="1.5" marker-end="url(#bo)"/>
+    <rect x="50" y="214" width="290" height="88" rx="10" fill="#ffffff" stroke="#ea580c" filter="url(#s)"/>
+    <text x="62" y="234" font-weight="700" fill="#0f172a" font-size="12">转存分享到网盘</text>
+    <text x="62" y="250" fill="#475569" font-family="Consolas,monospace">脚本 quark_save.py</text>
+    <text x="62" y="266" fill="#c2410c" font-family="Consolas,monospace">API POST drive-pc.quark.cn</text>
+    <text x="62" y="281" font-family="Consolas,monospace" fill="#c2410c" font-size="10.5">/sharepage/token → /sharepage/detail</text>
+    <text x="62" y="296" font-family="Consolas,monospace" fill="#c2410c" font-size="10.5">→ /sharepage/save (task 轮询至 status=2)</text>
+    <line x1="195" y1="302" x2="195" y2="318" stroke="#ea580c" stroke-width="1.5" marker-end="url(#bo)"/>
+    <rect x="50" y="322" width="290" height="72" rx="10" fill="#ffffff" stroke="#ea580c" filter="url(#s)"/>
+    <text x="62" y="342" font-weight="700" fill="#0f172a" font-size="12">下载答案包</text>
+    <text x="62" y="358" fill="#475569" font-family="Consolas,monospace">脚本 quark_download2.py · run_fetch_safe.py</text>
+    <text x="62" y="374" fill="#c2410c" font-family="Consolas,monospace">API /file/download（按 /quark/VFX_Godot* 过滤）</text>
+    <text x="62" y="388" fill="#9a3412" font-size="10">沙箱需 dangerouslyDisableSandbox + 好代理</text>
+    <line x1="195" y1="394" x2="195" y2="410" stroke="#ea580c" stroke-width="1.5" marker-end="url(#bo)"/>
+    <rect x="50" y="414" width="290" height="120" rx="10" fill="#ffffff" stroke="#ea580c" stroke-dasharray="5 3"/>
+    <text x="62" y="436" font-weight="700" fill="#0f172a" font-size="12">解压 → 三套参考</text>
+    <text x="62" y="454" fill="#475569" font-family="Consolas,monospace">VFX_GodotCourseEmpty.zip → 空项目基座</text>
+    <text x="62" y="470" fill="#475569" font-family="Consolas,monospace">…01_BeforeRecording.zip → 录制前</text>
+    <text x="62" y="486" fill="#475569" font-family="Consolas,monospace">…02_Results.zip → 标准答案(461文件)</text>
+    <text x="62" y="508" fill="#9a3412" font-size="10.5">输出：course-files\（答案包用后即删，可随时重取）</text>
+  </g>
+  <path d="M 360 480 L 420 480 L 420 200" fill="none" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#bo)"/>
+  <text x="430" y="150" font-size="11" fill="#c2410c" font-style="italic">提供：项目基座 + 标准答案场景</text>
+
+  <!-- 主流程 -->
+  <rect x="440" y="80" width="690" height="480" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="460" y="106" font-size="14" font-weight="700" fill="#1d4ed8">主流程（每分P）</text>
+
+  <rect x="460" y="122" width="650" height="76" rx="10" fill="#ffffff" stroke="#2563eb" filter="url(#s)"/>
+  <text x="472" y="144" font-weight="700" fill="#0f172a" font-size="12.5">① 逐P分析</text>
+  <text x="472" y="162" fill="#475569" font-family="Consolas,monospace" font-size="10.5">脚本 run_course.py → run_pages.py → echonotes_practice/executor.py · gemini.py · siliconflow.py</text>
+  <text x="472" y="178" fill="#c2410c" font-family="Consolas,monospace" font-size="10.5">API SiliconFlow Qwen3-VL（帧列表模式）+ ASR 融合 → analysis.json（steps + grade A/B/C）</text>
+  <text x="472" y="193" fill="#475569" font-size="10.5">assess_materials.py 分类 951 步：仅 5% 可编程、90% 为 GUI 操作 → 决定盲写边界</text>
+  <line x1="785" y1="198" x2="785" y2="214" stroke="#2563eb" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="460" y="218" width="650" height="92" rx="10" fill="#ffffff" stroke="#2563eb" filter="url(#s)"/>
+  <text x="472" y="240" font-weight="700" fill="#0f172a" font-size="12.5">② 闭卷盲写 → 对账 → 校准（三段式核心）</text>
+  <text x="472" y="258" fill="#475569" font-family="Consolas,monospace" font-size="10.5">盲写 build_homework.py（仅凭 analysis 写 .tscn）→ diff_homework.py / blind_vs_gt.py / reconcile_report.py</text>
+  <text x="472" y="274" fill="#475569" font-size="10.5">量化结论：盲写命中率均值 32% —— 结构可推理，美术分层参数必须看答案</text>
+  <text x="472" y="290" fill="#c2410c" font-family="Consolas,monospace" font-size="10.5">校准 build_all.py：sanitize_scene()（剥 uid · CompressedTexture2D→ExtResource · 重算 load_steps）</text>
+  <text x="472" y="305" fill="#475569" font-size="10.5">输入 盲写版+标准答案场景 → 输出 校准场景（只抄关键参数，代码不抄）+ manifest.json</text>
+  <line x1="785" y1="310" x2="785" y2="326" stroke="#2563eb" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="460" y="330" width="650" height="76" rx="10" fill="#ffffff" stroke="#2563eb" filter="url(#s)"/>
+  <text x="472" y="352" font-weight="700" fill="#0f172a" font-size="12.5">③ 冒烟验证（headless）</text>
+  <text x="472" y="370" fill="#c2410c" font-family="Consolas,monospace" font-size="10.5">CLI godot --headless --import · godot --headless --script smoke.gd（递归 find_children GPUParticles3D）</text>
+  <text x="472" y="386" fill="#475569" font-size="10.5">验证 10 场景 10/10 SMOKE_OK；smoke.gd 脚本随 manifest 生成</text>
+  <text x="472" y="401" fill="#94a3b8" font-size="10.5">踩坑：--headless 为 dummy 渲染后端，渲染必须走窗口模式（见④）</text>
+  <line x1="785" y1="406" x2="785" y2="422" stroke="#2563eb" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="460" y="426" width="650" height="110" rx="10" fill="#ffffff" stroke="#2563eb" filter="url(#s)"/>
+  <text x="472" y="448" font-weight="700" fill="#0f172a" font-size="12.5">④ 效果渲染（Movie Maker）</text>
+  <text x="472" y="466" fill="#475569" font-family="Consolas,monospace" font-size="10.5">脚本 build_showcase.py（Showcase 场景 + showcase_driver.gd 自动播放）</text>
+  <text x="472" y="482" fill="#c2410c" font-family="Consolas,monospace" font-size="10.5">CLI godot --write-movie x.avi --fixed-fps 30 --quit-after 150（窗口模式！headless 必崩）</text>
+  <text x="472" y="498" fill="#475569" font-family="Consolas,monospace" font-size="10.5">ffmpeg -c:v libx264 -pix_fmt yuv420p → mp4</text>
+  <text x="472" y="514" fill="#94a3b8" font-size="10.5">完整舞台场景（自带相机/天空）走裸渲染；普通预制体套黑底相机壳</text>
+
+  <!-- 输出 -->
+  <line x1="785" y1="560" x2="785" y2="584" stroke="#2563eb" stroke-width="1.8" marker-end="url(#b)"/>
+  <rect x="460" y="588" width="650" height="64" rx="14" fill="#2563eb" filter="url(#s)"/>
+  <text x="785" y="614" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="700">📦 作品集输出</text>
+  <text x="785" y="636" text-anchor="middle" font-size="11" fill="#bfdbfe" font-family="Consolas,monospace">homework\VFX_Course_Homework\（10 场景 + 10 mp4 + manifest.json + smoke 10/10）</text>
+
+  <!-- 脚本清单 -->
+  <rect x="30" y="688" width="1100" height="212" rx="14" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="50" y="714" font-size="13" font-weight="700" fill="#334155">本分支全部脚本（work/pipeline3/，已推 GitHub Ech_bilibili: feature/pipeline3-practice）</text>
+  <g font-size="11" fill="#475569" font-family="Consolas,monospace">
+    <text x="50" y="738">run_course.py / run_pages.py    逐P批量分析与失败续跑        assess_materials.py     步骤可编程性分级</text>
+    <text x="50" y="758">build_homework.py               P08 原型组装器               build_all.py            全量作业组装（sanitize/manifest/smoke）</text>
+    <text x="50" y="778">diff_homework.py                校准场景 vs 答案 diff         blind_vs_gt.py          盲写 vs 答案量化对比</text>
+    <text x="50" y="798">reconcile_report.py             全P对账报告（命中率32%）      build_showcase.py       演示场景+驱动脚本生成</text>
+    <text x="50" y="818">refresh_index_from_analysis.py  索引同步                     build_course_index.py   课程索引 md/html</text>
+    <text x="50" y="838">build_course_editorial.py       Kimi K3 总讲义               openlist_client.py 等   Quark 答案包获取链</text>
+    <text x="50" y="858">外部工具：Godot 4.6.1 mono console（--headless/--write-movie）· ffmpeg（libx264/mjpeg）· 解压</text>
+    <text x="50" y="884" fill="#94a3b8">坑位记录：Remove-Item/shutil.rmtree 被安全钩子拦 → 删除一律 .NET Directory.Delete；PS1 中文脚本须 UTF-8 BOM</text>
+  </g>
+</svg>
