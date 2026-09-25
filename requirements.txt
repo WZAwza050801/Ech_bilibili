@@ -1,0 +1,10 @@
+# Ech_bilibili 根：按子项目分别安装（一次装全就 -r 根文件）
+#
+#   B 站版（默认，零 pip 依赖，只用标准库）：
+#       pip install -r Ech_bilibili/requirements.txt
+#   YouTube 版（yt-dlp 抓取）：
+#       pip install -r Ech_youtube/requirements.txt
+#   语音转写 ASR（可选，建议独立虚拟环境）：
+#       pip install -r requirements-asr.txt
+-r Ech_bilibili/requirements.txt
+-r Ech_youtube/requirements.txt
