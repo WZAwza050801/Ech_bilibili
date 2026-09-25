@@ -7,6 +7,16 @@ EchoNotes 是一个视频观看 agent 项目：输入 B 站视频/课程链接�
 
 ![架构总览](docs/architecture.svg)
 
+### 全套流程图
+
+| 图 | 内容 |
+|---|---|
+| [架构总览](docs/architecture.svg) | 合并段 → 分叉双管线 → 统一归档 → 自动清扫 |
+| [合并段内部](docs/flow-merged.svg) | 音视频直取 → ASR → 抽帧 → 视觉理解：每步的脚本/API/输入输出 |
+| [管线三内部](docs/flow-pipeline3.svg) | 答案包 Quark 获取链 + 盲写→对账→校准→验证→渲染，全部脚本清单 |
+| [管线二内部](docs/flow-pipeline2.svg) | 窗口 map → 写作 → 公式复查 → XeLaTeX：模型端点与配额、退出码语义 |
+| [归档清扫内部](docs/flow-archive.svg) | organize.py 五步 + 校验规则 + 删除安全机制（三坑）+ GitHub 推送 |
+
 ## 三类内容管线
 
 | 管线 | 输入形态 | 输出 | 状态 |
@@ -23,13 +33,23 @@ EchoNotes 是一个视频观看 agent 项目：输入 B 站视频/课程链接�
 
 1. **合并段**：音视频直取 → faster-whisper 本地 ASR → 场景+均匀抽帧（dHash 去重、保留 PTS）→
    Qwen3-VL 逐帧视觉理解 → 术语纠正与音画对齐。产物 `transcript.json` 强制留档供下游复用。
+
+   ![合并段内部](docs/flow-merged.svg)
+
 2. **分叉**：
    - **管线三（作品集）**：步骤 A/B/C 分级 → 盲写场景（闭卷）→ 与讲师标准答案对账 →
      只校准关键参数（代码不抄）→ headless 冒烟测试 → Movie Maker 离线渲染效果 mp4。
+
+     ![管线三内部](docs/flow-pipeline3.svg)
+
    - **管线二（讲义）**：600s 窗口 reduce 编排 → 百炼 qwen3.8-max 规划 → Kimi kimi-k3 写作 →
      公式原帧视觉复查 → XeLaTeX 两遍编译 → 质量报告。
+
+     ![管线二内部](docs/flow-pipeline2.svg)
 3. **统一归档**：`D:\B站课程Agent\BV<号>-<课名>\`，分P可并行跑但**按 P 序号归位**，
    README 按 P01→P12 顺序索引；校验通过后自动清扫全部中间产物（保留 transcript 与管线代码）。
+
+   ![归档清扫内部](docs/flow-archive.svg)
 
 ## 管线一：口播视频 → 读书笔记
 
