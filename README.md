@@ -9,6 +9,7 @@ Ech_bilibili 是视频观看 agent 项目（多平台系列之 Bilibili 版）�
 ```
 视频观看agent编写/            # 仓库根：只放通用文档、脚本与各平台目录
 ├── Ech_bilibili/            # Bilibili 版（管线代码 + runs + 江左道卡卡-读书笔记）
+│   └── dev/                # 开发期调试脚本（防风控实验等），不参与管线运行
 ├── Ech_youtube/             # YouTube 版（管线代码 + runs + LexFridman-博客笔记）
 ├── scripts/                 # 通用工具：check_env.py（自检）+ install.py/setup.*（一键装）
 ├── docs/                    # API_SETUP.md + 架构流程图 svg
